@@ -1,0 +1,11 @@
+{
+  "name": "hardware_store_ts",
+  "version": "1.0.0",
+  "description": "OLX like store",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pawel Wilk",
+  "license": "GPL-3.0"
+}
