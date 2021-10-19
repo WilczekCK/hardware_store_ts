@@ -12,7 +12,7 @@
       "api/src"
     ],
     "ext": "ts",
-    "exec": "ts-node api/src/index.ts"
+    "exec": "ts-node api/src/server.ts"
   },
   "author": "Pawel Wilk",
   "license": "GPL-3.0",
