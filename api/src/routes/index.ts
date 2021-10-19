@@ -1,12 +1,14 @@
 import express from "express";
-import PingController from "../controllers/ping";
+import { app } from "../app";
+import {routes as messages} from './messages'
 
-const router = express.Router();
+let router = express.Router();
+app.use('/messages', messages);
 
 router.get("/ping", async (_req, res) => {
-  const controller = new PingController();
-  const response = await controller.getMessage();
-  return res.send(response);
+    return res.send('test');
 });
+
+
 
 export default router;
