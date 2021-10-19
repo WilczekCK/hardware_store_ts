@@ -11,4 +11,8 @@ app.use('/messages', messages);
 app.use('/auctions', auctions);
 app.use('/accounts', accounts);
 
+router.get('/', function(req, res){
+    res.send('Main page');
+})
+
 export default router;
