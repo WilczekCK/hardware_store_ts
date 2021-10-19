@@ -6,7 +6,7 @@ const app: Application = express();
 
 app.get("/ping", async (_req, res) => {
   res.send({
-    message: "pong",
+    message: "pong3",
   });
 });
 
