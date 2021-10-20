@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.routes = void 0;
+const get_1 = require("./get");
+const post_1 = require("./post");
+const delete_1 = require("./delete");
+const patch_1 = require("./patch");
+const put_1 = require("./put");
+const routes = [get_1.router, post_1.router, delete_1.router, patch_1.router, put_1.router];
+exports.routes = routes;
