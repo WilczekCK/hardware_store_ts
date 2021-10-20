@@ -1,6 +1,10 @@
 import morgan from "morgan";
 import Router from "./routes";
+import "reflect-metadata";
+import { createConnection } from "typeorm";
+
 import {app, express} from './app';
+import dbConfig from "./config/database";
 
 const PORT = process.env.PORT || 8000;
 
@@ -10,6 +14,14 @@ app.use(express.static("public"));
 
 app.use(Router);
 
-app.listen(PORT, () => {
-  console.log("Server is running on port", PORT);
+//DB CONNECTION
+createConnection(dbConfig)
+  .then((_connection) => {
+    app.listen(PORT, () => {
+      console.log("Server is running on port", PORT);
+    });
+  })
+  .catch((err) => {
+    console.log("Unable to connect to db", err);
+    process.exit(1);
 });
