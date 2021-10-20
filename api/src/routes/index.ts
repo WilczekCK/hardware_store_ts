@@ -7,6 +7,8 @@ import {routes as accounts} from './accounts'
 
 let router = express.Router();
 
+app.use(express.json());
+
 app.use('/messages', messages);
 app.use('/auctions', auctions);
 app.use('/accounts', accounts);

@@ -8,7 +8,6 @@ import dbConfig from "./config/database";
 
 const PORT = process.env.PORT || 8000;
 
-app.use(express.json());
 app.use(morgan("tiny"));
 app.use(express.static("public"));
 
