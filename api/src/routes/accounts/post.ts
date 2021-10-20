@@ -1,8 +1,10 @@
 import express from "express";
 var router = express.Router();
 
-router.post('/', function (req, res) {
-  res.send('Create an account')
+router.post('/', async (req, res) => {
+  console.log(req);
+
+  res.send(req.body);
 })
 
 export {router}
