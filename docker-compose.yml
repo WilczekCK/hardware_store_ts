@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     volumes:
-      - ./src:/app/src
+      - ./api/src:/app/src
     ports:
       - "8000:8000"
     depends_on:
