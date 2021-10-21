@@ -1,8 +1,11 @@
 import express from "express";
+
+import { getAllUsers } from "../../controllers/user.controller";
+
 var router = express.Router();
 
-router.get('/', function (req, res) {
-  res.send('Get all accounts')
+router.get('/', async (req, res) => {
+  res.send( await getAllUsers() );
 })
 
 router.get('/:id', function (req, res) {

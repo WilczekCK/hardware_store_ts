@@ -9,6 +9,10 @@ let router = express.Router();
 
 app.use(express.json());
 
+/* Error handling before routes! */
+
+router.get('*', )
+
 app.use('/messages', messages);
 app.use('/auctions', auctions);
 app.use('/accounts', accounts);

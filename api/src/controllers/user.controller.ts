@@ -8,6 +8,12 @@ export interface UserPayload {
     password: string;
 }
 
+export const getAllUsers = async(): Promise<Array<any>> => {
+    const userRepository = getRepository(User);
+
+    return userRepository.find({});
+}
+
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);
     const user = new User();
