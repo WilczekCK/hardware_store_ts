@@ -1,6 +1,6 @@
 import express from "express";
 
-import { getAllUsers, getUsers } from "../../controllers/user.controller";
+import { getUsers } from "../../controllers/user.controller";
 
 var router = express.Router();
 

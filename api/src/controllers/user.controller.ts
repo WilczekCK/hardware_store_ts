@@ -18,19 +18,14 @@ export interface userFilters {
 export const getUsers = async(payload: userFilters): Promise<Array<any>> => {
     const userRepository = getRepository(User);
 
-    const {where, take, order, skip} = {
+    const preparedQuery = {
         where: payload.where ? payload.where : {},
         take:  payload.limit ? payload.limit : 5,
         order: payload.order ? payload.order : { "id": "DESC" },
         skip:  payload.skip  ? payload.skip  : 0
     }
 
-    return userRepository.find( {
-        where,
-        take,
-        order,
-        skip
-    });
+    return userRepository.find( preparedQuery );
 }
 
 
