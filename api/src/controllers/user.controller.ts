@@ -15,12 +15,6 @@ export interface userFilters {
     skip?:  number;
 }
 
-export const getAllUsers = async(): Promise<Array<any>> => {
-    const userRepository = getRepository(User);
-
-    return userRepository.find({});
-}
-
 export const getUsers = async(payload: userFilters): Promise<Array<any>> => {
     const userRepository = getRepository(User);
 
