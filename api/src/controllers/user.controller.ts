@@ -13,7 +13,8 @@ export interface userFilters {
     limit?: number;
     order?: Record<string, string>;
     skip?:  number;
-    set?: Record<string, string> | Record<string, number>;
+    set?:   Record<string, string> | Record<string, number>;
+    operator?: string;
 }
 
 export const getUsers = async(payload: userFilters): Promise<any> => {
@@ -56,6 +57,22 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
     });
 }
 
-export const modifyUsers = async(payload: UserPayload): Promise<any> => {
+export const modifyUser = async(payload: UserPayload): Promise<any> => {
+    const preparedQuery = {
+        where:    payload.where ? payload.where : {},
+        skip:     payload.skip  ? payload.skip  : 0,
+        operator: payload.operator ? payload.operator : "AND",
+    }
 
+    // Object to ID's array
+    const ids = preparedQuery.where.map(( {id}: Record<string,number> ) => {
+        return id;
+    });
+
+    return await getConnection()
+        .createQueryBuilder()
+        .update(User)
+        .set({})
+        .where("id IN (:...ids)", { ids } )
+        .execute();
 }
