@@ -1,4 +1,4 @@
-import { getRepository, getConnection, DeleteResult, DeleteQueryBuilder, QueryBuilder } from "typeorm";
+import { DeleteResult, getConnection, getRepository } from "typeorm";
 import { User } from '../models';
 
 export interface UserPayload {
@@ -34,7 +34,7 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
     const usersId = payload.where;
 
     // Object to ID's array
-    const ids = usersId.map(( {id}: Record<string,number> ) => {
+    const ids:Array<number> = usersId.map(( {id}: Record<string,number> ) => {
         return id;
     });
 
@@ -58,16 +58,18 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
 }
 
 export const modifyUser = async(payload: userFilters): Promise<any> => {
-    const {where, set, operator} = {
+    const { where, set } = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? payload.set  : {},
-        operator: payload.operator ? payload.operator : "AND",
     }
+    
+    //WHERE, for single user, must have only ONE value!
+    const key:String = Object.keys(payload.where)[0];
 
     return await getConnection()
         .createQueryBuilder()
         .update(User)
         .set(set)
-        .where("id = :id", where)
+        .where(`${key} = :${key}`, where)
         .execute();
 }
