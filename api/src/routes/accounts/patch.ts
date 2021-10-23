@@ -1,12 +1,12 @@
 import express from "express";
+import { modifyUsers } from "../../controllers/user.controller";
+
 var router = express.Router();
 
-router.patch('/', function (req, res) {
-  res.send('Update all accounts')
-})
-
-router.patch('/:id', function (req, res) {
-  res.send(`Update accounts with ID ${req.params.id}`);
+router.patch('/', async (req, res) => {
+  res.send(
+    await modifyUsers( req.body )
+  );
 })
 
 export {router}
