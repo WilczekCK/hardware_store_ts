@@ -1,4 +1,4 @@
-import { getRepository, getConnection, DeleteResult } from "typeorm";
+import { getRepository, getConnection, DeleteResult, DeleteQueryBuilder, QueryBuilder } from "typeorm";
 import { User } from '../models';
 
 export interface UserPayload {
@@ -15,7 +15,7 @@ export interface userFilters {
     skip?:  number;
 }
 
-export const getUsers = async(payload: userFilters): Promise<Array<any>> => {
+export const getUsers = async(payload: userFilters): Promise<any> => {
     const userRepository = getRepository(User);
 
     const preparedQuery = {
@@ -28,7 +28,7 @@ export const getUsers = async(payload: userFilters): Promise<Array<any>> => {
     return userRepository.find( preparedQuery );
 }
 
-export const removeUsers = async (payload: userFilters): Promise<any> => {
+export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
     const usersId = payload.where;
 
     // Object to ID's array
