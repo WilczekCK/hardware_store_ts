@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, getConnection } from "typeorm";
 import { User } from '../models';
 
 export interface UserPayload {
@@ -9,7 +9,7 @@ export interface UserPayload {
 }
 
 export interface userFilters {
-    where?: Record<string, number> | string;
+    where?: Record<string, number> | string | any;
     limit?: number;
     order?: Record<string, string>;
     skip?:  number;
@@ -28,6 +28,20 @@ export const getUsers = async(payload: userFilters): Promise<Array<any>> => {
     return userRepository.find( preparedQuery );
 }
 
+export const removeUsers = async(payload: userFilters): Promise<any> => {
+    const test = payload.where;
+    
+    console.log( test )
+
+    getConnection()
+        .createQueryBuilder()
+        .delete()
+        .from(User)
+        .where("id = :id", test)
+        .execute();
+
+    return {status: 200};
+}
 
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);

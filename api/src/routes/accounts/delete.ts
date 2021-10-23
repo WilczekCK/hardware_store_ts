@@ -1,12 +1,17 @@
 import express from "express";
+
+import { removeUsers } from "../../controllers/user.controller";
+
 var router = express.Router();
 
-router.delete('/', function (req, res) {
-  res.send('Delete all accounts!')
-})
+router.delete('/', async (req, res) => {  
+  const { where } = req.body;
 
-router.delete('/:id', function (req, res) {
-  res.send(`Delete account with ID ${req.params.id}`);
+  res.send(
+    await removeUsers( { 
+      where
+    })
+  );
 })
 
 export {router}
