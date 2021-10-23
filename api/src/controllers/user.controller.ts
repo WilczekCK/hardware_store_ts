@@ -57,22 +57,17 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
     });
 }
 
-export const modifyUser = async(payload: UserPayload): Promise<any> => {
-    const preparedQuery = {
+export const modifyUser = async(payload: userFilters): Promise<any> => {
+    const {where, set, operator} = {
         where:    payload.where ? payload.where : {},
-        skip:     payload.skip  ? payload.skip  : 0,
+        set:      payload.set  ? payload.set  : {},
         operator: payload.operator ? payload.operator : "AND",
     }
-
-    // Object to ID's array
-    const ids = preparedQuery.where.map(( {id}: Record<string,number> ) => {
-        return id;
-    });
 
     return await getConnection()
         .createQueryBuilder()
         .update(User)
-        .set({})
-        .where("id IN (:...ids)", { ids } )
+        .set(set)
+        .where("id = :id", where)
         .execute();
 }
