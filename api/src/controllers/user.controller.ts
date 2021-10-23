@@ -28,15 +28,20 @@ export const getUsers = async(payload: userFilters): Promise<Array<any>> => {
     return userRepository.find( preparedQuery );
 }
 
-export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
+export const removeUsers = async (payload: userFilters): Promise<any> => {
     const usersId = payload.where;
+
+    // Object to ID's array
+    const ids = usersId.map(( {id}: Record<string,number> ) => {
+        return id;
+    });
 
     /* Query returns info, how many results are deleted and raw info*/
     return await getConnection()
         .createQueryBuilder()
         .delete()
         .from(User)
-        .where("id = :id", usersId)
+        .where("id IN (:...ids)", { ids } )
         .execute();
 }
 
