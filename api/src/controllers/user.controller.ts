@@ -64,12 +64,26 @@ export const modifyUser = async(payload: userFilters): Promise<any> => {
     }
     
     //WHERE, for single user, must have only ONE value!
-    const key:String = Object.keys(payload.where)[0];
+    const key = Object.keys(payload.where)[0];
 
     return await getConnection()
         .createQueryBuilder()
         .update(User)
         .set(set)
         .where(`${key} = :${key}`, where)
+        .execute();
+}
+
+export const modifyUsers = async(payload: userFilters): Promise<any> => {
+    const { where, set } = {
+        where:    payload.where ? payload.where : {},
+        set:      payload.set  ? payload.set  : {},
+    }
+
+    return await getConnection()
+        .createQueryBuilder()
+        .update(User)
+        .set(set)
+        .where(where)
         .execute();
 }
