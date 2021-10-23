@@ -13,6 +13,7 @@ export interface userFilters {
     limit?: number;
     order?: Record<string, string>;
     skip?:  number;
+    set?: Record<string, string> | Record<string, number>;
 }
 
 export const getUsers = async(payload: userFilters): Promise<any> => {
@@ -22,7 +23,7 @@ export const getUsers = async(payload: userFilters): Promise<any> => {
         where: payload.where ? payload.where : {},
         take:  payload.limit ? payload.limit : 5,
         order: payload.order ? payload.order : { "id": "DESC" },
-        skip:  payload.skip  ? payload.skip  : 0
+        skip:  payload.skip  ? payload.skip  : 0,
     }
 
     return userRepository.find( preparedQuery );
@@ -53,4 +54,8 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
         ...user,
         ...payload
     });
+}
+
+export const modifyUsers = async(payload: UserPayload): Promise<any> => {
+
 }
