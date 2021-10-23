@@ -1,4 +1,4 @@
-import { DeleteResult, getConnection, getRepository } from "typeorm";
+import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
 
 export interface UserPayload {
@@ -57,14 +57,14 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
     });
 }
 
-export const modifyUser = async(payload: userFilters): Promise<any> => {
-    const { where, set } = {
+export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
+    const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? payload.set  : {},
     }
     
     //WHERE, for single user, must have only ONE value!
-    const key = Object.keys(payload.where)[0];
+    const key:String = Object.keys(payload.where)[0];
 
     return await getConnection()
         .createQueryBuilder()
@@ -74,8 +74,8 @@ export const modifyUser = async(payload: userFilters): Promise<any> => {
         .execute();
 }
 
-export const modifyUsers = async(payload: userFilters): Promise<any> => {
-    const { where, set } = {
+export const modifyUsers = async(payload: userFilters): Promise<UpdateResult> => {
+    const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? payload.set  : {},
     }
