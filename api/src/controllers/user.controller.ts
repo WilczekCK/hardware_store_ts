@@ -10,7 +10,8 @@ export interface UserPayload {
 
 export interface userFilters {
     where?: Record<string, number> | string | any;
-    limit?: number;
+    limit?: number; 
+    take?: number; //its basically a limit, clone
     order?: Record<string, string>;
     skip?:  number;
     set?:   Record<string, string> | Record<string, number>;
@@ -20,7 +21,7 @@ export interface userFilters {
 export const getUsers = async(payload: userFilters): Promise<any> => {
     const userRepository = getRepository(User);
 
-    const preparedQuery = {
+    const preparedQuery:userFilters = {
         where: payload.where ? payload.where : {},
         take:  payload.limit ? payload.limit : 5,
         order: payload.order ? payload.order : { "id": "DESC" },
