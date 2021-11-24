@@ -34,8 +34,6 @@ export const getUsers = async(payload: userFilters): Promise<any> => {
 export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
     const usersId = payload.where;
 
-    console.log(payload);
-
     // Object to ID's array
     const ids:Array<number> = usersId.map(( {id}: Record<string,number> ) => {
         return id;

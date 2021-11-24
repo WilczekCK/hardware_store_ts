@@ -4,8 +4,8 @@ import { modifyUser } from "../../controllers/user.controller";
 var router = express.Router();
 
 router.put('/', async (req, res) => {
-  const { where } = req.body; // () => { id: [number] }
-  const { affected, raw } :any = await modifyUser( { where } ) // () => results how many deleted
+  const { where, set } = req.body; 
+  const { affected, raw } :any = await modifyUser( { where, set } )
 
   if ( affected > 0 ) {
     return res.send( {status: 200, message: `${affected} result modified, all ok`} );
