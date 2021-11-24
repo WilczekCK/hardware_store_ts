@@ -4,8 +4,8 @@ import { modifyUsers } from "../../controllers/user.controller";
 var router = express.Router();
 
 router.patch('/', async (req, res) => {
-  const { where } = req.body; // () => { id: [number] }
-  const { affected, raw } :any = await modifyUsers( { where } ) // () => results how many deleted
+  const { where, set } = req.body;
+  const { affected, raw } :any = await modifyUsers( { where, set } ) // () => results how many changed
 
   if ( affected > 0 ) {
     return res.send( {status: 200, message: `${affected} results modified, all ok`} );

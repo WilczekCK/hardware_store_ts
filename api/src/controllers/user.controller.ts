@@ -64,8 +64,6 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {updatedAt:new Date(), ...payload.set}  : {},
     }
-    
-    //set.updatedAt =  new Date();
 
     //WHERE, for single user, must have only ONE value!
     const key:String = Object.keys(payload.where)[0];
