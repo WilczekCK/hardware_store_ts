@@ -11,16 +11,24 @@ export class User {
   @PrimaryGeneratedColumn()
   id!: number;
   
-  @Column()
+  @Column({
+    type: "text",
+  })
   firstName!: string;
   
-  @Column()
+  @Column({
+    type: "text",
+  })
   lastName!: string;
   
-  @Column()
+  @Column({
+    type: "text",
+  })
   email!: string;
 
-  @Column()
+  @Column({
+    type: "text",
+  })
   password!: string;
   
   @CreateDateColumn()

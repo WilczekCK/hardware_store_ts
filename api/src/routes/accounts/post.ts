@@ -1,8 +1,11 @@
 import express from "express";
+
+import { createUser } from "../../controllers/user.controller";
+
 var router = express.Router();
 
-router.post('/', function (req, res) {
-  res.send('Create an account')
+router.post('/', async (req, res) => {
+  res.send( await createUser(req.body) );
 })
 
 export {router}
