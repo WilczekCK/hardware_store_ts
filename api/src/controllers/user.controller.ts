@@ -1,4 +1,5 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { User } from '../models';
 
 export interface UserPayload {
@@ -14,7 +15,7 @@ export interface userFilters {
     take?: number; //its basically a limit, clone
     order?: Record<string, string>;
     skip?:  number;
-    set?:   Record<string, string> | Record<string, number>;
+    set?:   Record<string, string> | Record<string, Date>;
     operator?: string;
 }
 
@@ -61,9 +62,11 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
 export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
     const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
-        set:      payload.set  ? payload.set  : {},
+        set:      payload.set  ? {updatedAt:new Date(), ...payload.set}  : {},
     }
     
+    //set.updatedAt =  new Date();
+
     //WHERE, for single user, must have only ONE value!
     const key:String = Object.keys(payload.where)[0];
 
@@ -71,7 +74,6 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
         .createQueryBuilder()
         .update(User)
         .set(set)
-        .set({ updatedAt: new Date() })
         .where(`${key} = :${key}`, where)
         .execute();
 }
@@ -79,14 +81,13 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
 export const modifyUsers = async(payload: userFilters): Promise<UpdateResult> => {
     const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
-        set:      payload.set  ? payload.set  : {},
+        set:      payload.set  ? {updatedAt:new Date(), ...payload.set} : {},
     }
 
     return await getConnection()
         .createQueryBuilder()
         .update(User)
         .set(set)
-        .set({ updatedAt: new Date() })
         .where(where)
         .execute();
 }
