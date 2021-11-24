@@ -71,6 +71,7 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
         .createQueryBuilder()
         .update(User)
         .set(set)
+        .set({ updatedAt: new Date() })
         .where(`${key} = :${key}`, where)
         .execute();
 }
@@ -85,6 +86,7 @@ export const modifyUsers = async(payload: userFilters): Promise<UpdateResult> =>
         .createQueryBuilder()
         .update(User)
         .set(set)
+        .set({ updatedAt: new Date() })
         .where(where)
         .execute();
 }
