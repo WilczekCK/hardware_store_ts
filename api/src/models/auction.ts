@@ -4,38 +4,39 @@ import {
     Column,
     CreateDateColumn,
     UpdateDateColumn,
-    OneToMany
+    ManyToOne
 } from "typeorm";
 
-import { Auction } from "./auction";
+import { User } from "./user";
   
 @Entity()
-export class User {
+export class Auction {
   @PrimaryGeneratedColumn()
   id!: number;
   
   @Column({
     type: "text",
   })
-  firstName!: string;
-  
-  @Column({
-    type: "text",
-  })
-  lastName!: string;
-  
-  @Column({
-    type: "text",
-  })
-  email!: string;
+  brand!: string;
 
   @Column({
     type: "text",
   })
-  password!: string;
+  series!: string;
 
-  @OneToMany(() => Auction, auction => auction.user)
-  auctions!: Auction[];
+  @Column({
+    type: "text",
+  })
+  description!: string;
+
+  @Column()
+  isActive!:boolean;
+  
+  @Column()
+  price!: number;
+
+  @ManyToOne(() => User, user => user.auctions)
+  user!: User;
   
   @CreateDateColumn()
   createdAt!: Date;
