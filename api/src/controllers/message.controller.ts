@@ -1,5 +1,5 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
-import { Auction, User } from '../models';
+import { Auction, User, Message } from '../models';
 
 export interface messagePayload {
     content: string;
@@ -20,7 +20,7 @@ export interface messageFilters {
 }
 
 export const getMessages = async(payload: messageFilters): Promise<any> => {
-    const messageRepository = getRepository(Auction);
+    const messageRepository = getRepository(Message);
 
     const preparedQuery:messageFilters = {
         where: payload.where ? payload.where : {},
@@ -50,18 +50,21 @@ export const removeMessages = async (payload: messageFilters): Promise<DeleteRes
         .execute();
 }
 
-export const createMessage = async(payload: messagePayload): Promise<Auction> => {
-    const messageRepository = getRepository(Auction);
+export const createMessage = async(payload: messagePayload): Promise<Message> => {
+    const messageRepository = getRepository(Message);
 
     //Relation assigments
-    //const user = new User();
-          //user.id = payload.userId;
-    const auction = new Auction();
-          //auction.user = user;
+    const userFrom = new User();
+          userFrom.id = payload.userFrom;
+    const userTo = new User();
+          userTo.id = payload.userTo;
+    const message = new Message();
+          message.userTo = userTo;
+          message.userFrom = userFrom;
 
     return messageRepository.save({
-        ...auction,
-        ...payload
+        ...payload,
+        ...message
     });
 }
 
