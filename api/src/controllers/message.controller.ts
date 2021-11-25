@@ -2,12 +2,10 @@ import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } 
 import { Auction, User } from '../models';
 
 export interface messagePayload {
-    brand: string;
-    series: string;
-    description: string;
-    isActive: boolean;
-    price: number;
-    userId: number;
+    content: string;
+    isOpened: boolean;
+    userFrom: number;
+    userTo: number;
 }
 
 export interface messageFilters {
@@ -56,10 +54,10 @@ export const createMessage = async(payload: messagePayload): Promise<Auction> =>
     const messageRepository = getRepository(Auction);
 
     //Relation assigments
-    const user = new User();
-          user.id = payload.userId;
+    //const user = new User();
+          //user.id = payload.userId;
     const auction = new Auction();
-          auction.user = user;
+          //auction.user = user;
 
     return messageRepository.save({
         ...auction,
