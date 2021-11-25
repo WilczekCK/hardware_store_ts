@@ -1,11 +1,9 @@
 import {
     Entity,
     PrimaryGeneratedColumn,
-    Column,
     CreateDateColumn,
-    UpdateDateColumn,
-    ManyToOne,
-    ChildEntity
+    ChildEntity,
+    OneToMany,
 } from "typeorm";
 
 import {User} from "./user";
@@ -16,17 +14,8 @@ export class Mailbox {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  content!: string;
-
-  @Column()
-  isOpened!: boolean;
-
-  @ManyToOne(() => User, user => user.messagesInbox)
-  userTo!: User;
-
-  @ManyToOne(() => User, user => user.messagesOutbox)
-  userFrom!: User;
+  @OneToMany(() => Message, message => message.id)
+  messages!: Message[];
   
   @CreateDateColumn()
   createdAt!: Date;
