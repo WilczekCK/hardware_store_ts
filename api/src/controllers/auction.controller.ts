@@ -1,5 +1,7 @@
-import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
-import { Auction } from '../models';
+import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
+
+import { Auction, User } from '../models';
+import { getUsers } from './user.controller';
 
 export interface auctionPayload {
     brand: string;
@@ -7,6 +9,7 @@ export interface auctionPayload {
     description: string;
     isActive: boolean;
     price: number;
+    userId: number;
 }
 
 export interface auctionFilters {
@@ -51,7 +54,15 @@ export const removeAuction = async (payload: auctionFilters): Promise<DeleteResu
 
 export const createAuction = async(payload: auctionPayload): Promise<Auction> => {
     const auctionRepository = getRepository(Auction);
+    const userRepository = getRepository(User);
+    
     const auction = new Auction();
+
+    const { userId } = payload;
+    const user = await getUsers({where: {id: userId}});
+
+    user.auctions = auction;
+    await userRepository.save(user);
 
     return auctionRepository.save({
         ...auction,
