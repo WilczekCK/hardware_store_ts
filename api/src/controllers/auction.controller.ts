@@ -1,14 +1,15 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
-import { User } from '../models';
+import { Auction } from '../models';
 
-export interface UserPayload {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
+export interface auctionPayload {
+    brand: string;
+    series: string;
+    description: string;
+    isActive: boolean;
+    price: number;
 }
 
-export interface userFilters {
+export interface auctionFilters {
     where?: Record<string, number> | string | any;
     limit?: number; 
     take?: number; //its basically a limit, clone
@@ -18,24 +19,24 @@ export interface userFilters {
     operator?: string;
 }
 
-export const getUsers = async(payload: userFilters): Promise<any> => {
-    const userRepository = getRepository(User);
+export const getAuction = async(payload: auctionFilters): Promise<any> => {
+    const auctionRepository = getRepository(Auction);
 
-    const preparedQuery:userFilters = {
+    const preparedQuery:auctionFilters = {
         where: payload.where ? payload.where : {},
         take:  payload.limit ? payload.limit : 5,
         order: payload.order ? payload.order : { "id": "DESC" },
         skip:  payload.skip  ? payload.skip  : 0,
     }
 
-    return userRepository.find( preparedQuery );
+    return auctionRepository.find( preparedQuery );
 }
 
-export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
-    const usersId = payload.where;
+export const removeAuction = async (payload: auctionFilters): Promise<DeleteResult> => {
+    const auctionsId = payload.where;
 
     // Object to ID's array
-    const ids:Array<number> = usersId.map(( {id}: Record<string,number> ) => {
+    const ids:Array<number> = auctionsId.map(( {id}: Record<string,number> ) => {
         return id;
     });
 
@@ -43,23 +44,23 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
     return await getConnection()
         .createQueryBuilder()
         .delete()
-        .from(User)
+        .from(Auction)
         .where("id IN (:...ids)", { ids } )
         .execute();
 }
 
-export const createUser = async(payload: UserPayload): Promise<User> => {
-    const userRepository = getRepository(User);
-    const user = new User();
+export const createAuction = async(payload: auctionPayload): Promise<Auction> => {
+    const auctionRepository = getRepository(Auction);
+    const auction = new Auction();
 
-    return userRepository.save({
-        ...user,
+    return auctionRepository.save({
+        ...auction,
         ...payload
     });
 }
 
-export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
-    const { where, set }:userFilters = {
+export const modifyAuction = async(payload: auctionFilters): Promise<UpdateResult> => {
+    const { where, set }:auctionFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {updatedAt:new Date(), ...payload.set}  : {},
     }
@@ -69,21 +70,21 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
 
     return await getConnection()
         .createQueryBuilder()
-        .update(User)
+        .update(Auction)
         .set(set)
         .where(`${key} = :${key}`, where)
         .execute();
 }
 
-export const modifyUsers = async(payload: userFilters): Promise<UpdateResult> => {
-    const { where, set }:userFilters = {
+export const modifyAuctions = async(payload: auctionFilters): Promise<UpdateResult> => {
+    const { where, set }:auctionFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {updatedAt:new Date(), ...payload.set} : {},
     }
 
     return await getConnection()
         .createQueryBuilder()
-        .update(User)
+        .update(Auction)
         .set(set)
         .where(where)
         .execute();
