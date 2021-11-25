@@ -1,5 +1,4 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
-import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { User } from '../models';
 
 export interface UserPayload {

@@ -1,12 +1,22 @@
 import express from "express";
+
+import { getMessages } from "../../controllers/message.controller";
+
 var router = express.Router();
 
-router.get('/', function (req, res) {
-  res.send('Get all messages from actual user')
+router.get('/', async (req, res) => {
+  res.send(
+    await getMessages( req.body )
+  );
 })
 
-router.get('/:id', function (req, res) {
-  res.send(`Get message with ID ${req.params.id}`);
+router.get('/:id', async (req, res) => {
+  res.send(
+    await getMessages( { 
+      where: { id: parseInt(req.params.id) }, 
+      ...req.body 
+    })
+  );
 })
 
 export {router}

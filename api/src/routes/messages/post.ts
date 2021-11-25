@@ -1,12 +1,11 @@
 import express from "express";
+
+import { createMessage } from "../../controllers/message.controller";
+
 var router = express.Router();
 
-router.post('/', function (req, res) {
-  res.send('Post messages for all users')
-})
-
-router.post('/:id', function (req, res) {
-  res.send(`Post message with ID ${req.params.id}`);
+router.post('/', async (req, res) => {
+  res.send( await createMessage(req.body) );
 })
 
 export {router}
