@@ -1,7 +1,5 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
-
 import { Auction, User } from '../models';
-import { getUsers } from './user.controller';
 
 export interface auctionPayload {
     brand: string;
@@ -37,7 +35,7 @@ export const getAuctions = async(payload: auctionFilters): Promise<any> => {
     return auctionRepository.find( preparedQuery );
 }
 
-export const removeAuction = async (payload: auctionFilters): Promise<DeleteResult> => {
+export const removeAuctions = async (payload: auctionFilters): Promise<DeleteResult> => {
     const auctionsId = payload.where;
 
     // Object to ID's array
