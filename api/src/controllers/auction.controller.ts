@@ -20,6 +20,7 @@ export interface auctionFilters {
     skip?:  number;
     set?:   Record<string, string> | Record<string, Date>;
     operator?: string;
+    relations?: string[] | undefined;
 }
 
 export const getAuctions = async(payload: auctionFilters): Promise<any> => {
@@ -30,6 +31,7 @@ export const getAuctions = async(payload: auctionFilters): Promise<any> => {
         take:  payload.limit ? payload.limit : 5,
         order: payload.order ? payload.order : { "id": "DESC" },
         skip:  payload.skip  ? payload.skip  : 0,
+        relations: payload.relations ? payload.relations : undefined,
     }
 
     return auctionRepository.find( preparedQuery );
@@ -59,10 +61,12 @@ export const createAuction = async(payload: auctionPayload): Promise<Auction> =>
     const auction = new Auction();
 
     const { userId } = payload;
-    const user = await getUsers({where: {id: userId}});
+    //const user = await getUsers({where: { id: userId }});
 
-    user.auctions = auction;
-    await userRepository.save(user);
+    const user = new User();
+    user.id = userId;
+
+    auction.user = user;
 
     return auctionRepository.save({
         ...auction,
