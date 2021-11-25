@@ -19,7 +19,7 @@ export interface auctionFilters {
     operator?: string;
 }
 
-export const getAuction = async(payload: auctionFilters): Promise<any> => {
+export const getAuctions = async(payload: auctionFilters): Promise<any> => {
     const auctionRepository = getRepository(Auction);
 
     const preparedQuery:auctionFilters = {

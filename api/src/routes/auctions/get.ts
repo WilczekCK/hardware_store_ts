@@ -1,12 +1,22 @@
 import express from "express";
+
+import { getAuctions } from "../../controllers/auction.controller";
+
 var router = express.Router();
 
-router.get('/', function (req, res) {
-  res.send('Get all auctions')
+router.get('/', async (req, res) => {
+  res.send(
+    await getAuctions( req.body )
+  );
 })
 
-router.get('/:id', function (req, res) {
-  res.send(`Get auction with ID ${req.params.id}`);
+router.get('/:id', async (req, res) => {
+  res.send(
+    await getAuctions( { 
+      where: { id: parseInt(req.params.id) }, 
+      ...req.body 
+    })
+  );
 })
 
 export {router}
