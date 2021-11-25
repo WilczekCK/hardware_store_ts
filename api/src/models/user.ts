@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 
 import { Auction } from "./auction";
+import { Message } from "./message";
   
 @Entity()
 export class User {
@@ -36,6 +37,12 @@ export class User {
 
   @OneToMany(() => Auction, auction => auction.user)
   auctions!: Auction[];
+
+  @OneToMany(() => Message, message => message.userFrom)
+  messagesInbox!: Message[];
+
+  @OneToMany(() => Message, message => message.userTo)
+  messagesOutbox!: Message[];
   
   @CreateDateColumn()
   createdAt!: Date;
