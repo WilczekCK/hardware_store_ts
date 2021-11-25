@@ -56,17 +56,12 @@ export const removeAuction = async (payload: auctionFilters): Promise<DeleteResu
 
 export const createAuction = async(payload: auctionPayload): Promise<Auction> => {
     const auctionRepository = getRepository(Auction);
-    const userRepository = getRepository(User);
-    
-    const auction = new Auction();
 
-    const { userId } = payload;
-    //const user = await getUsers({where: { id: userId }});
-
+    //Relation assigments
     const user = new User();
-    user.id = userId;
-
-    auction.user = user;
+          user.id = payload.userId;
+    const auction = new Auction();
+          auction.user = user;
 
     return auctionRepository.save({
         ...auction,
