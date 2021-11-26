@@ -2,7 +2,7 @@ import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } 
 import { Auction, User, Message, Mailbox } from '../models';
 
 export interface mailPayload {
-    subjectId:string;
+    subjectId:any;
 }
 
 export interface mailFilters {
@@ -51,11 +51,15 @@ export const createMail = async(payload: mailPayload): Promise<Mailbox> => {
     const mailsRepository = getRepository(Mailbox);
 
     //Relation assigments
-    const message = {};
+    const message = new Message();
+          message.id = payload.subjectId;
+    const mailbox = new Mailbox();
+          message.mailId = mailbox.id;
+
 
     return mailsRepository.save({
         ...payload,
-        ...message
+        ...mailbox
     });
 }
 

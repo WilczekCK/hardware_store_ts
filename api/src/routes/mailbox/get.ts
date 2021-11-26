@@ -1,18 +1,18 @@
 import express from "express";
 
-import { getMessages } from "../../controllers/message.controller";
+import { getMails } from "../../controllers/mailbox.controller";
 
 var router = express.Router();
 
 router.get('/', async (req, res) => {
   res.send(
-    await getMessages( req.body )
+    await getMails( req.body )
   );
 })
 
 router.get('/:id', async (req, res) => {
   res.send(
-    await getMessages( { 
+    await getMails( { 
       where: { id: parseInt(req.params.id) }, 
       ...req.body 
     })

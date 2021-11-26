@@ -26,9 +26,9 @@ export class Message {
   @ManyToOne(() => User, user => user.messagesOutbox)
   userFrom!: User;
 
-  @ManyToOne(() => Mailbox, mailbox => mailbox.messages)
-  message!: Message;
-  
+  @ManyToOne(() => Mailbox, mailbox => mailbox.id)
+  mailId!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 }

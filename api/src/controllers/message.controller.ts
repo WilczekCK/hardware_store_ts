@@ -1,5 +1,6 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
-import { Auction, User, Message } from '../models';
+import { Auction, User, Message, Mailbox } from '../models';
+import { createMail } from './mailbox.controller';
 
 export interface messagePayload {
     content: string;
@@ -62,10 +63,15 @@ export const createMessage = async(payload: messagePayload): Promise<Message> =>
           message.userTo = userTo;
           message.userFrom = userFrom;
 
-    return messageRepository.save({
+    const response = await messageRepository.save({
         ...payload,
         ...message
     });
+
+    //Create mail in inbox!
+    //await createMail({ subjectId: response.id });
+
+    return response;
 }
 
 export const modifyMessage = async(payload: messageFilters): Promise<UpdateResult> => {
