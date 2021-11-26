@@ -70,7 +70,7 @@ export const createMessage = async(payload: messagePayload): Promise<Message> =>
     } else {
         //Create relation in inbox!
         const { id } = await createMail({usersBetween: [userTo, userFrom]});
-        const mail = new Mailbox( );
+        const mail = new Mailbox();
               mail.id = id;
               message.mailId = mail.id;
     }

@@ -2,7 +2,7 @@ import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } 
 import { Auction, User, Message, Mailbox } from '../models';
 
 export interface mailPayload {
-    usersBetween: any;
+    usersBetween: Array<User>;
 }
 
 export interface mailFilters {
@@ -50,7 +50,6 @@ export const removeMails = async (payload: mailFilters): Promise<DeleteResult> =
 export const createMail = async(payload: mailPayload): Promise<Mailbox> => {
     const mailsRepository = getRepository(Mailbox);
     console.log(payload);
-
 
     //Relation assigments
     const mailbox = new Mailbox();
