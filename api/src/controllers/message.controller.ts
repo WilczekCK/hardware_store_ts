@@ -60,22 +60,17 @@ export const createMessage = async(payload: messagePayload): Promise<Message> =>
           userFrom.id = payload.userFrom;
     const userTo = new User();
           userTo.id = payload.userTo;
-
-
-
     const message = new Message();
           message.userTo = userTo;
           message.userFrom = userFrom;
           
-
-
     const doesMailExists = await getMails({ where: { id: payload.mailId } });
     if ( doesMailExists.length ) {
-        //do nothing
+        //do nothing, mail already created
     } else {
         //Create relation in inbox!
-        const { id } = await createMail();
-        const mail = new Mailbox();
+        const { id } = await createMail({usersBetween: [userTo, userFrom]});
+        const mail = new Mailbox( );
               mail.id = id;
               message.mailId = mail.id;
     }
