@@ -1,12 +1,13 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { Auction, User, Message, Mailbox } from '../models';
-import { createMail } from './mailbox.controller';
+import { createMail, getMails } from './mailbox.controller';
 
 export interface messagePayload {
     content: string;
     isOpened: boolean;
     userFrom: number;
     userTo: number;
+    mailId: number;
 }
 
 export interface messageFilters {
@@ -59,17 +60,30 @@ export const createMessage = async(payload: messagePayload): Promise<Message> =>
           userFrom.id = payload.userFrom;
     const userTo = new User();
           userTo.id = payload.userTo;
+
+
+
     const message = new Message();
           message.userTo = userTo;
           message.userFrom = userFrom;
+          
+
+
+    const doesMailExists = await getMails({ where: { id: payload.mailId } });
+    if ( doesMailExists.length ) {
+        //do nothing
+    } else {
+        //Create relation in inbox!
+        const { id } = await createMail();
+        const mail = new Mailbox();
+              mail.id = id;
+              message.mailId = mail.id;
+    }
 
     const response = await messageRepository.save({
         ...payload,
         ...message
     });
-
-    //Create mail in inbox!
-    //await createMail({ subjectId: response.id });
 
     return response;
 }

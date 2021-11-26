@@ -1,10 +1,10 @@
 import express from "express";
 
 import { app } from "../app";
-import {routes as messages} from './messages'
 import {routes as auctions} from './auctions'
 import {routes as accounts} from './accounts'
 import {routes as mailbox} from './mailbox'
+import {routes as messages} from './messages'
 
 let router = express.Router();
 
