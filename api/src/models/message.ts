@@ -3,11 +3,11 @@ import {
     PrimaryGeneratedColumn,
     Column,
     CreateDateColumn,
-    UpdateDateColumn,
     ManyToOne
 } from "typeorm";
 
 import {User} from "./user";
+import {Mailbox} from "./mailbox";
   
 @Entity()
 export class Message {
@@ -25,7 +25,10 @@ export class Message {
 
   @ManyToOne(() => User, user => user.messagesOutbox)
   userFrom!: User;
-  
+
+  @ManyToOne(() => Mailbox, mailbox => mailbox.id)
+  mailId!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 }

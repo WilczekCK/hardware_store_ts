@@ -1,16 +1,11 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { Auction, User, Message, Mailbox } from '../models';
-import { createMail, getMails } from './mailbox.controller';
 
-export interface messagePayload {
-    content: string;
-    isOpened: boolean;
-    userFrom: number;
-    userTo: number;
-    mailId: number;
+export interface mailPayload {
+    usersBetween: Array<User>;
 }
 
-export interface messageFilters {
+export interface mailFilters {
     where?: Record<string, number> | string | any;
     limit?: number; 
     take?: number; //its basically a limit, clone
@@ -21,10 +16,10 @@ export interface messageFilters {
     relations?: string[] | undefined;
 }
 
-export const getMessages = async(payload: messageFilters): Promise<any> => {
-    const messageRepository = getRepository(Message);
+export const getMails = async(payload: mailFilters): Promise<any> => {
+    const mailsRepository = getRepository(Mailbox);
 
-    const preparedQuery:messageFilters = {
+    const preparedQuery:mailFilters = {
         where: payload.where ? payload.where : {},
         take:  payload.limit ? payload.limit : 5,
         order: payload.order ? payload.order : { "id": "DESC" },
@@ -32,10 +27,10 @@ export const getMessages = async(payload: messageFilters): Promise<any> => {
         relations: payload.relations ? payload.relations : undefined,
     }
 
-    return messageRepository.find( preparedQuery );
+    return mailsRepository.find( preparedQuery );
 }
 
-export const removeMessages = async (payload: messageFilters): Promise<DeleteResult> => {
+export const removeMails = async (payload: mailFilters): Promise<DeleteResult> => {
     const messageId = payload.where;
 
     // Object to ID's array
@@ -52,39 +47,22 @@ export const removeMessages = async (payload: messageFilters): Promise<DeleteRes
         .execute();
 }
 
-export const createMessage = async(payload: messagePayload): Promise<Message> => {
-    const messageRepository = getRepository(Message);
+export const createMail = async(payload: mailPayload): Promise<Mailbox> => {
+    const mailsRepository = getRepository(Mailbox);
+    console.log(payload);
 
     //Relation assigments
-    const userFrom = new User();
-          userFrom.id = payload.userFrom;
-    const userTo = new User();
-          userTo.id = payload.userTo;
-    const message = new Message();
-          message.userTo = userTo;
-          message.userFrom = userFrom;
-          
-    const doesMailExists = await getMails({ where: { id: payload.mailId } });
-    if ( doesMailExists.length ) {
-        //do nothing, mail already created
-    } else {
-        //Create relation in inbox!
-        const { id } = await createMail({usersBetween: [userTo, userFrom]});
-        const mail = new Mailbox();
-              mail.id = id;
-              message.mailId = mail.id;
-    }
+    const mailbox = new Mailbox();
+          mailbox.userOne = payload.usersBetween[0];
+          mailbox.userTwo = payload.usersBetween[1];
 
-    const response = await messageRepository.save({
-        ...payload,
-        ...message
+    return mailsRepository.save({
+        ...mailbox,
     });
-
-    return response;
 }
 
-export const modifyMessage = async(payload: messageFilters): Promise<UpdateResult> => {
-    const { where, set }:messageFilters = {
+export const modifyMail = async(payload: mailFilters): Promise<UpdateResult> => {
+    const { where, set }:mailFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {updatedAt:new Date(), ...payload.set}  : {},
     }
@@ -100,8 +78,8 @@ export const modifyMessage = async(payload: messageFilters): Promise<UpdateResul
         .execute();
 }
 
-export const modifyMessages = async(payload: messageFilters): Promise<UpdateResult> => {
-    const { where, set }:messageFilters = {
+export const modifyMails = async(payload: mailFilters): Promise<UpdateResult> => {
+    const { where, set }:mailFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {updatedAt:new Date(), ...payload.set} : {},
     }
