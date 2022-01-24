@@ -36,7 +36,7 @@ export const getUsers = async(payload: userFilters): Promise<any> => {
 export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
     const { usersId: ids } = payload.where;
 
-    /* Query returns info, how many results are deleted and raw info*/
+    /* Query returns info, how many results are deleted and raw info */
     return await getConnection()
         .createQueryBuilder()
         .delete()
