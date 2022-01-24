@@ -1,6 +1,6 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
-import { hashPassword, comparePassword } from "./hashing.controller";
+import { hashData, compareData } from "./hashing.controller";
 
 
 export interface UserPayload {
@@ -53,8 +53,6 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);
     const user = new User();
-
-    comparePassword( payload.password, '$2b$10$KoAFSvmNjyAkdBwa43hNZOi4QrfzuxMpnNqhdgDs9rO9gEJkPV5W6' );
 
     return userRepository.save({
         ...user,
