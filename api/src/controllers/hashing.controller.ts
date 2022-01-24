@@ -20,3 +20,14 @@ export const hashPassword = async (password: string): Promise<string | boolean> 
 
     return false;
 }
+
+export const comparePassword = async (password: string, hash: string): Promise<boolean> => {
+    try{
+        compare(password, hash, (err, result): Error | Boolean => result)
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+
+    return false;
+}
