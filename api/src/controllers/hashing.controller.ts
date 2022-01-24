@@ -3,12 +3,12 @@ import { genSalt, hash, compare } from "bcrypt";
 
 const saltRounds: number = 10;
 
-export const hashPassword = async (password: string): Promise<boolean> => {
+export const hashPassword = async (password: string): Promise<string | boolean> => {
     try {
-        genSalt(saltRounds, function(err:Error | undefined, salt: string):Boolean {
-            hash(password, salt, function(err: Error | undefined, hash: string):any {
+        genSalt(saltRounds, (err:Error | undefined, salt: string): Boolean => {
+            hash(password, salt, (err: Error | undefined, hash: string): Boolean | string  => {
                 console.log(hash);
-                return true;
+                return hash;
             });
     
             return false;
@@ -16,7 +16,6 @@ export const hashPassword = async (password: string): Promise<boolean> => {
     } catch (err) {
         console.log(err);
         return false;
-
     }
 
     return false;
