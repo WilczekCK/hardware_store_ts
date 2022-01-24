@@ -1,5 +1,7 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
+import { hashPassword } from "./hashing.controller";
+
 
 export interface UserPayload {
     firstName: string;
@@ -51,6 +53,8 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);
     const user = new User();
+
+    hashPassword( payload.password );
 
     return userRepository.save({
         ...user,
