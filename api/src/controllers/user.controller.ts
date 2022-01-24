@@ -34,12 +34,9 @@ export const getUsers = async(payload: userFilters): Promise<any> => {
 }
 
 export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
-    const usersId = payload.where;
+    const { usersId: ids } = payload.where;
 
-    // Object to ID's array
-    const ids:Array<number> = usersId.map(( {id}: Record<string,number> ) => {
-        return id;
-    });
+    console.log(ids);
 
     /* Query returns info, how many results are deleted and raw info*/
     return await getConnection()
