@@ -14,6 +14,6 @@ export const hashData = async (dataToHash: string): Promise<string> => {
         })
 }
 
-export const compareData = async (sentData: string, hashedData: string): Promise<boolean> => {
+export const compareData = async (hashedData: string, sentData: string): Promise<boolean> => {
     return compare(sentData, hashedData).then(( result:boolean ) => result)
 }

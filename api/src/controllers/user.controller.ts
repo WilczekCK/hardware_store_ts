@@ -21,6 +21,7 @@ export interface userFilters {
 }
 
 export const getUsers = async(payload: userFilters): Promise<any> => {
+
     const userRepository = getRepository(User);
 
     const preparedQuery:userFilters = {

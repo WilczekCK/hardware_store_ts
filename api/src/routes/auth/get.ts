@@ -3,8 +3,6 @@ import { areCredentialsValid } from '../../controllers/auth.controller';
 
 var router = express.Router();
 
-router.get('/', async (req, res) => {
-  console.log( areCredentialsValid('wilkuwdr2008@gmail.com', 'asdsdsd') );
-})
+router.get('/', async (req, res) => await areCredentialsValid(req.body) );
 
 export {router}

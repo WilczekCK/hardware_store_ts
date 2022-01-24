@@ -1,14 +1,23 @@
 import { getUsers } from './user.controller';
+import { compareData } from './hashing.controller';
 
-export const areCredentialsValid = async (email:string, password:string): Promise<Boolean> => {
+export const areCredentialsValid = async ({where: whereQuery}: Record<string,any>): Promise<Boolean> => {
 
     const userInfo = await getUsers({
-        where: {
-            email
-        }
-    })
+        where: { email: whereQuery.email }
+    });
 
-    console.log( userInfo );
+    const { password } = userInfo[0];
 
-    return true;
+    const compareResult = await compareData(password, whereQuery.password);
+
+    console.log(password, whereQuery.password);
+
+    if( compareResult ) {
+        console.log('OK!');
+        return true;
+    }
+
+    console.log('WRONG!');
+    return false;
 }
