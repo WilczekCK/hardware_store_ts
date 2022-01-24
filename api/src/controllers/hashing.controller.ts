@@ -1,23 +1,18 @@
 import { genSalt, hash, compare } from "bcrypt";
+import { isBooleanObject } from "util/types";
 
 const saltRounds: number = 10;
 
-export const hashData = async (dataToHash: string): Promise<string | boolean> => {
-    try {
-        genSalt(saltRounds, (err:Error | undefined, salt: string): Boolean => {
-            hash(dataToHash, salt, (err: Error | undefined, hash: string): Boolean | string  => {
-                console.log(hash);
-                return hash;
-            });
-    
-            return false;
-        });
-    } catch (err) {
-        console.log(err);
-        return false;
-    }
+export const hashData = async (dataToHash: string): Promise<string> => {
 
-    return false;
+    return hash( dataToHash, saltRounds )
+        .then(function(hash) {
+            return hash;
+        })
+        .catch(function(err){
+            console.log(err);
+            throw err;
+        })
 }
 
 export const compareData = async (dataToHash: string, hash: string): Promise<boolean> => {

@@ -50,6 +50,9 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);
     const user = new User();
+          
+    // Secure the password!
+    payload.password = await hashData(payload.password);
 
     return userRepository.save({
         ...user,
