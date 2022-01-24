@@ -1,5 +1,4 @@
-import { genSalt, hash, compare } from "bcrypt";
-import { isBooleanObject } from "util/types";
+import { hash, compare } from "bcrypt";
 
 const saltRounds: number = 10;
 
@@ -15,13 +14,6 @@ export const hashData = async (dataToHash: string): Promise<string> => {
         })
 }
 
-export const compareData = async (dataToHash: string, hash: string): Promise<boolean> => {
-    try{
-        compare(dataToHash, hash, (err, result): Error | Boolean => result)
-    } catch (err) {
-        console.log(err);
-        return false;
-    }
-
-    return false;
+export const compareData = async (sentData: string, hashedData: string): Promise<boolean> => {
+    return compare(sentData, hashedData).then((result) => result)
 }

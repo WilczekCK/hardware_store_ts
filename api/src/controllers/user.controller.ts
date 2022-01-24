@@ -36,8 +36,6 @@ export const getUsers = async(payload: userFilters): Promise<any> => {
 export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
     const { usersId: ids } = payload.where;
 
-    console.log(ids);
-
     /* Query returns info, how many results are deleted and raw info*/
     return await getConnection()
         .createQueryBuilder()
@@ -50,7 +48,7 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);
     const user = new User();
-          
+
     // Secure the password!
     payload.password = await hashData(payload.password);
 
