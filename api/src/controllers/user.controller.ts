@@ -1,5 +1,7 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
+import { hashData, compareData } from "./hashing.controller";
+
 
 export interface UserPayload {
     firstName: string;
@@ -32,14 +34,9 @@ export const getUsers = async(payload: userFilters): Promise<any> => {
 }
 
 export const removeUsers = async (payload: userFilters): Promise<DeleteResult> => {
-    const usersId = payload.where;
+    const { usersId: ids } = payload.where;
 
-    // Object to ID's array
-    const ids:Array<number> = usersId.map(( {id}: Record<string,number> ) => {
-        return id;
-    });
-
-    /* Query returns info, how many results are deleted and raw info*/
+    /* Query returns info, how many results are deleted and raw info */
     return await getConnection()
         .createQueryBuilder()
         .delete()
@@ -51,6 +48,9 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
 export const createUser = async(payload: UserPayload): Promise<User> => {
     const userRepository = getRepository(User);
     const user = new User();
+
+    // Secure the password!
+    payload.password = await hashData(payload.password);
 
     return userRepository.save({
         ...user,
