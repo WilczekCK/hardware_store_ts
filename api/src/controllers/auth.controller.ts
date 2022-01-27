@@ -1,3 +1,15 @@
+/*
+    TODO:   
+    - Password reset
+    - Email verification
+    - User deletion
+    - OAuth
+*/
+
+/* TESTING PURPOSE */
+const testAccount = await nodemailer.createTestAccount();
+/* TESTING PURPOSE */
+
 import { getUsers } from './user.controller';
 import { compareData } from './hashing.controller';
 
@@ -11,4 +23,8 @@ export const areCredentialsValid = async ({where: whereQuery}: queryResults): Pr
 
     if ( compareResult ) return true;
     return false;
+}
+
+export const sendVerificationEmail = async (): Promise<boolean> => {
+
 }
