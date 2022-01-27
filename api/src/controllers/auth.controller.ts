@@ -15,10 +15,12 @@ type queryResults = {
 
 export const areCredentialsValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
     const [ User ] : any = await getUsers({ where: {email: whereQuery.email} });
-    const compareResult: boolean = await compareData(User.password, whereQuery.password);
+    if ( !User ) return false;
 
-    if ( compareResult ) return true;
-    return false;
+    const compareResult: boolean = await compareData(User.password, whereQuery.password);
+    if ( !compareResult ) return false;
+
+    return true;
 }
 
 export const sendVerificationEmail = async (): Promise<boolean> => {
