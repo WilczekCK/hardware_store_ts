@@ -31,10 +31,13 @@ export const generateVerificationString = (): string => {
 
 export const sendVerificationEmail = async (): Promise<boolean> => {
     const transporter = createTransport(config)
-    const mailSent = await transporter.sendMail(mails.verification);
 
-    console.log(generateVerificationString());
+    const { html } = mails.verification;
+    const mailSent = await transporter.sendMail({
+        ...mails.verification,
+        html: html.replace("[verify_code]", generateVerificationString())
+    });
 
-    console.log("Message sent: %s", mailSent.messageId);
-    return true;
+    if ( mailSent.messageId ) return true
+    return false;
 }
