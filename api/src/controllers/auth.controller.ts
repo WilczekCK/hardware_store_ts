@@ -8,6 +8,7 @@
 import { getUsers } from './user.controller';
 import { compareData } from './hashing.controller';
 import { createTestAccount, createTransport } from 'nodemailer';
+import { config, mails } from '../config/mail';
 
 type queryResults = {
     [where: string]: Record<string, string>
@@ -25,23 +26,11 @@ export const areCredentialsValid = async ({where: whereQuery}: queryResults): Pr
 
 export const sendVerificationEmail = async (): Promise<boolean> => {
     const testAccount = await createTestAccount();
-    const transporter = createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: testAccount.user, // generated ethereal user
-            pass: testAccount.pass, // generated ethereal password
-        },
-    })
+    const transporter = createTransport(config)
 
-    const mailSent = await transporter.sendMail({
-        from: '"Fred Foo 👻" <foo@example.com>', // sender address
-        to: "wilkuwdr2008@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
-    });
+    const mailSent = await transporter.sendMail(mails.verification);
+
+    console.log("Message sent: %s", mailSent.messageId);
 
     return true;
 }
