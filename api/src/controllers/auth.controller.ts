@@ -9,9 +9,6 @@ export const areCredentialsValid = async ({where: whereQuery}: queryResults): Pr
     const [ User ] : any = await getUsers({ where: {email: whereQuery.email} });
     const compareResult: boolean = await compareData(User.password, whereQuery.password);
 
-    if( compareResult ) {
-        return true;
-    }
-
+    if ( compareResult ) return true;
     return false;
 }
