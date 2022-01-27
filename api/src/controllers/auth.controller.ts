@@ -9,8 +9,6 @@ import { getUsers } from './user.controller';
 import { compareData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
-import Mail from 'nodemailer/lib/mailer';
-import SendmailTransport from 'nodemailer/lib/sendmail-transport';
 
 type queryResults = {
     [where: string]: Record<string, string>
@@ -31,13 +29,14 @@ export const generateVerificationString = (): string => {
     return letterArray.sort(() => 0.5 - Math.random()).join("");
 }
 
-export const sendVerificationEmail = async (): Promise<boolean> => {
+export const sendVerificationEmail = async ( firstName:string, email: string, verificationCodeAssigned: string ): Promise<boolean> => {
     const transporter:Transporter = createTransport(config);
 
-    const { html }:Record<string,string> = mails.verification;
+    const { html, to }:Record<string,string> = mails.verification;
     const mailSent:Record<string,number> = await transporter.sendMail({
         ...mails.verification,
-        html: html.replace("[verify_code]", generateVerificationString())
+        to: to.replace("[mail_to]", email),
+        html: html.replace("[verify_code]", verificationCodeAssigned).replace("[name]", firstName),
     });
 
     if ( !mailSent.response ) return false;

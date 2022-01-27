@@ -12,7 +12,6 @@ router.get('/user', async (req, res) => {
 });
 
 router.get('/mail', async (req, res) => {
-    sendVerificationEmail();
 });
 
 export {router}

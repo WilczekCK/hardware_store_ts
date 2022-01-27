@@ -1,6 +1,7 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
 import { hashData, compareData } from "./hashing.controller";
+import { sendVerificationEmail, generateVerificationString } from "./auth.controller";
 
 
 export interface UserPayload {
@@ -8,6 +9,8 @@ export interface UserPayload {
     lastName: string;
     email: string;
     password: string;
+    verifyCode: string;
+    isVerified: boolean;
 }
 
 export interface userFilters {
@@ -52,6 +55,11 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
 
     // Secure the password!
     payload.password = await hashData(payload.password);
+
+    // Assign the verify code
+    user.verifyCode = generateVerificationString();
+    user.isVerified = false;
+    await sendVerificationEmail(payload.firstName, payload.email, user.verifyCode);
 
     return userRepository.save({
         ...user,

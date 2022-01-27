@@ -11,10 +11,10 @@ type mailContent = {
 const mails:mailContent = {
     verification: {
         from: '"Paweł Wilk" <wiluwdr@onet.eu>', // sender address
-        to: "wilkuwdr2008@gmail.com", // list of receivers
+        to: "[mail_to]", // list of receivers
         subject: "YourWebsite.com | Mail Verification", // Subject line
         text: "TBD", // plain text body
-        html: "<b>Hello, this is your verification code [verify_code] </b>", // html body
+        html: "<b>Hello [name], this is your verification code [verify_code] </b>", // html body
     },
     forgotPassword: {
         from: '"Paweł Wilk" <wiluwdr@onet.eu>', // sender address
