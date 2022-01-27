@@ -7,7 +7,7 @@
 */
 import { getUsers } from './user.controller';
 import { compareData } from './hashing.controller';
-import { createTestAccount, createTransport } from 'nodemailer';
+import { createTransport } from 'nodemailer';
 import { config, mails } from '../config/mail';
 
 type queryResults = {
@@ -25,12 +25,9 @@ export const areCredentialsValid = async ({where: whereQuery}: queryResults): Pr
 }
 
 export const sendVerificationEmail = async (): Promise<boolean> => {
-    const testAccount = await createTestAccount();
     const transporter = createTransport(config)
-
     const mailSent = await transporter.sendMail(mails.verification);
 
     console.log("Message sent: %s", mailSent.messageId);
-
     return true;
 }

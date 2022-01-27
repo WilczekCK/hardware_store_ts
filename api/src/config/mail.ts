@@ -12,16 +12,16 @@ const mails:mailContent = {
     verification: {
         from: '"Paweł Wilk" <wiluwdr@onet.eu>', // sender address
         to: "wilkuwdr2008@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
+        subject: "YourWebsite.com | Mail Verification", // Subject line
+        text: "TBD", // plain text body
+        html: "<b>TBD</b>", // html body
     },
     forgotPassword: {
         from: '"Paweł Wilk" <wiluwdr@onet.eu>', // sender address
         to: "wilkuwdr2008@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "Hello world?", // plain text body
-        html: "<b>Hello world?</b>", // html body
+        subject: "YourWebsite.com | Password Reset", // Subject line
+        text: "TBD", // plain text body
+        html: "<b>TBD/b>", // html body
     }
 }
 
