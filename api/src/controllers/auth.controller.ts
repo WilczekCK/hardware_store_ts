@@ -34,9 +34,10 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
 
     const { html, to }:Record<string,string> = mails.verification;
     const mailSent:Record<string,number> = await transporter.sendMail({
+        to:   to.replace("[mail_to]", email),
+        html: html.replace("[verify_code]", verificationCodeAssigned)
+                  .replace("[name]", firstName),
         ...mails.verification,
-        to: to.replace("[mail_to]", email),
-        html: html.replace("[verify_code]", verificationCodeAssigned).replace("[name]", firstName),
     });
 
     if ( !mailSent.response ) return false;

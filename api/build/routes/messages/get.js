@@ -5,11 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
+const message_controller_1 = require("../../controllers/message.controller");
 var router = express_1.default.Router();
 exports.router = router;
-router.get('/', function (req, res) {
-    res.send('Get all messages from actual user');
+router.get('/', async (req, res) => {
+    res.send(await (0, message_controller_1.getMessages)(req.body));
 });
-router.get('/:id', function (req, res) {
-    res.send(`Get message with ID ${req.params.id}`);
+router.get('/:id', async (req, res) => {
+    res.send(await (0, message_controller_1.getMessages)({
+        where: { id: parseInt(req.params.id) },
+        ...req.body
+    }));
 });

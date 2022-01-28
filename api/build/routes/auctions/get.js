@@ -5,11 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
+const auction_controller_1 = require("../../controllers/auction.controller");
 var router = express_1.default.Router();
 exports.router = router;
-router.get('/', function (req, res) {
-    res.send('Get all auctions');
+router.get('/', async (req, res) => {
+    res.send(await (0, auction_controller_1.getAuctions)(req.body));
 });
-router.get('/:id', function (req, res) {
-    res.send(`Get auction with ID ${req.params.id}`);
+router.get('/:id', async (req, res) => {
+    res.send(await (0, auction_controller_1.getAuctions)({
+        where: { id: parseInt(req.params.id) },
+        ...req.body
+    }));
 });
