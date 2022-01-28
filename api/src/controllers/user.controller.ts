@@ -71,6 +71,7 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
     const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {...payload.set, updatedAt:new Date()}  : {},
+        operator: payload.operator ? payload.operator : "AND",
     }
 
     //WHERE, for single user, must have only ONE value!
@@ -80,7 +81,7 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
         .createQueryBuilder()
         .update(User)
         .set(set)
-        .where(`${key} = :${key}`, where)
+        .where(`${key} = :${key}`)
         .execute();
 }
 

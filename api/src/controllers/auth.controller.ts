@@ -32,12 +32,14 @@ export const generateVerificationString = (): string => {
 export const sendVerificationEmail = async ( firstName:string, email: string, verificationCodeAssigned: string ): Promise<boolean> => {
     const transporter:Transporter = createTransport(config);
 
+    console.log(firstName, email, verificationCodeAssigned);
+
     const { html, to }:Record<string,string> = mails.verification;
     const mailSent:Record<string,number> = await transporter.sendMail({
         to:   to.replace("[mail_to]", email),
         html: html.replace("[verify_code]", verificationCodeAssigned)
                   .replace("[name]", firstName),
-        ...mails.verification,
+        ...mails,
     });
 
     if ( !mailSent.response ) return false;
@@ -47,10 +49,10 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
 export const isVerificationCodeValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
     const [ User ] : any = await getUsers({ 
         where: [
-            {verifyCode: whereQuery.verifyCode}, 
+            {verifyCode: whereQuery.verificationCode}, 
             {isVerified: false}
         ] });
-    if ( !User ) return false;
+    if ( !User || !whereQuery.verificationCode) return false;
 
     return true;
 }  
@@ -60,10 +62,14 @@ export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boo
         where: [
             {id: whereQuery.id}
         ] });
-    if ( !User ) return false;
+    if ( !User || User.isVerified) return false;
     
+        console.log(User);
+
     const { affected, raw } :any = await modifyUser({
-        where: {'id': whereQuery.id},
+        where: [
+            {id: whereQuery.id}
+        ],
         set: {isVerified: true}
     })
     if ( affected === 0 ) return false;
