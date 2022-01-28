@@ -49,30 +49,26 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
 export const isVerificationCodeValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
     const [ User ] : any = await getUsers({ 
         where: [
-            {verifyCode: whereQuery.verificationCode}, 
+            {verificationCode: whereQuery.verificationCode}, 
             {isVerified: false}
-        ] });
+        ],
+        operator: 'AND' 
+    });
     if ( !User || !whereQuery.verificationCode) return false;
 
     return true;
 }  
 
 export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boolean> => {
-    const [ User ] : any = await getUsers({ 
-        where: [
-            {id: whereQuery.id}
-        ] });
-    if ( !User || User.isVerified) return false;
-    
-        console.log(User);
+    console.log(whereQuery.id);
+    const [ User ] : any = await getUsers({ where: {id: whereQuery.id} });
+    if ( !User ) return false;
 
     const { affected, raw } :any = await modifyUser({
-        where: [
-            {id: whereQuery.id}
-        ],
+        where: {verificationCode: whereQuery.verificationCode},
         set: {isVerified: true}
     })
-    if ( affected === 0 ) return false;
+    if ( !affected ) return false;
 
     return true;
 }

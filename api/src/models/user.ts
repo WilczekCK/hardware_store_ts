@@ -42,7 +42,7 @@ export class User {
     type: "text",
     nullable: true,
   })
-  verifyCode!: string;
+  verificationCode!: string;
 
   @OneToMany(() => Auction, auction => auction.user)
   auctions!: Auction[];

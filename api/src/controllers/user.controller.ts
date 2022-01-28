@@ -9,7 +9,7 @@ export interface UserPayload {
     lastName: string;
     email: string;
     password: string;
-    verifyCode: string;
+    verificationCode: string;
     isVerified: boolean;
 }
 
@@ -57,9 +57,9 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
     payload.password = await hashData(payload.password);
 
     // Assign the verify code
-    user.verifyCode = generateVerificationString();
+    user.verificationCode = generateVerificationString();
     user.isVerified = false;
-    await sendVerificationEmail(payload.firstName, payload.email, user.verifyCode);
+    await sendVerificationEmail(payload.firstName, payload.email, user.verificationCode);
 
     return userRepository.save({
         ...user,
@@ -71,7 +71,6 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
     const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {...payload.set, updatedAt:new Date()}  : {},
-        operator: payload.operator ? payload.operator : "AND",
     }
 
     //WHERE, for single user, must have only ONE value!
@@ -81,7 +80,7 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
         .createQueryBuilder()
         .update(User)
         .set(set)
-        .where(`${key} = :${key}`)
+        .where(`${key} = :${key}`, where)
         .execute();
 }
 
