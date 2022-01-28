@@ -2,7 +2,6 @@
     TODO:   
     - Password reset
     - Email verification <- done
-    - User deletion
     - OAuth
 */
 import { getUsers, modifyUser } from './user.controller';
@@ -31,8 +30,6 @@ export const generateVerificationString = (): string => {
 
 export const sendVerificationEmail = async ( firstName:string, email: string, verificationCodeAssigned: string ): Promise<boolean> => {
     const transporter:Transporter = createTransport(config);
-
-    console.log(firstName, email, verificationCodeAssigned);
 
     const { html, to }:Record<string,string> = mails.verification;
     const mailSent:Record<string,number> = await transporter.sendMail({
@@ -69,5 +66,20 @@ export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boo
     })
     if ( !affected ) return false;
 
+    return true;
+}
+
+export const sendForgotPasswordEmail = async (firstName:string, email: string, newPassword: string): Promise<boolean> => {
+    const transporter:Transporter = createTransport(config);
+
+    const { html, to }:Record<string,string> = mails.forgotPassword;
+    const mailSent:Record<string,number> = await transporter.sendMail({
+        to:   to.replace("[mail_to]", email),
+        html: html.replace("[password]", newPassword)
+                  .replace("[name]", firstName),
+        ...mails,
+    });
+
+    if ( !mailSent.response ) return false;
     return true;
 }
