@@ -5,7 +5,7 @@
     - User deletion
     - OAuth
 */
-import { getUsers } from './user.controller';
+import { getUsers, modifyUser } from './user.controller';
 import { compareData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
@@ -41,5 +41,32 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
     });
 
     if ( !mailSent.response ) return false;
+    return true;
+}
+
+export const isVerificationCodeValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
+    const [ User ] : any = await getUsers({ 
+        where: [
+            {verifyCode: whereQuery.verifyCode}, 
+            {isVerified: false}
+        ] });
+    if ( !User ) return false;
+
+    return true;
+}  
+
+export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boolean> => {
+    const [ User ] : any = await getUsers({ 
+        where: [
+            {id: whereQuery.id}
+        ] });
+    if ( !User ) return false;
+    
+    const { affected, raw } :any = await modifyUser({
+        where: {'id': whereQuery.id},
+        set: {isVerified: true}
+    })
+    if ( affected === 0 ) return false;
+
     return true;
 }

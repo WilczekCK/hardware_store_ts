@@ -19,7 +19,7 @@ export interface userFilters {
     take?: number; //its basically a limit, clone
     order?: Record<string, string>;
     skip?:  number;
-    set?:   Record<string, string> | Record<string, Date>;
+    set?:   Record<string, string> | Record<string, Date> | Record<string, boolean>;
     operator?: string;
 }
 
@@ -70,7 +70,7 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
 export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
     const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
-        set:      payload.set  ? {updatedAt:new Date(), ...payload.set}  : {},
+        set:      payload.set  ? {...payload.set, updatedAt:new Date()}  : {},
     }
 
     //WHERE, for single user, must have only ONE value!
