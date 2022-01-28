@@ -1,7 +1,7 @@
 /*
     TODO:   
     - Password reset
-    - Email verification
+    - Email verification <- done
     - User deletion
     - OAuth
 */
@@ -60,7 +60,6 @@ export const isVerificationCodeValid = async ({where: whereQuery}: queryResults)
 }  
 
 export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boolean> => {
-    console.log(whereQuery.id);
     const [ User ] : any = await getUsers({ where: {id: whereQuery.id} });
     if ( !User ) return false;
 
