@@ -18,10 +18,10 @@ const mails:mailContent = {
     },
     forgotPassword: {
         from: '"Paweł Wilk" <wiluwdr@onet.eu>', // sender address
-        to: "wilkuwdr2008@gmail.com", // list of receivers
+        to: "[mail_to]", // list of receivers
         subject: "YourWebsite.com | Password Reset", // Subject line
         text: "TBD", // plain text body
-        html: "<b>TBD</b>", // html body
+        html: "<b>Hello [name], this is your new password [password_generated] </b>", // html body
     }
 }
 
