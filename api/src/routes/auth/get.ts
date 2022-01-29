@@ -22,7 +22,7 @@ router.get('/forgotPassword', async (req, res) => {
     res.send(
       (isMailSent) 
       ? {status: 200, message: `Verification code sent to your email`}
-      : {status: 202, message: `There is no user like that`}
+      : {status: 402, message: `There is no user like that`}
     );
   })
   
