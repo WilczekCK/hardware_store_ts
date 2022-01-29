@@ -9,7 +9,6 @@ router.put('/', async (req, res) => {
 })
 
 router.put('/forgotPassword', async (req, res) => {
-  
   const [User] = await getUsers({ where: {email: req.body.where.email} });
   const isMailSent = await sendForgotPasswordEmail(req.body, User.verificationCode);
 
