@@ -71,8 +71,8 @@ export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boo
 
 export const changeForgottenPasswordToTemp = async({where: whereQuery}: queryResults, newPassword: string): Promise<boolean> => {
     const { affected, raw } :any = await modifyUser({
-        where: {verificationCode: whereQuery.verificationCode},
-        set: {isVerified: true}
+        where: {email: whereQuery.email},
+        set: {password: await hashData(newPassword)}
     })
     if ( !affected ) return false;
 
@@ -86,7 +86,7 @@ export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults,
 
     const mailSent:Record<string,number> = await transporter.sendMail({
         to:   to.replace("[mail_to]", whereQuery.email),
-        html: html.replace("[password]", newPassword)
+        html: html.replace("[password_generated]", newPassword)
                   .replace("[name]", firstName),
         ...mails,
     });

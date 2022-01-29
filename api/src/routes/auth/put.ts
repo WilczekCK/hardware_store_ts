@@ -9,7 +9,10 @@ router.put('/', async (req, res) => {
 
 router.put('/forgotPassword', async (req, res) => {
   const newPassword = generateVerificationString();
+  const setNewHashedPassword = await sendForgotPasswordEmail(req.body, newPassword);
   const isMailSent = await sendForgotPasswordEmail(req.body, newPassword);
+
+  res.send({newPassword: setNewHashedPassword, isMailSent})
 })
 
 
