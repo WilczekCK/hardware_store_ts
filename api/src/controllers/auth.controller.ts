@@ -1,8 +1,6 @@
 /*
-    TODO:   
-    - Password reset
-    - Email verification <- done
-    - OAuth
+    TODO:  
+    - OAuth <- later
 */
 import { getUsers, modifyUser } from './user.controller';
 import { compareData, hashData } from './hashing.controller';
@@ -81,8 +79,12 @@ export const changeForgottenPassword = async({where: whereQuery}: queryResults):
 }
 
 export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults, verificationCode: string): Promise<boolean> => {
+    const [ User ] : any = await getUsers({ where: {email: whereQuery.email} });
+    if ( !User ) return false;
+
+    const firstName: string = User.firstName;
+
     const transporter:Transporter = createTransport(config);
-    const firstName = 'test';
     const { html, to }:Record<string,string> = mails.forgotPassword;
 
     const mailSent:Record<string,number> = await transporter.sendMail({

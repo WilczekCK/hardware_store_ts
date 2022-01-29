@@ -4,6 +4,10 @@ import { getUsers } from "../../controllers/user.controller";
 
 var router = express.Router();
 
+type queryResults = {
+    [where: string]: Record<string, string>
+}
+
 router.get('/user', async (req, res) => {
     const areValid = await areCredentialsValid(req.body);
     res.send( {
@@ -17,7 +21,7 @@ router.get('/mail', async (req, res) => {
 
 router.get('/forgotPassword', async (req, res) => {
     const [User] = await getUsers({ where: {email: req.body.where.email} });
-    const isMailSent = await sendForgotPasswordEmail(req.body, User.verificationCode);
+    const isMailSent: Boolean = await sendForgotPasswordEmail(req.body, User.verificationCode);
   
     res.send(
       (isMailSent) 
