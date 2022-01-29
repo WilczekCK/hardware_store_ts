@@ -69,12 +69,13 @@ export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boo
     return true;
 }
 
-export const sendForgotPasswordEmail = async (firstName:string, email: string, newPassword: string): Promise<boolean> => {
+export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults, newPassword: string): Promise<boolean> => {
     const transporter:Transporter = createTransport(config);
-
+    const firstName = 'test';
     const { html, to }:Record<string,string> = mails.forgotPassword;
+
     const mailSent:Record<string,number> = await transporter.sendMail({
-        to:   to.replace("[mail_to]", email),
+        to:   to.replace("[mail_to]", whereQuery.email),
         html: html.replace("[password]", newPassword)
                   .replace("[name]", firstName),
         ...mails,
