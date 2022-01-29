@@ -7,6 +7,11 @@ services:
       - POSTGRES_DB=express-ts
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ~/dbdata:/var/lib/postgresql/data
+    networks:
+      - mynw
+
   app:
     build:
       context: .

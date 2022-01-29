@@ -1,6 +1,7 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
 import { hashData, compareData } from "./hashing.controller";
+import { sendVerificationEmail, generateVerificationString } from "./auth.controller";
 
 
 export interface UserPayload {
@@ -8,6 +9,8 @@ export interface UserPayload {
     lastName: string;
     email: string;
     password: string;
+    verificationCode: string;
+    isVerified: boolean;
 }
 
 export interface userFilters {
@@ -16,11 +19,12 @@ export interface userFilters {
     take?: number; //its basically a limit, clone
     order?: Record<string, string>;
     skip?:  number;
-    set?:   Record<string, string> | Record<string, Date>;
+    set?:   Record<string, string> | Record<string, Date> | Record<string, boolean>;
     operator?: string;
 }
 
 export const getUsers = async(payload: userFilters): Promise<any> => {
+
     const userRepository = getRepository(User);
 
     const preparedQuery:userFilters = {
@@ -52,6 +56,11 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
     // Secure the password!
     payload.password = await hashData(payload.password);
 
+    // Assign the verify code
+    user.verificationCode = generateVerificationString();
+    user.isVerified = false;
+    await sendVerificationEmail(payload.firstName, payload.email, user.verificationCode);
+
     return userRepository.save({
         ...user,
         ...payload
@@ -61,7 +70,7 @@ export const createUser = async(payload: UserPayload): Promise<User> => {
 export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
     const { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
-        set:      payload.set  ? {updatedAt:new Date(), ...payload.set}  : {},
+        set:      payload.set  ? {...payload.set, updatedAt:new Date()}  : {},
     }
 
     //WHERE, for single user, must have only ONE value!

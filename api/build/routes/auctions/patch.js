@@ -5,11 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
+const auction_controller_1 = require("../../controllers/auction.controller");
 var router = express_1.default.Router();
 exports.router = router;
-router.patch('/', function (req, res) {
-    res.send('Update all auctions from inbox');
-});
-router.patch('/:id', function (req, res) {
-    res.send(`Update auctions with ID ${req.params.id}`);
+router.patch('/', async (req, res) => {
+    const { where, set } = req.body;
+    const { affected, raw } = await (0, auction_controller_1.modifyAuctions)({ where, set }); // () => results how many changed
+    if (affected > 0) {
+        return res.send({ status: 200, message: `${affected} results modified, all ok` });
+    }
+    res.send({ status: 202, message: `No results` });
 });

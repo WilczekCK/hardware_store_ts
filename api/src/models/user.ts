@@ -14,6 +14,9 @@ import { Message } from "./message";
 export class User {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ nullable: true })
+  isVerified!: boolean;
   
   @Column({
     type: "text",
@@ -34,6 +37,12 @@ export class User {
     type: "text",
   })
   password!: string;
+
+  @Column({
+    type: "text",
+    nullable: true,
+  })
+  verificationCode!: string;
 
   @OneToMany(() => Auction, auction => auction.user)
   auctions!: Auction[];

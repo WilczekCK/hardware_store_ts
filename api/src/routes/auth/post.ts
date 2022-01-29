@@ -2,10 +2,8 @@ import express from "express";
 
 var router = express.Router();
 
-router.delete('/', async (req, res) => {  
+router.post('/', async (req, res) => {
   //
 })
-
-
 
 export {router}
