@@ -21,7 +21,7 @@ const mails:mailContent = {
         to: "[mail_to]", // list of receivers
         subject: "YourWebsite.com | Password Reset", // Subject line
         text: "TBD", // plain text body
-        html: "<b>Hello [name], this is your new password [password_generated] </b>", // html body
+        html: "<b>Hello [name], your verification code to change password is [password_generated] </b>", // html body
     }
 }
 
