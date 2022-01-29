@@ -5,7 +5,7 @@
     - OAuth
 */
 import { getUsers, modifyUser } from './user.controller';
-import { compareData } from './hashing.controller';
+import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
 
@@ -69,6 +69,16 @@ export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boo
     return true;
 }
 
+export const changeForgottenPasswordToTemp = async({where: whereQuery}: queryResults, newPassword: string): Promise<boolean> => {
+    const { affected, raw } :any = await modifyUser({
+        where: {verificationCode: whereQuery.verificationCode},
+        set: {isVerified: true}
+    })
+    if ( !affected ) return false;
+
+    return true;
+}
+
 export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults, newPassword: string): Promise<boolean> => {
     const transporter:Transporter = createTransport(config);
     const firstName = 'test';
@@ -80,7 +90,7 @@ export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults,
                   .replace("[name]", firstName),
         ...mails,
     });
-
     if ( !mailSent.response ) return false;
+
     return true;
 }
