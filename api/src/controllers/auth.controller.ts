@@ -68,7 +68,7 @@ export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boo
 }
 
 export const changeForgottenPassword = async({where: whereQuery}: queryResults): Promise<boolean> => {
-    const newHashedPassword = await hashData(whereQuery.password);
+    const newHashedPassword: string = await hashData(whereQuery.password);
     const { affected, raw } :any = await modifyUser({
         where: {verificationCode: whereQuery.verificationCode},
         set: {password: newHashedPassword}

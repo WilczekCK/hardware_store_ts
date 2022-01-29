@@ -9,7 +9,7 @@ type queryResults = {
 }
 
 router.get('/user', async (req, res) => {
-    const areValid = await areCredentialsValid(req.body);
+    const areValid: Boolean = await areCredentialsValid(req.body);
     res.send( {
         status: areValid ? 200 : 401,
         areValid 
@@ -20,7 +20,7 @@ router.get('/mail', async (req, res) => {
 });
 
 router.get('/forgotPassword', async (req, res) => {
-    const [User] = await getUsers({ where: {email: req.body.where.email} });
+    const [ User ] = await getUsers({ where: {email: req.body.where.email} });
     const isMailSent: Boolean = await sendForgotPasswordEmail(req.body, User.verificationCode);
   
     res.send(
