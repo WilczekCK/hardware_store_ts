@@ -1,2 +1,4 @@
-**/node_modules
+**/api/node_modules
 **/api/build
+**/client/build
+**/client/node_modules
