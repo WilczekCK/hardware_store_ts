@@ -4,7 +4,7 @@
   "description": "OLX like store",
   "main": "app.js",
   "scripts": {
-    "build": "tsc -p ./api",
+    "build": "tsc -p ./",
     "dev": "nodemon"
   },
   "nodemonConfig": {
@@ -12,7 +12,7 @@
       "api/src"
     ],
     "ext": "ts",
-    "exec": "ts-node api/src/server.ts"
+    "exec": "ts-node src/server.ts"
   },
   "author": "Pawel Wilk",
   "license": "GPL-3.0",
@@ -27,6 +27,7 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
     "@types/nodemailer": "^6.4.4",
+    "@vue/cli-init": "^4.5.15",
     "bcrypt": "^5.0.1",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
