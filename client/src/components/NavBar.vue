@@ -1,5 +1,5 @@
 <template lang="pug">
-van-nav-bar( fixed="true" )
+van-nav-bar(fixed=true id="navbar")
   template(#left)
     ="Hardware Store"
   template(#right)
@@ -16,19 +16,17 @@ export default class NavBar extends Vue {}
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+#navbar{
+
+    /* Tweak for desktop only */
+    @media (min-width: 768px) {
+        max-width: 75%;
+        margin-left: 12.5%;
+    }
+
+    a{
+        margin-left: 20px;
+    }
 }
 </style>
 
