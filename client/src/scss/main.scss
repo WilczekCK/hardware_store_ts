@@ -7,15 +7,18 @@
 }
   
 #nav{
-  padding: 15px;
-  background:rgba(0,0,0,.2)
+  .header__container{  
+    padding: 15px;
+    background:rgba(0,0,0,.2);
+
+    a{
+      font-weight: bold;
+      color: #2c3e50;
+
+      &.router-link-exact-active{
+        color: #42b983;
+      }
+    }
+  }  
 }
-  
-#nav a{
-  font-weight: bold;
-  color: #2c3e50;
-}
-  
-#nav a.router-link-exact-active{
-  color: #42b983;
-}
+.home{padding-bottom:2000px}
