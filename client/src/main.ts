@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { Button, Row, Col, RowAlign, RowJustify, Sticky } from "vant";
+import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar } from "vant";
 
 import App from "./App.vue";
 import router from "./router";
@@ -9,7 +9,7 @@ const app = createApp(App);
 app.config.performance = true; //enable vue troubleshooting
 
 /* VANT */
-app.use(Button).use(Row).use(Col).use(Sticky);
+app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar);
 /* VANT */
 
 app.use(store).use(router).mount("#app");
