@@ -4,16 +4,23 @@
 
   ul
     li(v-for="auction in auctionsArray")
-      a(href="#") {{auction.brand}}
+      ListSingleAuction(:auction="auction")
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
-import axios, { AxiosResponse } from "axios";
+import { Vue, Options } from "vue-class-component";
+import axios from "axios";
+import ListSingleAuction from '../components/ListSingleAuction.vue';
 
 interface serverResponse {
   [key: string]: number | string | boolean;
 }
+
+@Options({
+  components: {
+    ListSingleAuction,
+  }
+})
 
 export default class Auctions extends Vue {
   auctionsArray :Array<serverResponse> = [];
