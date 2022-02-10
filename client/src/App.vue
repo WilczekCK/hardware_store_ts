@@ -1,11 +1,22 @@
 <template lang="pug">
-#nav
-  router-link(to="/")
-    ="Home"
-  router-link(to="/about")
-    ="About"
-router-view
+NavBar
+router-view( v-slot="{ Component }" )
+  transition( name="fade" mode="out-in" )
+    Component( :is="Component" )
 </template>
+
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+
+import NavBar from "./components/NavBar.vue"; // @ is an alias to /src
+
+@Options({
+  components: {
+    NavBar
+  }
+})
+export default class App extends Vue{}
+</script>
 
 <style lang="scss">
 @import "./scss/main.scss";
