@@ -1,24 +1,28 @@
 <template lang="pug">
 .about
   h1="This is an auctions page"
+
+  ul
+    li(v-for="auction in auctionsArray")
+      a(href="#") {{auction.brand}}
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+
+interface serverResponse {
+  [key: string]: number | string | boolean;
+}
 
 export default class Auctions extends Vue {
-  auctionsArray = [];
+  auctionsArray :Array<serverResponse> = [];
 
-  fetchAuctions() : void {
+  created() :void {
+    /* Fetch all active auctions */
     axios.get("/auctions").then(response => {
-      console.log(response);
-      this.auctionsArray = response.data;
+      this.auctionsArray = response.data
     });
-  };
-
-  mounted(){
-    this.fetchAuctions();
   }
 }
 </script>
