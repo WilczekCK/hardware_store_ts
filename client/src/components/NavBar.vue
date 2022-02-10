@@ -8,15 +8,18 @@ van-nav-bar(fixed=true id="navbar")
       ="Home"
     router-link(to="/about")
       ="About"
+    router-link(to="/login" class="navbar__container--login")
+      van-button(icon="friends-o" type="success")="Sign/Log in"
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-export default class NavBar extends Vue {}
+export default class NavBar extends Vue {
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 @import "../scss/main.scss";
 #navbar{
 
@@ -27,12 +30,17 @@ export default class NavBar extends Vue {}
     }
 
     a{
-        margin-left: 20px;
+        margin-left: 25px;
         font-weight: 400;
         color: $text_color;
 
         &:hover{
             color: $hover_color;
+        }
+
+        .van-button{
+          background: $hover_color;
+          .van-icon{ color: white; font-weight: 800}
         }
     }
 
@@ -41,6 +49,8 @@ export default class NavBar extends Vue {}
         padding-top:10px;
         padding-bottom:10px;
     }
+
+
 }
 </style>
 
