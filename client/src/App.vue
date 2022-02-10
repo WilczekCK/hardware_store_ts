@@ -1,6 +1,8 @@
 <template lang="pug">
 NavBar
-router-view
+router-view( v-slot="{ Component }" )
+  transition( name="fade" mode="out-in" )
+    Component( :is="Component" )
 </template>
 
 <script lang="ts">
