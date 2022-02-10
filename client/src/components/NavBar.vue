@@ -1,7 +1,7 @@
 <template lang="pug">
 van-nav-bar(fixed=true id="navbar")
   template(#left)
-      router-link(to="/")
+    router-link(to="/")
         ="Hardware Store"
   template(#right)
     router-link(to="/")
@@ -17,6 +17,7 @@ export default class NavBar extends Vue {}
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@import "../scss/main.scss";
 #navbar{
 
     /* Tweak for desktop only */
@@ -28,10 +29,10 @@ export default class NavBar extends Vue {}
     a{
         margin-left: 20px;
         font-weight: 400;
-        color:inherit;
+        color: $text_color;
 
         &:hover{
-            color: #42b983;
+            color: $hover_color;
         }
     }
 
