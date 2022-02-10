@@ -38,8 +38,8 @@ export default class NavBar extends Vue {}
 
     /* Logo */
     &:first-of-type{
-        font-size: 1.5rem;
-        font-weight: bold;
+        padding-top:10px;
+        padding-bottom:10px;
     }
 }
 </style>
