@@ -1,7 +1,8 @@
 <template lang="pug">
 van-nav-bar(fixed=true id="navbar")
   template(#left)
-    ="Hardware Store"
+      router-link(to="/")
+        ="Hardware Store"
   template(#right)
     router-link(to="/")
       ="Home"
@@ -26,6 +27,18 @@ export default class NavBar extends Vue {}
 
     a{
         margin-left: 20px;
+        font-weight: 400;
+        color:inherit;
+
+        &:hover{
+            color: #42b983;
+        }
+    }
+
+    /* Logo */
+    &:first-of-type{
+        font-size: 1.5rem;
+        font-weight: bold;
     }
 }
 </style>
