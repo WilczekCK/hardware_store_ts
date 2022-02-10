@@ -4,7 +4,8 @@
 
   ul
     li(v-for="auction in auctionsArray")
-      ListSingleAuction(:auction="auction")
+      router-link(:to="`/auctions/${auction.id}`")
+        ListSingleAuction(:auction="auction")
 </template>
 
 <script lang="ts">
