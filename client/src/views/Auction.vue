@@ -5,6 +5,8 @@ van-loading(type="spinner" v-if="!isLoaded")
   p {{auction.brand}} {{auction.series}} for {{auction.price}} PLN
   p Added at {{auction.createdAt}}
   p {{auction.description}}
+  van-button(:type="'success'" @click="$router.options.history.state.back ? $router.go(-1) : $router.push('/auctions')")
+    = "Back to auctions"
 </template>
 
 <script lang="ts">
@@ -20,8 +22,11 @@ export default class Auction extends Vue {
   auction: serverResponse = {};
   id = 0;
   isLoaded = false;
-  
+
   created() {
+
+    console.log(this.$router.options.history.state);
+
     const route = useRoute();
     this.id = parseInt(route.params.id[0]);
 

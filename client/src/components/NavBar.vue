@@ -37,11 +37,6 @@ export default class NavBar extends Vue {
         &:hover{
             color: $hover_color;
         }
-
-        .van-button{
-          background: $hover_color;
-          .van-icon{ color: white; font-weight: 800}
-        }
     }
 
     /* Logo */
