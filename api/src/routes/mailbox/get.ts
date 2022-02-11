@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.get('/', async (req, res) => {
   res.send(
-    await getMails( req.body )
+    await getMails( req.body.length ? req.body : req.query  )
   );
 })
 

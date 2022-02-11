@@ -18,7 +18,7 @@ interface serverResponse {
 
 export default class Auction extends Vue {
   auction: serverResponse = {};
-  id: number;
+  id = 0;
   isLoaded = false;
   
   created() {

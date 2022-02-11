@@ -1,5 +1,5 @@
 <template lang="pug">
-p {{auction.brand}}
+p {{auction.brand}} {{auction.series}}
 </template>
 
 <script lang="ts">

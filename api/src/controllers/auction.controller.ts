@@ -22,6 +22,7 @@ export interface auctionFilters {
 }
 
 export const getAuctions = async(payload: auctionFilters): Promise<any> => {
+    console.log(payload);
     const auctionRepository = getRepository(Auction);
 
     const preparedQuery:auctionFilters = {

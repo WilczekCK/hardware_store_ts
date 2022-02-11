@@ -30,9 +30,18 @@ export default class Auctions extends Vue {
 
   created() :void {
     /* Fetch all active auctions */
-    axios.get("/auctions").then(response => {
+    axios("/auctions",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        limit: 2,
+      }
+    }).then(response => {
       this.auctionsArray = response.data
-      this.isLoaded = false;
+      this.isLoaded = true;
     });
   }
 }

@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.get('/', async (req, res) => {
   res.send(
-    await getAuctions( req.body )
+    await getAuctions( req.body.length ? req.body : req.query )
   );
 })
 
