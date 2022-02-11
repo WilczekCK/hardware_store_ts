@@ -30,7 +30,6 @@ interface serverResponse {
 export default class Auctions extends Vue {
   auctionsArray :Array<serverResponse> = [];
   isLoaded = false;
-  isPageParamLoaded = false;
   areMoreAuctions = true;
 
   //infinite loading values
@@ -39,8 +38,6 @@ export default class Auctions extends Vue {
   skip = 0;
 
   loadAuctions() : void {
-    console.log(this.page);
-
     /* Fetch all active auctions */
     axios("/auctions",
     {
@@ -50,19 +47,17 @@ export default class Auctions extends Vue {
       },
       params: {
         limit: this.limit,
-        skip: (this.page && !this.isPageParamLoaded) ? (this.page - 1) * this.limit : this.skip,
+        skip: (this.page - 1) * this.limit,
       }
     }).then((response) => {
-      
-      
-      this.auctionsArray = this.auctionsArray.concat(response.data);
-      this.skip = this.page ? ((this.page - 1) * this.limit) + this.limit : this.skip + this.limit;
+      this.$router.push({ query: Object.assign({ page: this.page }) }); //change param in url
 
-      this.isLoaded = true;
-      this.isPageParamLoaded = true;
-
+      this.auctionsArray = this.auctionsArray.concat(response.data); 
+      this.skip = ( (this.page - 1) * this.limit ) + this.limit; //limit depends if using ?page query or not
       this.page++;
 
+      this.isLoaded = true; 
+  
       // Disable Load More Button if there are no more auctions
       if ( response.data.length < this.limit ) {
         this.areMoreAuctions = false;
@@ -72,7 +67,7 @@ export default class Auctions extends Vue {
 
   created() :void {
     const route = useRoute();
-    this.page = route.query.page;
+    this.page = route.query.page ? route.query.page : 1;
 
     this.loadAuctions();
   }
