@@ -6,7 +6,7 @@ var router = express.Router();
 
 router.get('/', async (req, res) => {
   res.send(
-    await getMessages( req.body )
+    await getMessages( req.body.length ? req.body : req.query  )
   );
 })
 

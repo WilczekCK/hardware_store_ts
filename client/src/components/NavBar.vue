@@ -6,8 +6,8 @@ van-nav-bar(fixed=true id="navbar")
   template(#right)
     router-link(to="/")
       ="Home"
-    router-link(to="/about")
-      ="About"
+    router-link(to="/auctions")
+      ="Auctions"
     router-link(to="/login" class="navbar__container--login")
       van-button(icon="friends-o" type="success")="Sign/Log in"
 </template>
@@ -36,11 +36,6 @@ export default class NavBar extends Vue {
 
         &:hover{
             color: $hover_color;
-        }
-
-        .van-button{
-          background: $hover_color;
-          .van-icon{ color: white; font-weight: 800}
         }
     }
 

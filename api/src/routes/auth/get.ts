@@ -9,7 +9,7 @@ type queryResults = {
 }
 
 router.get('/user', async (req, res) => {
-    const areValid: Boolean = await areCredentialsValid(req.body);
+    const areValid: Boolean = await areCredentialsValid(req.body.length ? req.body : req.query );
     res.send( {
         status: areValid ? 200 : 401,
         areValid 

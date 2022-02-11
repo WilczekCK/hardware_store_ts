@@ -7,7 +7,6 @@ router-view( v-slot="{ Component }" )
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-
 import NavBar from "./components/NavBar.vue"; // @ is an alias to /src
 
 @Options({

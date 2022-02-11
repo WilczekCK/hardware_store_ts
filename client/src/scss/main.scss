@@ -13,4 +13,10 @@ $hover_color: #42b983;
   margin-top:100px;
 }
 
+/* Button success default color */
+.van-button--success{
+  background: $hover_color;
+  .van-icon{ color: white; font-weight: 800}
+}
+
 .home{padding-bottom:2000px}
