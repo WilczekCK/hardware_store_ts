@@ -24,9 +24,6 @@ export default class Auction extends Vue {
   isLoaded = false;
 
   created() {
-
-    console.log(this.$router.options.history.state);
-
     const route = useRoute();
     this.id = parseInt(route.params.id[0]);
 
