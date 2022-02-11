@@ -1,8 +1,9 @@
 <template lang="pug">
 .about
   h1="This is an auctions page"
+  van-loading(type="spinner" v-if="!isLoaded")
 
-  ul
+  ul(v-else)
     li(v-for="auction in auctionsArray")
       router-link(:to="`/auctions/${auction.id}`")
         ListSingleAuction(:auction="auction")
@@ -25,11 +26,13 @@ interface serverResponse {
 
 export default class Auctions extends Vue {
   auctionsArray :Array<serverResponse> = [];
+  isLoaded = false;
 
   created() :void {
     /* Fetch all active auctions */
     axios.get("/auctions").then(response => {
       this.auctionsArray = response.data
+      this.isLoaded = false;
     });
   }
 }

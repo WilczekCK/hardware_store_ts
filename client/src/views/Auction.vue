@@ -1,5 +1,6 @@
 <template lang="pug">
-.about
+van-loading(type="spinner" v-if="!isLoaded")
+.single__auction(v-else)
   h1="This is an single auction page"
   p {{auction.brand}} {{auction.series}} for {{auction.price}} PLN
   p Added at {{auction.createdAt}}
@@ -18,6 +19,7 @@ interface serverResponse {
 export default class Auction extends Vue {
   auction: serverResponse = {};
   id: number;
+  isLoaded = false;
   
   created() {
     const route = useRoute();
@@ -25,6 +27,7 @@ export default class Auction extends Vue {
 
     axios.get(`/auctions/${this.id}`).then(response => {
       this.auction = response.data[0];
+      this.isLoaded = true;
     });
   }
 }
