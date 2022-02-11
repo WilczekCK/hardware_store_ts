@@ -7,7 +7,7 @@
     li(v-for="auction in auctionsArray")
       router-link(:to="`/auctions/${auction.id}`")
         ListSingleAuction(:auction="auction")
-  van-button(:type="!areMoreAuctions ? 'default' : 'success'" @click="loadMore" :disabled="!areMoreAuctions")
+  van-button(:type="!areMoreAuctions ? 'default' : 'success'" @click="loadAuctions" :disabled="!areMoreAuctions")
     = "Load more"
 </template>
 
@@ -36,25 +36,11 @@ export default class Auctions extends Vue {
   skip = 0;
 
   created() :void {
-    /* Fetch all active auctions */
-    axios("/auctions",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      params: {
-        limit: this.limit,
-        skip: this.skip
-      }
-    }).then(response => {
-      this.auctionsArray = response.data
-      this.isLoaded = true;
-      this.skip = this.skip + this.limit;
-    });
+    this.loadAuctions();
   }
 
-  loadMore() : void {
+  loadAuctions() : void {
+    /* Fetch all active auctions */
     axios("/auctions",
     {
       method: "GET",
@@ -68,6 +54,7 @@ export default class Auctions extends Vue {
     }).then((response) => {
       this.auctionsArray = this.auctionsArray.concat(response.data);
       this.skip = this.skip + this.limit;
+      this.isLoaded = true;
 
       // Disable Load More Button if there are no more auctions
       if ( response.data.length < this.limit ) {
