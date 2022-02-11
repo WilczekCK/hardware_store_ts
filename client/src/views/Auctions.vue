@@ -1,12 +1,13 @@
 <template lang="pug">
-.about
+.auctions__container
   h1="This is an auctions page"
   van-loading(type="spinner" v-if="!isLoaded")
 
-  ul(v-else)
-    li(v-for="auction in auctionsArray")
-      router-link(:to="`/auctions/${auction.id}`")
-        ListSingleAuction(:auction="auction")
+  .auctions__container--list(v-else)
+    ul
+      li(v-for="auction in auctionsArray")
+        router-link(:to="`/auctions/${auction.id}`")
+          ListSingleAuction(:auction="auction")
 
   van-button(:type="page <= 1 ? 'default' : 'success'" @click="() => { page = parseInt(page) - 1; loadAuctions('previous')}" :disabled="page <= 1 || !isLoaded")
     = "Previous page"
@@ -81,6 +82,9 @@ export default class Auctions extends Vue {
 </script>
 
 <style lang="scss">
+.auctions__container{
+  min-height: 150px
+}
 </style>
 
 
