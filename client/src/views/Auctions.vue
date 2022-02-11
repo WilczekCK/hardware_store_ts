@@ -8,9 +8,9 @@
       router-link(:to="`/auctions/${auction.id}`")
         ListSingleAuction(:auction="auction")
 
-  van-button(:type="!areMoreAuctions ? 'default' : 'success'" @click="() => { page = page - 1; loadAuctions('previous')}" :disabled="page <= 1")
+  van-button(:type="page <= 1 ? 'default' : 'success'" @click="() => { page = parseInt(page) - 1; loadAuctions('previous')}" :disabled="page <= 1 || !isLoaded")
     = "Previous page"
-  van-button(:type="!areMoreAuctions ? 'default' : 'success'" @click="() => { page = page + 1; loadAuctions('next')}" :disabled="!areMoreAuctions")
+  van-button(:type="!areMoreAuctions ? 'default' : 'success'" @click="() => { page = parseInt(page) + 1; loadAuctions('next')}" :disabled="!areMoreAuctions || !isLoaded")
     = "Next page"
 </template>
 
@@ -41,6 +41,8 @@ export default class Auctions extends Vue {
   skip = 0;
 
   loadAuctions(pageDirection: string) : void {
+    this.isLoaded = false; 
+    
     /* Fetch all active auctions */
     axios("/auctions",
     {
@@ -58,7 +60,6 @@ export default class Auctions extends Vue {
       this.auctionsArray = response.data; 
       this.skip = ( (this.page - 1) * this.limit ) + this.limit; //limit depends if using ?page query or not
       
-
       this.isLoaded = true; 
   
       // Disable Load More Button if there are no more auctions
