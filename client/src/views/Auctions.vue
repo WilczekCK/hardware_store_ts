@@ -13,6 +13,7 @@
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import { useRoute } from "vue-router";
 import axios from "axios";
 import ListSingleAuction from '../components/ListSingleAuction.vue';
 
@@ -29,17 +30,17 @@ interface serverResponse {
 export default class Auctions extends Vue {
   auctionsArray :Array<serverResponse> = [];
   isLoaded = false;
+  isPageParamLoaded = false;
   areMoreAuctions = true;
 
   //infinite loading values
   limit = 2;
+  page:any = 0; //what type is this? lol
   skip = 0;
 
-  created() :void {
-    this.loadAuctions();
-  }
-
   loadAuctions() : void {
+    console.log(this.page);
+
     /* Fetch all active auctions */
     axios("/auctions",
     {
@@ -49,18 +50,31 @@ export default class Auctions extends Vue {
       },
       params: {
         limit: this.limit,
-        skip: this.skip
+        skip: (this.page && !this.isPageParamLoaded) ? (this.page - 1) * this.limit : this.skip,
       }
     }).then((response) => {
+      
+      
       this.auctionsArray = this.auctionsArray.concat(response.data);
-      this.skip = this.skip + this.limit;
+      this.skip = this.page ? ((this.page - 1) * this.limit) + this.limit : this.skip + this.limit;
+
       this.isLoaded = true;
+      this.isPageParamLoaded = true;
+
+      this.page++;
 
       // Disable Load More Button if there are no more auctions
       if ( response.data.length < this.limit ) {
         this.areMoreAuctions = false;
       }
     });
+  }
+
+  created() :void {
+    const route = useRoute();
+    this.page = route.query.page;
+
+    this.loadAuctions();
   }
 }
 </script>
