@@ -30,6 +30,9 @@ export default class Auction extends Vue {
     axios.get(`/auctions/${this.id}`).then(response => {
       this.auction = response.data[0];
       this.isLoaded = true;
+
+
+      console.log(this.auction);
     });
   }
 }
