@@ -24,10 +24,21 @@ van-form(@submit="onSubmit" class="login__container")
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import axios from "axios";
 export default class LoginContainer extends Vue {
+  username = '';
+  password = '';
 
-  onSubmit() {
-    return;
+
+  async onSubmit() {
+    const { config } = await axios.post('auth/user', {
+      where: {
+        email: this.username,
+        password: this.password
+      }
+    })
+
+    console.log(config.data.status === 200);
   }
 }
 </script>
