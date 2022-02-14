@@ -83,14 +83,12 @@ export default class Auctions extends Vue {
 
 <style lang="scss">
 .auctions__container{
-  max-height:250px;
-
   .auctions__container--loading{
-    max-height:250px;
+    max-height: 75px;
   }
 
   .auctions__container--list{
-    min-height: 250px;
+    max-height: 75px;
   }
 }
 </style>
