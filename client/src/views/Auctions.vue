@@ -1,8 +1,8 @@
 <template lang="pug">
 .auctions__container
   h1="This is an auctions page"
-  van-loading(type="spinner" v-if="!isLoaded")
-
+  van-loading(type="spinner" v-if="!isLoaded" class="auctions__container--loading")
+  h2(v-else-if="!auctionsArray.length && isLoaded")="No auctions :("
   .auctions__container--list(v-else)
     ul
       li(v-for="auction in auctionsArray")
@@ -83,7 +83,13 @@ export default class Auctions extends Vue {
 
 <style lang="scss">
 .auctions__container{
-  min-height: 150px
+  .auctions__container--loading{
+    max-height: 75px;
+  }
+
+  .auctions__container--list{
+    max-height: 75px;
+  }
 }
 </style>
 

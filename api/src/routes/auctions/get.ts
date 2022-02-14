@@ -14,6 +14,7 @@ router.get('/:id', async (req, res) => {
   res.send(
     await getAuctions( { 
       where: { id: parseInt(req.params.id) }, 
+      relations: ["user"],
       ...req.body 
     })
   );
