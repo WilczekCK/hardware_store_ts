@@ -1,21 +1,25 @@
 <template lang="pug">
-van-form(@submit="onSubmit")
-  van-cell-group(inset)
+van-form(@submit="onSubmit" class="login__container")
+  van-cell-group(inset class="login__container__cellgroup")
     van-field(
+      class="login__container__cellgroup__field"
       v-model="username"
       name="Username"
       label="Username"
       placeholder="Username"
       :rules="[{ required: true, message: 'Username is required' }]")
     van-field(
+      class="login__container__cellgroup__field"
       v-model="password"
       type="password"
       name="Password"
       label="Password"
       placeholder="Password"
       :rules="[{ required: true, message: 'Password is required' }]")
-  div(style="margin: 16px;")
-    van-button(round block type="primary" native-type="submit")=Submit
+  div(style="margin: 16px;" class="login__container__submit__container")
+    van-button(round block type="primary" native-type="submit")="Submit"
+    a(href="#" class="login__container__submit__container--forgot")="Forgot password"
+    a(href="#" class="login__container__submit__container--account" )="Create account"
 </template>
 
 <script lang="ts">
@@ -31,6 +35,23 @@ export default class LoginContainer extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "../scss/main.scss";
+.login__container{
+  width: 315px;
+  margin: 0 auto;
+
+  .login__container__submit__container{
+    display:flex;
+    flex-wrap:wrap;
+
+    a{
+      flex-basis:50%;
+    }
+
+    button{
+      flex-basis:100%;
+    }
+  }
+}
 </style>
 
 
