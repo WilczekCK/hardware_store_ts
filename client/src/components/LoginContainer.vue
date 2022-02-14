@@ -1,6 +1,8 @@
 <template lang="pug">
+
+h3( class="login__error" v-if="error") {{ error }}
 van-form(@submit="onSubmit" class="login__container")
-  van-cell-group(inset class="login__container__cellgroup")
+  van-cell-group(inset class="login__container__cellgroup" :rules="[{ message: 'DUOA' }]")
     van-field(
       class="login__container__cellgroup__field"
       v-model="username"
@@ -17,7 +19,7 @@ van-form(@submit="onSubmit" class="login__container")
       placeholder="Password"
       :rules="[{ required: true, message: 'Password is required' }]")
   div(style="margin: 16px;" class="login__container__submit__container")
-    van-button(round block type="success" native-type="submit")="Submit"
+    van-button(block type="success" native-type="submit")="Submit"
     a(href="#" class="login__container__submit__container--forgot")="Forgot password"
     a(href="#" class="login__container__submit__container--account" )="Create account"
 </template>
@@ -28,9 +30,11 @@ import axios from "axios";
 export default class LoginContainer extends Vue {
   username = '';
   password = '';
-
+  error = '';
 
   async onSubmit() {
+    this.error = '';
+
     const { config } = await axios.post('auth/user', {
       where: {
         email: this.username,
@@ -38,7 +42,11 @@ export default class LoginContainer extends Vue {
       }
     })
 
-    console.log(config.data.status === 200);
+    if( config.data.status !== 200 ) {
+      this.error = "Wrong username or password";
+    } else {
+      alert('Go further!');
+    }
   }
 }
 </script>
@@ -46,6 +54,7 @@ export default class LoginContainer extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import "../scss/main.scss";
+.login__error{ color: red; }
 .login__container{
   width: 315px;
   margin: 0 auto;
