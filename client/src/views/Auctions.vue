@@ -1,7 +1,7 @@
 <template lang="pug">
 .auctions__container
   h1="This is an auctions page"
-  van-loading(type="spinner" v-if="!isLoaded")
+  van-loading(type="spinner" v-if="!isLoaded" class="auctions__container--loading")
 
   .auctions__container--list(v-else)
     ul
@@ -83,7 +83,13 @@ export default class Auctions extends Vue {
 
 <style lang="scss">
 .auctions__container{
-  min-height: 150px
+  .auctions__container--loading{
+    min-height:250px;
+  }
+
+  .auctions__container--list{
+    min-height: 250px;
+  }
 }
 </style>
 
