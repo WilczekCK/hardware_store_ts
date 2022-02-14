@@ -17,7 +17,7 @@ van-form(@submit="onSubmit" class="login__container")
       placeholder="Password"
       :rules="[{ required: true, message: 'Password is required' }]")
   div(style="margin: 16px;" class="login__container__submit__container")
-    van-button(round block type="primary" native-type="submit")="Submit"
+    van-button(round block type="success" native-type="submit")="Submit"
     a(href="#" class="login__container__submit__container--forgot")="Forgot password"
     a(href="#" class="login__container__submit__container--account" )="Create account"
 </template>
@@ -44,7 +44,9 @@ export default class LoginContainer extends Vue {
     flex-wrap:wrap;
 
     a{
-      flex-basis:50%;
+      flex-basis: 50%;
+      font-size: 12px;
+      margin-top: 10px;
     }
 
     button{
