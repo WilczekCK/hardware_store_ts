@@ -14,22 +14,33 @@ export default createStore({
     getUserType: (state) => state.userType
   },
   actions: {
-    loginSession(context, data){
-
+    loginSession( {commit}, data){
+      sessionStorage.setItem('session_hardware', JSON.stringify(data));
+      commit('setSession', data.username);
     },
-    getSession(context){
-
+    getSession( {commit} ){
+      const session = sessionStorage.getItem('session_hardware');
+      if(session && typeof session === 'string' && session !== ''){
+        const data = JSON.parse(session);
+        commit('setSession', data);
+      }
     },
-    logout(context){
-
-    }
+    logout: ( {commit} ) => commit('logoutSession')
   },
   mutations: {
-    setLogin(state, data){
-
+    setSession(state, data) {
+      state.token = data.token
+      state.userId = data.userid
+      state.userType = 0; //temp, no admin privileges available now!
+      state.username = data.firstname;
     },
-    logoutSession(state){
-    
+    logoutSession(state) {
+      sessionStorage.clear()
+      
+      state.token = ''
+      state.userId = ''
+      state.userType = 0
+      state.username = '';
     }
   },
 });
