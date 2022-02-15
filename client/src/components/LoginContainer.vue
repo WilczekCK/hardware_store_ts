@@ -31,9 +31,7 @@ export default class LoginContainer extends Vue {
   password = '';
   error = '';
 
-  async onSubmit() {
-    this.error = '';
-
+  async areCredentialsValid() :Promise<boolean> {
     const { data } = await axios.post('auth/user', {
       where: {
         email: this.email,
@@ -41,21 +39,35 @@ export default class LoginContainer extends Vue {
       }
     })
 
-    if( data.status !== 200 ) {
-      this.error = "Wrong username or password";
-    } else {
-      const { data } = await axios.post(`accounts/auth`, {
-        where: {
-          email: this.email
-        }
-      })
+    if( data.status === 200 ) {
+      return true
+    }
 
-      if( data[0].isVerified ){
-        alert('You will be logged in soon!');
-      }else{
-        this.error = "Please verify your account first!";
+    this.error = "Wrong username or password";
+    return false;
+  }
+
+  async getAccountInfo() :Promise<boolean> {
+    const { data } = await axios.post(`accounts/auth`, {
+      where: {
+        email: this.email
       }
+    })
 
+    if( data[0].isVerified ){
+      return true
+    }
+
+    this.error = "Please verify your account first!";
+    return false;
+  }
+  
+
+  async onSubmit() {
+    this.error = '';
+
+    if ( await this.areCredentialsValid() && await this.getAccountInfo() ) {
+      //
     }
   }
 }
