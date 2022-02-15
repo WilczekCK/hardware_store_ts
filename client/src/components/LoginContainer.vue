@@ -8,7 +8,7 @@ van-form(@submit="onSubmit" class="login__container")
       name="email"
       label="Email"
       placeholder="Email"
-      :rules="[{ required: true, message: 'email is required' }]")
+      :rules="[{ required: true, message: 'Email is required' }]")
     van-field(
       class="login__container__cellgroup__field"
       v-model="password"
@@ -34,14 +34,14 @@ export default class LoginContainer extends Vue {
   async onSubmit() {
     this.error = '';
 
-    const { config } = await axios.post('auth/user', {
+    const { data } = await axios.post('auth/user', {
       where: {
         email: this.email,
         password: this.password
       }
     })
 
-    if( config.data.status !== 200 ) {
+    if( data.status !== 200 ) {
       this.error = "Wrong username or password";
     } else {
       alert('Go further!');
