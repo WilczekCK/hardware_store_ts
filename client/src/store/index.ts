@@ -29,7 +29,7 @@ export default createStore({
   },
   mutations: {
     setSession(state, data) {
-      state.token = data.token
+      state.token = 'no_token_now' //temp, no token now
       state.userId = data.userid
       state.userType = 0; //temp, no admin privileges available now!
       state.username = data.firstname;
