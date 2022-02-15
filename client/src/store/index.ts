@@ -4,21 +4,14 @@ export default createStore({
   state: {
     token: '',
     userId: '',
-    userType: 0
+    userType: 0,
+    username: ''
   },
   getters: {
-    getLogin(state){
-
-    },
-    getToken(state){
-
-    },
-    getUserId(state){
-
-    },
-    getUserType(state){
-
-    }
+    getLogin:    (state) => state.username,
+    getToken:    (state) => state.token,
+    getUserId:   (state) => state.userId,
+    getUserType: (state) => state.userType
   },
   actions: {
     loginSession(context, data){
