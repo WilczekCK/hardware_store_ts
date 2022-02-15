@@ -8,7 +8,7 @@ router.post('/', async (req, res) => {
 })
 
 router.post('/user', async (req, res) => {
-  const areValid: Boolean = await areCredentialsValid(req.body.where ? req.body : req.query );
+  const areValid: boolean = await areCredentialsValid(req.body.where ? req.body : req.query );
   res.send( {
       status: areValid ? 200 : 401,
       areValid 
