@@ -30,6 +30,7 @@ export default class LoginContainer extends Vue {
   email = '';
   password = '';
   error = '';
+  user: Record<string, number> = {};
 
   async areCredentialsValid() :Promise<boolean> {
     const { data } = await axios.post('auth/user', {
@@ -55,6 +56,7 @@ export default class LoginContainer extends Vue {
     })
 
     if( data[0].isVerified ){
+      this.user = data[0];
       return true
     }
 
@@ -65,9 +67,10 @@ export default class LoginContainer extends Vue {
 
   async onSubmit() {
     this.error = '';
+    this.user = {};
 
     if ( await this.areCredentialsValid() && await this.getAccountInfo() ) {
-      //
+      console.log(this.user.email);
     }
   }
 }
