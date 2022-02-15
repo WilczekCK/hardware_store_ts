@@ -1,15 +1,14 @@
 <template lang="pug">
-
-h3( class="login__error" v-if="error") {{ error }}
 van-form(@submit="onSubmit" class="login__container")
-  van-cell-group(inset class="login__container__cellgroup" :rules="[{ message: 'DUOA' }]")
+  h3( class="login__error" v-if="error") {{ error }}
+  van-cell-group(inset class="login__container__cellgroup")
     van-field(
       class="login__container__cellgroup__field"
-      v-model="username"
-      name="Username"
-      label="Username"
-      placeholder="Username"
-      :rules="[{ required: true, message: 'Username is required' }]")
+      v-model="email"
+      name="email"
+      label="Email"
+      placeholder="Email"
+      :rules="[{ required: true, message: 'email is required' }]")
     van-field(
       class="login__container__cellgroup__field"
       v-model="password"
@@ -28,7 +27,7 @@ van-form(@submit="onSubmit" class="login__container")
 import { Vue } from "vue-class-component";
 import axios from "axios";
 export default class LoginContainer extends Vue {
-  username = '';
+  email = '';
   password = '';
   error = '';
 
@@ -37,7 +36,7 @@ export default class LoginContainer extends Vue {
 
     const { config } = await axios.post('auth/user', {
       where: {
-        email: this.username,
+        email: this.email,
         password: this.password
       }
     })
