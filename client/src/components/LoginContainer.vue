@@ -44,8 +44,17 @@ export default class LoginContainer extends Vue {
     if( data.status !== 200 ) {
       this.error = "Wrong username or password";
     } else {
-      const { data } = await axios.get(`accounts?email=${this.email}`)
-      console.log( data );
+      const { data } = await axios.post(`accounts/auth`, {
+        where: {
+          email: this.email
+        }
+      })
+
+      if( data[0].isVerified ){
+        alert('You will be logged in soon!');
+      }else{
+        this.error = "Please verify your account first!";
+      }
 
     }
   }
