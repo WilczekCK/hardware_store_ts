@@ -23,8 +23,9 @@ export default class NavBar extends Vue {
   userInfo = {}; 
 
   async created(){
-    
-    this.userInfo = computed(() => this.store.getters.getToken)
+    this.store.dispatch('getSession');
+
+    this.userInfo = computed(() => this.store.getters.getLogin)
   }
 }
 </script>
