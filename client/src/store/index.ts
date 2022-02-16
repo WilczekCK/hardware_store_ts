@@ -19,10 +19,10 @@ export default createStore({
       commit('setSession', data);
     },
     getSession( {commit} ){
-      const session = this.state;
+      const session = sessionStorage.getItem('session_hardware');
       if(session && typeof session === 'string' && session !== ''){
         const data = JSON.parse(session);
-        commit('loginSession', data);
+        commit('setSession', data);
       }
     },
     logout: ( {commit} ) => commit('logoutSession')
