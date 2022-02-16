@@ -10,11 +10,22 @@ van-nav-bar(fixed=true id="navbar")
       ="Auctions"
     router-link(to="/login" class="navbar__container--login")
       van-button(icon="friends-o" type="success")="Sign/Log in"
+      p {{userInfo}}
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import { computed } from "vue";
+import { useStore } from 'vuex';
+  
 export default class NavBar extends Vue {
+  store = useStore();
+  userInfo = {}; 
+
+  async created(){
+    
+    this.userInfo = computed(() => this.store.getters.getToken)
+  }
 }
 </script>
 
