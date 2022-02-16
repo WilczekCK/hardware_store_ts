@@ -16,7 +16,7 @@ export default createStore({
   actions: {
     loginSession( {commit}, data){
       sessionStorage.setItem('session_hardware', JSON.stringify(data));
-      commit('setSession', data.username);
+      commit('setSession', data);
     },
     getSession( {commit} ){
       const session = sessionStorage.getItem('session_hardware');
@@ -29,6 +29,8 @@ export default createStore({
   },
   mutations: {
     setSession(state, data) {
+      console.log(state, data);
+      
       state.token = 'no_token_now' //temp, no token now
       state.userId = data.userid
       state.userType = 0; //temp, no admin privileges available now!
