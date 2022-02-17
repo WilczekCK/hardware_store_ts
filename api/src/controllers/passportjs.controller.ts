@@ -1,6 +1,7 @@
 import passport from 'passport';
-import LocalStrategy from 'passport-local';
+import passportLocal from 'passport-local';
 import crypto from 'crypto';
 
+const LocalStrategy = passportLocal.Strategy;
 
 export {passport, LocalStrategy, crypto};

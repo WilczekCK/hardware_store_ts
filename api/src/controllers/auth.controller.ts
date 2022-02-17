@@ -6,12 +6,22 @@ import { getUsers, modifyUser } from './user.controller';
 import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
+import { LocalStrategy, passport } from './passportjs.controller';
 
 type queryResults = {
     [where: string]: Record<string, string>
 }
 
 export const areCredentialsValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
+    passport.use(new LocalStrategy(function verify(username, password, cb) {
+        db.get('SELECT rowid AS id, * FROM users WHERE username = ?', [ username ], function(err, row) {
+          if (err) { return cb(err); }
+          if (!row) { return cb(null, false, { message: 'Incorrect username or password.' }); }
+      
+
+        });
+      }));
+    
     const [ User ] : any = await getUsers({ where: {email: whereQuery.email} });
     if ( !User ) return false;
 
