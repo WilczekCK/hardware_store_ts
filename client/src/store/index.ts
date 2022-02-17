@@ -29,8 +29,6 @@ export default createStore({
   },
   mutations: {
     setSession(state, data) {
-      console.log(state, data);
-      
       state.token = 'no_token_now' //temp, no token now
       state.userId = data.userid
       state.userType = 0; //temp, no admin privileges available now!
