@@ -8,14 +8,6 @@ type queryResults = {
     [where: string]: Record<string, string>
 }
 
-router.get('/user', async (req, res) => {
-    const areValid: Boolean = await areCredentialsValid(req.body.length ? req.body : req.query );
-    res.send( {
-        status: areValid ? 200 : 401,
-        areValid 
-    } );
-});
-
 router.get('/mail', async (req, res) => {
 });
 

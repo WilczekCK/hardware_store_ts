@@ -8,13 +8,30 @@ van-nav-bar(fixed=true id="navbar")
       ="Home"
     router-link(to="/auctions")
       ="Auctions"
-    router-link(to="/login" class="navbar__container--login")
-      van-button(icon="friends-o" type="success")="Sign/Log in"
+    router-link(to="/login" class="navbar__container--login" v-if="!userInfo")
+      van-button(icon="friends-o" type="success" )="Sign/Log in"
+    van-button(icon="friends-o" type="success" v-else @click="logout")="Log out, " 
+      span {{userInfo}}
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
+import { computed } from "vue";
+import { useStore } from 'vuex';
+  
 export default class NavBar extends Vue {
+  store = useStore();
+  userInfo = {}; 
+
+  logout() {
+    this.store.dispatch('logout');
+  }
+
+  async created(){
+    this.store.dispatch('getSession');
+
+    this.userInfo = computed(() => this.store.getters.getLogin)
+  }
 }
 </script>
 
