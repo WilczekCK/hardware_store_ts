@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import session from 'express-session';
-import crypto from 'crypto';
+import SQLiteStore from 'connect-sqlite3';
 import { areCredentialsValid } from './auth.controller';
 
 const LocalStrategy = passportLocal.Strategy;
@@ -29,4 +29,4 @@ passport.deserializeUser(function(user:any, done:any) {
     done(null, user);
 });
 
-export {passport, LocalStrategy, crypto, session};
+export {passport, LocalStrategy, SQLiteStore, session};
