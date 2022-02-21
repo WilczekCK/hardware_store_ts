@@ -38,11 +38,9 @@ export default class LoginContainer extends Vue {
 
   async areCredentialsValid() :Promise<boolean> {
     const { data } = await axios.post('auth/user', {
-      where: {
-        email: this.email,
-        password: this.password
-      }
-    }, {withCredentials: true})
+      email: this.email,
+      password: this.password
+    })
 
     if( data.status === 200 ) {
       return true
