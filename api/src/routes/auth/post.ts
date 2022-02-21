@@ -8,8 +8,12 @@ router.post('/', async (req, res) => {
   //
 })
 
-router.post("/user", 
-  passport.authenticate('local', { failureRedirect: '/login', failureMessage: true, successRedirect: '/login/true' }) 
-);
+router.post("/user", async (req, res) => {
+  passport.authenticate('local', 
+    (err, passportUser, info) => {
+      const token = passportUser
+      res.send( token );
+    })(req, res);
+});
 
 export {router}
