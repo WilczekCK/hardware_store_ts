@@ -18,13 +18,16 @@ van-nav-bar(fixed=true id="navbar")
 import { Vue } from "vue-class-component";
 import { computed } from "vue";
 import { useStore } from 'vuex';
+import axios from "axios";
   
 export default class NavBar extends Vue {
   store = useStore();
   userInfo = {}; 
 
-  logout() {
+  async logout() {
     this.store.dispatch('logout');
+
+    await axios.post('auth/user/logout');
   }
 
   async created(){
