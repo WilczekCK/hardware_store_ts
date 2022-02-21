@@ -1,10 +1,11 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import session from 'express-session';
-import SQLiteStore from 'connect-sqlite3';
+
 import { areCredentialsValid } from './auth.controller';
 
 const LocalStrategy = passportLocal.Strategy;
+const SQLiteStore = require('connect-sqlite3')(session);
 
 passport.use(new LocalStrategy( {
     usernameField: 'email',
@@ -21,12 +22,16 @@ passport.use(new LocalStrategy( {
     }
 } ));
 
-passport.serializeUser(function(user:any, done:any) {
-    done(null, user);
+passport.serializeUser(function(user:any, cb:any) {
+    process.nextTick(function() {
+        cb(null, { id: user.id, username: user.username });
+    });
 });
     
-passport.deserializeUser(function(user:any, done:any) {
-    done(null, user);
+passport.deserializeUser(function(user:any, cb:any) {
+    process.nextTick(function() {
+        return cb(null, user);
+    });
 });
 
 export {passport, LocalStrategy, SQLiteStore, session};
