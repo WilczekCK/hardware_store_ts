@@ -9,10 +9,10 @@
   },
   "nodemonConfig": {
     "watch": [
-      "api/src"
+      "./src"
     ],
     "ext": "ts",
-    "exec": "ts-node src/server.ts"
+    "exec": "ts-node ./src/server.ts"
   },
   "author": "Pawel Wilk",
   "license": "GPL-3.0",

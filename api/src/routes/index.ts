@@ -17,7 +17,6 @@ const corsOptions : cors.CorsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-
 app.use('/messages', messages);
 app.use('/auctions', auctions);
 app.use('/accounts', accounts);

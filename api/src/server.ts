@@ -1,10 +1,10 @@
+import {app, express} from './app';
+
 import morgan from "morgan";
 import Router from "./routes";
 import "reflect-metadata";
 import { createConnection } from "typeorm";
 
-
-import {app, express} from './app';
 import dbConfig from "./config/database";
 
 const PORT = process.env.PORT || 8000;

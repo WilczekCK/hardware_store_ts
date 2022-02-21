@@ -13,7 +13,7 @@ van-form(@submit="onSubmit" class="login__container")
       class="login__container__cellgroup__field"
       v-model="password"
       type="password"
-      name="Password"
+      name="password"
       label="Password"
       placeholder="Password"
       :rules="[{ required: true, message: 'Password is required' }]")
@@ -42,7 +42,7 @@ export default class LoginContainer extends Vue {
         email: this.email,
         password: this.password
       }
-    })
+    }, {withCredentials: true})
 
     if( data.status === 200 ) {
       return true
