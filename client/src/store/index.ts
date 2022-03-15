@@ -15,7 +15,6 @@ export default createStore({
   },
   actions: {
     loginSession( {commit}, data){
-      sessionStorage.setItem('session_hardware', JSON.stringify(data));
       commit('setSession', data);
     },
     getSession( {commit} ){
@@ -29,10 +28,12 @@ export default createStore({
   },
   mutations: {
     setSession(state, data) {
-      state.token = 'no_token_now' //temp, no token now
+      state.token = data.verificationCode, //temp, no token now
       state.userId = data.userid
       state.userType = 0; //temp, no admin privileges available now!
       state.username = data.firstName;
+
+      sessionStorage.setItem('session_hardware', JSON.stringify(state));
     },
     logoutSession(state) {
       sessionStorage.clear()
