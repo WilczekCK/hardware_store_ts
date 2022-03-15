@@ -1,24 +1,32 @@
+import { resolveSoa } from "dns";
 import express from "express";
 import passport from "passport";
 
 
 var router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/user/auth', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/login'
+}), async (req, res) => {
   //
 })
 
-router.post("/user/login", async (req, res) => {
-  passport.authenticate('local', 
-    (err, passportUser, info) => {
+router.post("/user/login", async (req, res, next) => {
+  passport.authenticate('local', (err, passportUser, info) => {
       const token = passportUser
-      res.send( token );
-    })(req, res);
+      
+      req.login(token, err => {
+        res.send( token );
+      })
+
+    })(req, res, next);
 });
 
 router.post("/user/logout", async (req, res) => {
   req.logout();
-  res.redirect('/');
+  
+  return res.send();
 });
 
 export {router}

@@ -4,14 +4,14 @@ import { passport, session, SQLiteStore } from "./controllers/passportjs.control
 const app: Application = express();
 
 app.use(session({
-    secret: "secret",
-    resave: false ,
-    saveUninitialized: true ,
-    store: new SQLiteStore({ db: 'sessions.db' })
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    store: new SQLiteStore({ db: 'sessions.db', dir: './' })
 }))
 
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.authenticate('session'));
 
 
 export {app, express};

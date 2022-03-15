@@ -5,7 +5,7 @@ export default createStore({
     token: '',
     userId: '',
     userType: 0,
-    username: ''
+    username: '',
   },
   getters: {
     getLogin:    (state) => state.username,
@@ -19,6 +19,9 @@ export default createStore({
     },
     getSession( {commit} ){
       const session = sessionStorage.getItem('session_hardware');
+
+      console.log(session);
+
       if(session && typeof session === 'string' && session !== ''){
         const data = JSON.parse(session);
         commit('setSession', data);
@@ -29,11 +32,12 @@ export default createStore({
   mutations: {
     setSession(state, data) {
       state.token = data.verificationCode, //temp, no token now
-      state.userId = data.userid
-      state.userType = 0; //temp, no admin privileges available now!
+      state.userId = data.userId;
+      state.userType; //temp, no admin privileges available now!
       state.username = data.firstName;
 
-      sessionStorage.setItem('session_hardware', JSON.stringify(state));
+      sessionStorage.setItem('session_hardware', JSON.stringify({username: state.username, userId: state.userId}) );
+      document.cookie = "verificationCode=" + state.token;
     },
     logoutSession(state) {
       sessionStorage.clear()
