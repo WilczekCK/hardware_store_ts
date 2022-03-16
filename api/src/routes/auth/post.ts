@@ -5,11 +5,11 @@ import passport from "passport";
 
 var router = express.Router();
 
-router.post('/user/auth', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/login'
-}), async (req, res) => {
-  //
+router.post('/user/auth', async (req, res, next) => {
+  passport.authenticate('token-checker', (err, passportUser, info) => {
+    console.log(info);
+
+  })(req, res, next);
 })
 
 router.post("/user/login", async (req, res, next) => {

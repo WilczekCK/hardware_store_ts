@@ -21,6 +21,7 @@ van-form(@submit="onSubmit" class="login__container")
     van-button(block type="success" native-type="submit")="Submit"
     a(href="#" class="login__container__submit__container--forgot")="Forgot password"
     a(href="#" class="login__container__submit__container--account" )="Create account"
+    router-link(to="/authTester" class="login__container__submit__container--account" )="Auth Tester"
 </template>
 
 <script lang="ts">
