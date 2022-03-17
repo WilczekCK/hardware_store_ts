@@ -31,17 +31,6 @@ passport.use(new LocalStrategy( {
     }
 } ));
 
-/*passport.use('token-checker', new CustomStrategy(async (req, cb) => {
-    if( req.body.verificationCode ) { return cb(null, false); }
-    const [User]: any = await getUsers( {where: {verificationCode: req.body.verificationCode}} );
-
-    if( User ) {
-        return cb(null, { message: 'User is verified' });
-    } else {
-        return cb(null, false);
-    }
-}));
-*/
 passport.serializeUser(function(user:any, done:any) {
     console.log(`Serialize info: ${user.id}`);
     done(null, user);
@@ -55,21 +44,45 @@ passport.deserializeUser(function(user:any, done:any) {
 const findActualUserLogged = (sessions: Array<string>, token:any) => {
     function findUserKey(val:any) {
         if( val === token ){
-            return true;
+            return val;
         }
     }
 
     return sessions.findIndex(findUserKey);
 }
 
-const requireLogin = async (req:any, res:any, next:any) => {
-    const isUserLogged = findActualUserLogged(  Object.keys(req.sessionStore.sessions), req.headers.authorization);
+const isUserLogged = async (req:any, res:any) => {
+    const sessionOrder = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
 
-    if( isUserLogged > -1 ) {
-        console.log('loggedIn')
-    } else {
-        console.log('notLogged')
-    }
+    if( sessionOrder > -1 ) {
+      return true;
+    } 
+
+    return false;
 }
 
-export {passport, LocalStrategy, SQLiteStore, session, requireLogin};
+const refreshUserInfo = async (req: any, res: any) => {
+    const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
+    const sessions:string[] = Object.values(req.sessionStore.sessions);
+
+    if ( ! await isUserLogged(req, res) )  {
+        return false;
+    }
+
+    const sessionString:string = sessions[sessionOrder];
+    const sessionObject:Record<string, Record<string, string>> = JSON.parse( sessionString );
+
+    return sessionObject.passport.user;
+}
+
+const requireLogin = async (req:any, res:any, next: any) => {
+    if( await isUserLogged(req, res) ) {
+        next();
+        return true;
+    } 
+    
+    return false;
+}
+
+
+export {passport, LocalStrategy, SQLiteStore, session, requireLogin, isUserLogged, refreshUserInfo};

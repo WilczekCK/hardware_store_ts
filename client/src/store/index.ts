@@ -25,8 +25,9 @@ export default createStore({
         userId: data.userId,
       };
 
+
       //sessionStorage.setItem('session_hardware', JSON.stringify(userInfo));
-      cookies.set('session_hardware', JSON.stringify(userInfo));
+      cookies.set('session_hardware', JSON.stringify( {id: userInfo.sessionID}));
       
       commit('setSession', userInfo);
     },
