@@ -1,4 +1,8 @@
+import { VueElement } from "vue";
 import { createStore } from "vuex";
+import { useCookies } from "vue3-cookies";
+
+const { cookies } = useCookies();
 
 export default createStore({
   state: {
@@ -21,7 +25,9 @@ export default createStore({
         userId: data.userId,
       };
 
-      sessionStorage.setItem('session_hardware', JSON.stringify(userInfo));
+      //sessionStorage.setItem('session_hardware', JSON.stringify(userInfo));
+      cookies.set('session_hardware', JSON.stringify(userInfo));
+      
       commit('setSession', userInfo);
     },
     getSession( {commit} ){
