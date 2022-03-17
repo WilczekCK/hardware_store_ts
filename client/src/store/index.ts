@@ -13,8 +13,9 @@ export default createStore({
   },
   actions: {
     loginSession( {commit}, data){
+      console.log(data);
       const userInfo = {
-        token: data.verificationCode,
+        sessionID: data.sessionID,
         firstName: data.firstName
       };
 
@@ -33,7 +34,7 @@ export default createStore({
   },
   mutations: {
     setSession(state, data) {
-      state.token = data.verificationCode, //temp, no token now
+      state.token = data.sessionID, //temp, no token now
       state.userType; //temp, no admin privileges available now!
       state.username = data.firstName;
     },

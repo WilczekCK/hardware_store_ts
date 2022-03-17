@@ -10,6 +10,7 @@ import { User } from '../models';
 
 const LocalStrategy = passportLocal.Strategy;
 const CustomStrategy = passportCustom.Strategy;
+
 const SQLiteStore = require('connect-sqlite3')(session);
 
 passport.use(new LocalStrategy( {
@@ -30,30 +31,45 @@ passport.use(new LocalStrategy( {
     }
 } ));
 
-passport.use('token-checker', new CustomStrategy(async (req, done) => {
-        const [User]: any = await getUsers( {where: {verificationCode: req.body.verificationCode}} );
+/*passport.use('token-checker', new CustomStrategy(async (req, cb) => {
+    if( req.body.verificationCode ) { return cb(null, false); }
+    const [User]: any = await getUsers( {where: {verificationCode: req.body.verificationCode}} );
 
-        console.log('chuj');
-
-        if( User ) {
-            console.log(User);
-        }
+    if( User ) {
+        return cb(null, { message: 'User is verified' });
+    } else {
+        return cb(null, false);
     }
-))
-
-passport.serializeUser(function(user:any, cb:any) {
+}));
+*/
+passport.serializeUser(function(user:any, done:any) {
     console.log(`Serialize info: ${user.id}`);
-    cb(null, user.id);
+    done(null, user);
 });
     
-passport.deserializeUser(async function(id:any, cb:any) {
-    console.log(`Deserialize info: ${id}`);
-    let user = await getUsers( {where: {id}} );
-
-    if ( user ) {
-        return cb(null, user);
-    }
-
+passport.deserializeUser(function(user:any, done:any) {
+    console.log(`Deserialize info: ${user}`);
+    return done(null, user);
 });
 
-export {passport, LocalStrategy, SQLiteStore, session};
+const findActualUserLogged = (sessions: Array<string>, token:any) => {
+    function findUserKey(val:any) {
+        if( val === token ){
+            return true;
+        }
+    }
+
+    return sessions.findIndex(findUserKey);
+}
+
+const requireLogin = async (req:any, res:any, next:any) => {
+    const isUserLogged = findActualUserLogged(  Object.keys(req.sessionStore.sessions), req.headers.authorization);
+
+    if( isUserLogged > -1 ) {
+        console.log('loggedIn')
+    } else {
+        console.log('notLogged')
+    }
+}
+
+export {passport, LocalStrategy, SQLiteStore, session, requireLogin};

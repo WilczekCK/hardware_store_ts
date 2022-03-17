@@ -1,17 +1,25 @@
 import express, { Application } from "express";
-import { passport, session, SQLiteStore } from "./controllers/passportjs.controller";
+import { passport, session } from "./controllers/passportjs.controller";
+import cookieParser from "cookie-parser";
 
 const app: Application = express();
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8000/');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-PINGOTHER, X-CSRF-TOKEN');
+    next();
+  });
+  
+
 app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    store: new SQLiteStore({ db: 'sessions.db', dir: './' })
-}))
+    secret: 'secret key for session',
+    resave: true,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}));
 
 app.use(passport.initialize());
-app.use(passport.authenticate('session'));
-
+app.use(passport.session()); 
 
 export {app, express};

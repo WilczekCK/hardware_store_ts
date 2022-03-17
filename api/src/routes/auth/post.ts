@@ -5,23 +5,23 @@ import passport from "passport";
 
 var router = express.Router();
 
-router.post('/user/auth', async (req, res, next) => {
-  passport.authenticate('token-checker', (err, passportUser, info) => {
-    console.log(info);
+router.post("/user/login", (req, res, next) => {
+  passport.authenticate('local', (err, passportUser, info) => {
+    if (err) { return false }
+    if (!passportUser) { return false }
+    if ( passportUser ) {
+      console.log('Passed!');
 
+      req.login(passportUser, (err) => {
+        if ( err ) {
+          return next(err);
+        }
+
+        return res.status(200).send( {...passportUser, sessionID: req.sessionID} );
+      });
+    }
   })(req, res, next);
 })
-
-router.post("/user/login", async (req, res, next) => {
-  passport.authenticate('local', (err, passportUser, info) => {
-      const token = passportUser
-      
-      req.login(token, err => {
-        res.send( token );
-      })
-
-    })(req, res, next);
-});
 
 router.post("/user/logout", async (req, res) => {
   req.logout();

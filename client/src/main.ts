@@ -16,4 +16,8 @@ app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar).use(Loading).use(Form)
 
 /* AXIOS */
 axios.defaults.baseURL = "http://localhost:8000/";
+axios.defaults.withCredentials = true;
+
+console.log(axios.defaults);
+
 app.use(store).use(router).mount("#app");

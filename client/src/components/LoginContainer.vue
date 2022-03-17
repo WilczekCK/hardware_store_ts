@@ -27,6 +27,7 @@ van-form(@submit="onSubmit" class="login__container")
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import { useStore } from 'vuex';
+
 import axios from "axios";
 
 export default class LoginContainer extends Vue {
@@ -35,18 +36,16 @@ export default class LoginContainer extends Vue {
   password = '';
   error = '';
   user = {};
-  
 
   async areCredentialsValid() :Promise<boolean> {
     const { data } = await axios.post('auth/user/login', {
       email: this.email,
-      password: this.password
+      password: this.password,
     })
 
-    console.log(data);
-
     if( data.nickname && data.id) {
-      return true
+      this.user = data;
+      return data;
     }
 
     this.error = "Wrong username or password";
@@ -54,10 +53,10 @@ export default class LoginContainer extends Vue {
   }
 
   async getAccountInfo() :Promise<boolean> {
-    const { data } = await axios.post(`accounts/auth`, {
+    const { data } = await axios.post(`accounts/auth`,{
       where: {
         email: this.email
-      }
+      },
     })
 
     if( data[0].isVerified ){
@@ -74,7 +73,7 @@ export default class LoginContainer extends Vue {
     this.error = '';
     this.user = {};
 
-    if ( await this.areCredentialsValid() && await this.getAccountInfo() ) {
+    if ( await this.areCredentialsValid() ) {
       this.store.dispatch('loginSession', this.user);
     }
   }
