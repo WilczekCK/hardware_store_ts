@@ -43,7 +43,7 @@ export default class LoginContainer extends Vue {
       password: this.password,
     })
 
-    if( data.nickname && data.id) {
+    if( data.username && data.id ) {
       this.user = data;
       return data;
     }

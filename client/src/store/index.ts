@@ -20,15 +20,11 @@ export default createStore({
   actions: {
     loginSession( {commit}, data){
       const userInfo = {
-        sessionID: data.sessionID,
-        firstName: data.nickname,
-        userId: data.userId,
+        username: data.username,
+        userId: data.id,
       };
-
-
-      //sessionStorage.setItem('session_hardware', JSON.stringify(userInfo));
-      cookies.set('session_hardware', JSON.stringify( {id: userInfo.sessionID}));
       
+      cookies.set('session_hardware', JSON.stringify( {id: data.sessionID}));
       commit('setSession', userInfo);
     },
     getSession( {commit} ){
@@ -45,7 +41,7 @@ export default createStore({
   mutations: {
     setSession(state, data) {
       state.userType; //temp, no admin privileges available now!
-      state.username = data.firstName;
+      state.username = data.username;
       state.userId = data.userId;
     },
     logoutSession(state) {

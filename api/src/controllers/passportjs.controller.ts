@@ -18,14 +18,14 @@ passport.use(new LocalStrategy( {
     passwordField: 'password',
 }, async (username:string, password:string, cb:any) => {
     if(!username || !password) { return cb(null, false, { message: 'Incorrect email or password' }) };
-    
+
     const [User]: any = await getUsers( {where: {email: username}} );
 
     const areValidCredentials: boolean = await areCredentialsValid( {where: {email: username, password}} );
     const isHashedPasswordValid = password === User.password;    
 
     if ( areValidCredentials || isHashedPasswordValid && User) {
-        cb(null, { id: User.id, nickname: User.firstName });
+        cb(null, { id: User.id, username: User.firstName });
     } else {
         cb(null, false, { message: 'Incorrect email or password' });
     }
