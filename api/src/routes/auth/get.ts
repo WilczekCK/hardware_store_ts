@@ -2,7 +2,7 @@ import express from "express";
 import { sendForgotPasswordEmail } from '../../controllers/auth.controller';
 import { getUsers } from "../../controllers/user.controller";
 
-import { refreshUserInfo } from '../../controllers/passportjs.controller';
+import { refreshUserInfo, removeSession } from '../../controllers/passportjs.controller';
 
 var router = express.Router();
 
@@ -28,5 +28,8 @@ router.get('/refresh', async (req, res) => {
   res.send( await refreshUserInfo(req, res) );
 })
   
+router.get('/logout', async (req, res) => {
+  res.send( await removeSession(req, res) );
+})
 
 export {router}

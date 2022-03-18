@@ -15,6 +15,17 @@ const refreshStoreByToken = async ( id:string ) :Promise<Record<string, string>>
   return data;
 }
 
+const logoutFromApiByToken = async ( id:string ) :Promise<Record<string, string>> => {
+  const {data} = await axios("/auth/logout",{
+    method: 'get',
+    headers: {
+      "Authorization": id
+    }
+  })
+
+  return data;
+}
+
 export default createStore({
   state: {
     userType: 0,
@@ -47,7 +58,12 @@ export default createStore({
         });
       } 
     },
-    logout: ( {commit} ) => commit('logoutSession')
+    async logout( {commit} )  {
+      const { id }:any = cookies.get("session_hardware");
+      
+      await logoutFromApiByToken(id);
+      commit('logoutSession');
+    }
   },
   mutations: {
     setSession(state, data) {
@@ -56,7 +72,7 @@ export default createStore({
       state.userId = data.userId;
     },
     logoutSession(state) {
-      sessionStorage.clear()
+      cookies.set('session_hardware', '');
 
       state.userType = 0
       state.username = '';

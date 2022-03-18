@@ -78,5 +78,17 @@ const requireLogin = async (req:any, res:any, next: any) => {
     return false;
 }
 
+const removeSession = async (req:any, res:any) => {
+    const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
+    const sessions:string[] = Object.values(req.sessionStore.sessions);
 
-export {passport, LocalStrategy, SQLiteStore, session, requireLogin, isUserLogged, refreshUserInfo};
+    if ( ! await isUserLogged(req, res) )  {
+        return false;
+    }
+
+    delete req.sessionStore.sessions[req.headers.authorization];
+    console.log(req.sessionStore.sessions);
+}
+
+
+export {passport, LocalStrategy, SQLiteStore, session, requireLogin, isUserLogged, refreshUserInfo, removeSession};
