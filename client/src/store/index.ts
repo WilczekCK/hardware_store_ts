@@ -48,7 +48,7 @@ export default createStore({
       commit('setSession', userInfo);
     },
     async getSession( {commit} ){
-      if ( !this.getters.getLogin ){
+      if ( !this.getters.getLogin && cookies.get("session_hardware")){
         const { id }:any = cookies.get("session_hardware");
         const getUser = await refreshStoreByToken(id);
 
@@ -76,6 +76,7 @@ export default createStore({
 
       state.userType = 0
       state.username = '';
+      state.userId = 0;
     }
   },
 });

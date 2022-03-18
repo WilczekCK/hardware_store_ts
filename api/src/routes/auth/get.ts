@@ -29,7 +29,8 @@ router.get('/refresh', async (req, res) => {
 })
   
 router.get('/logout', async (req, res) => {
-  res.send( await removeSession(req, res) );
+  await removeSession(req, res);
+  res.send( {status: 200, message: `User logged out`} );
 })
 
 export {router}

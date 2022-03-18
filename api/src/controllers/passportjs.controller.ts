@@ -79,15 +79,12 @@ const requireLogin = async (req:any, res:any, next: any) => {
 }
 
 const removeSession = async (req:any, res:any) => {
-    const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
-    const sessions:string[] = Object.values(req.sessionStore.sessions);
-
     if ( ! await isUserLogged(req, res) )  {
         return false;
     }
 
     delete req.sessionStore.sessions[req.headers.authorization];
-    console.log(req.sessionStore.sessions);
+    return true;
 }
 
 

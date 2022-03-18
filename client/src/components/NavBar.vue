@@ -26,8 +26,6 @@ export default class NavBar extends Vue {
 
   async logout() {
     this.store.dispatch('logout');
-
-    await axios.post('auth/user/logout');
   }
 
   async created(){
