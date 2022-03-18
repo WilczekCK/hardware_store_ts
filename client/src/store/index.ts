@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const { cookies } = useCookies();
 
-const refreshStoreByToken = async ( id:string ) :Promise<boolean> => {
+const refreshStoreByToken = async ( id:string ) :Promise<Record<string, string>> => {
   const {data} = await axios("/auth/refresh",{
     method: 'get',
     headers: {
@@ -44,7 +44,10 @@ export default createStore({
         const { id }:any = cookies.get("session_hardware");
         const getUser = await refreshStoreByToken(id);
 
-        commit('setSession', getUser);
+        commit('setSession', {
+          userId: getUser.id,
+          username: getUser.username,
+        });
       } 
     },
     logout: ( {commit} ) => commit('logoutSession')

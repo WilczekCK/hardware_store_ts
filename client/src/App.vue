@@ -22,7 +22,7 @@ export default class App extends Vue{
   store = useStore();
 
   async created() {
-    this.store.dispatch('getSession');
+    await this.store.dispatch('getSession');
   }
 }
 </script>
