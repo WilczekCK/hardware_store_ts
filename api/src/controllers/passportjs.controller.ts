@@ -6,7 +6,6 @@ import { areCredentialsValid } from './auth.controller';
 import { getUsers } from './user.controller'
 
 const LocalStrategy = passportLocal.Strategy;
-
 const SQLiteStore = require('connect-sqlite3')(session);
 
 passport.use(new LocalStrategy( {
@@ -14,13 +13,11 @@ passport.use(new LocalStrategy( {
     passwordField: 'password',
 }, async (username:string, password:string, cb:any) => {
     if(!username || !password) { return cb(null, false, { message: 'Incorrect email or password' }) };
-
     const [User]: any = await getUsers( {where: {email: username}} );
 
     const areValidCredentials: boolean = await areCredentialsValid( {where: {email: username, password}} );
-    const isHashedPasswordValid = password === User.password;    
 
-    if ( areValidCredentials || isHashedPasswordValid && User) {
+    if ( areValidCredentials ) {
         cb(null, { id: User.id, username: User.firstName });
     } else {
         cb(null, false, { message: 'Incorrect email or password' });
@@ -35,7 +32,7 @@ passport.deserializeUser(function(user:any, done:any) {
     return done(null, user);
 });
 
-const findActualUserLogged = (sessions: Array<string>, token:any) => {
+export const findActualUserLogged = (sessions: Array<string>, token:any) => {
     function findUserKey(val:any) {
         if( val === token ){
             return val;
@@ -45,7 +42,7 @@ const findActualUserLogged = (sessions: Array<string>, token:any) => {
     return sessions.findIndex(findUserKey);
 }
 
-const isUserLogged = async (req:any, res:any) => {
+export const isUserLogged = async (req:any, res:any) => {
     const sessionOrder = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
 
     if( sessionOrder > -1 ) {
@@ -55,7 +52,7 @@ const isUserLogged = async (req:any, res:any) => {
     return false;
 }
 
-const refreshUserInfo = async (req: any, res: any) => {
+export const refreshUserInfo = async (req: any, res: any) => {
     const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
     const sessions:string[] = Object.values(req.sessionStore.sessions);
 
@@ -69,7 +66,7 @@ const refreshUserInfo = async (req: any, res: any) => {
     return sessionObject.passport.user;
 }
 
-const requireLogin = async (req:any, res:any, next: any) => {
+export const requireLogin = async (req:any, res:any, next: any) => {
     if( await isUserLogged(req, res) ) {
         next();
         return true;
@@ -78,7 +75,7 @@ const requireLogin = async (req:any, res:any, next: any) => {
     return false;
 }
 
-const removeSession = async (req:any, res:any) => {
+export const removeSession = async (req:any, res:any) => {
     if ( ! await isUserLogged(req, res) )  {
         return false;
     }
@@ -87,5 +84,4 @@ const removeSession = async (req:any, res:any) => {
     return true;
 }
 
-
-export {passport, LocalStrategy, SQLiteStore, session, requireLogin, isUserLogged, refreshUserInfo, removeSession};
+export {passport, LocalStrategy, SQLiteStore, session};
