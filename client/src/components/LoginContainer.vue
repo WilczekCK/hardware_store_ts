@@ -37,7 +37,7 @@ export default class LoginContainer extends Vue {
   error = '';
   user = {};
 
-  async areCredentialsValid() :Promise<boolean> {
+  async getUserInfo() :Promise<boolean> {
     const { data } = await axios.post('auth/user/login', {
       email: this.email,
       password: this.password,
@@ -52,28 +52,11 @@ export default class LoginContainer extends Vue {
     return false;
   }
 
-  async getAccountInfo() :Promise<boolean> {
-    const { data } = await axios.post(`accounts/auth`,{
-      where: {
-        email: this.email
-      },
-    })
-
-    if( data[0].isVerified ){
-      this.user = data[0];
-      return true
-    }
-
-    this.error = "Please verify your account first!";
-    return false;
-  }
-  
-
   async onSubmit() {
     this.error = '';
     this.user = {};
 
-    if ( await this.areCredentialsValid() ) {
+    if ( await this.getUserInfo() ) {
       this.store.dispatch('loginSession', this.user);
     }
   }
