@@ -50,10 +50,6 @@ export default class Auctions extends Vue {
     axios("/auctions",
     {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": this.store.getters.getToken 
-      },
       params: {
         limit: this.limit,
         skip: (this.page - 1) * this.limit,

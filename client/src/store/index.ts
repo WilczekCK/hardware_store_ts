@@ -1,4 +1,3 @@
-import { VueElement } from "vue";
 import { createStore } from "vuex";
 import { useCookies } from "vue3-cookies";
 import axios from 'axios';

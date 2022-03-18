@@ -1,15 +1,11 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import passportCustom from 'passport-custom';
 import session from 'express-session';
 
 import { areCredentialsValid } from './auth.controller';
-import { compareData } from './hashing.controller';
-import { getUsers, UserPayload } from './user.controller'
-import { User } from '../models';
+import { getUsers } from './user.controller'
 
 const LocalStrategy = passportLocal.Strategy;
-const CustomStrategy = passportCustom.Strategy;
 
 const SQLiteStore = require('connect-sqlite3')(session);
 
@@ -32,12 +28,10 @@ passport.use(new LocalStrategy( {
 } ));
 
 passport.serializeUser(function(user:any, done:any) {
-    console.log(`Serialize info: ${user.id}`);
     done(null, user);
 });
     
 passport.deserializeUser(function(user:any, done:any) {
-    console.log(`Deserialize info: ${user}`);
     return done(null, user);
 });
 

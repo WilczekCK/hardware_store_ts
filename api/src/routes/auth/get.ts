@@ -1,8 +1,8 @@
 import express from "express";
-import { areCredentialsValid, sendVerificationEmail, sendForgotPasswordEmail } from '../../controllers/auth.controller';
+import { sendForgotPasswordEmail } from '../../controllers/auth.controller';
 import { getUsers } from "../../controllers/user.controller";
 
-import { passport, requireLogin, isUserLogged, refreshUserInfo } from '../../controllers/passportjs.controller';
+import { refreshUserInfo } from '../../controllers/passportjs.controller';
 
 var router = express.Router();
 
