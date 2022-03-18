@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar, Loading, Form, Field, CellGroup, Toast } from "vant";
+import { globalCookiesConfig } from "vue3-cookies";
 
 import App from "./App.vue";
 import router from "./router";
@@ -16,4 +17,15 @@ app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar).use(Loading).use(Form)
 
 /* AXIOS */
 axios.defaults.baseURL = "http://localhost:8000/";
+axios.defaults.withCredentials = true;
+
+/* COOKIES */
+globalCookiesConfig({
+    expireTimes: "7d",
+    path: "/",
+    domain: "",
+    secure: true,
+    sameSite: "None",
+});
+
 app.use(store).use(router).mount("#app");

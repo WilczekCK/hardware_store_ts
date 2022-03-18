@@ -1,6 +1,6 @@
 import express from "express";
-
 import { getAuctions } from "../../controllers/auction.controller";
+
 
 var router = express.Router();
 

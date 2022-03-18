@@ -18,6 +18,7 @@
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
 import { useRoute } from "vue-router";
+import { useStore } from 'vuex';
 import axios from "axios";
 import ListSingleAuction from '../components/ListSingleAuction.vue';
 
@@ -35,6 +36,7 @@ export default class Auctions extends Vue {
   auctionsArray :Array<serverResponse> = [];
   isLoaded = false;
   areMoreAuctions = true;
+  store = useStore();
 
   //infinite loading values
   limit = 2;
@@ -48,13 +50,10 @@ export default class Auctions extends Vue {
     axios("/auctions",
     {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
       params: {
         limit: this.limit,
         skip: (this.page - 1) * this.limit,
-      }
+      },
     }).then((response) => {
       this.$router.push({ query: Object.assign({ page: this.page }) }); //change param in url
 

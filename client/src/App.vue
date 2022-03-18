@@ -7,6 +7,7 @@ router-view( v-slot="{ Component }" )
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { useStore } from 'vuex';
 import NavBar from "./components/NavBar.vue"; // @ is an alias to /src
 
 @Options({
@@ -14,7 +15,13 @@ import NavBar from "./components/NavBar.vue"; // @ is an alias to /src
     NavBar
   }
 })
-export default class App extends Vue{}
+export default class App extends Vue{
+  store = useStore();
+
+  async created() {
+    await this.store.dispatch('getSession');
+  }
+}
 </script>
 
 <style lang="scss">

@@ -97,3 +97,4 @@ export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults,
 
     return true;
 }
+

@@ -1,6 +1,6 @@
 import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { User } from '../models';
-import { hashData, compareData } from "./hashing.controller";
+import { hashData } from "./hashing.controller";
 import { sendVerificationEmail, generateVerificationString } from "./auth.controller";
 
 

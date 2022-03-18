@@ -1,6 +1,8 @@
 import express from "express";
-import { areCredentialsValid, sendVerificationEmail, sendForgotPasswordEmail } from '../../controllers/auth.controller';
+import { sendForgotPasswordEmail } from '../../controllers/auth.controller';
 import { getUsers } from "../../controllers/user.controller";
+
+import { refreshUserInfo, removeSession } from '../../controllers/passportjs.controller';
 
 var router = express.Router();
 
@@ -21,6 +23,14 @@ router.get('/forgotPassword', async (req, res) => {
       : {status: 402, message: `There is no user like that`}
     );
   })
+
+router.get('/refresh', async (req, res) => {
+  res.send( await refreshUserInfo(req, res) );
+})
   
+router.get('/logout', async (req, res) => {
+  await removeSession(req, res);
+  res.send( {status: 200, message: `User logged out`} );
+})
 
 export {router}

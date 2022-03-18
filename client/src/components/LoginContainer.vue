@@ -13,7 +13,7 @@ van-form(@submit="onSubmit" class="login__container")
       class="login__container__cellgroup__field"
       v-model="password"
       type="password"
-      name="Password"
+      name="password"
       label="Password"
       placeholder="Password"
       :rules="[{ required: true, message: 'Password is required' }]")
@@ -21,11 +21,13 @@ van-form(@submit="onSubmit" class="login__container")
     van-button(block type="success" native-type="submit")="Submit"
     a(href="#" class="login__container__submit__container--forgot")="Forgot password"
     a(href="#" class="login__container__submit__container--account" )="Create account"
+    router-link(to="/authTester" class="login__container__submit__container--account" )="Auth Tester"
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import { useStore } from 'vuex';
+
 import axios from "axios";
 
 export default class LoginContainer extends Vue {
@@ -34,46 +36,27 @@ export default class LoginContainer extends Vue {
   password = '';
   error = '';
   user = {};
-  
 
-  async areCredentialsValid() :Promise<boolean> {
-    const { data } = await axios.post('auth/user', {
-      where: {
-        email: this.email,
-        password: this.password
-      }
+  async getUserInfo() :Promise<boolean> {
+    const { data } = await axios.post('auth/user/login', {
+      email: this.email,
+      password: this.password,
     })
 
-    if( data.status === 200 ) {
-      return true
+    if( data.username && data.id ) {
+      this.user = data;
+      return data;
     }
 
     this.error = "Wrong username or password";
     return false;
   }
 
-  async getAccountInfo() :Promise<boolean> {
-    const { data } = await axios.post(`accounts/auth`, {
-      where: {
-        email: this.email
-      }
-    })
-
-    if( data[0].isVerified ){
-      this.user = data[0];
-      return true
-    }
-
-    this.error = "Please verify your account first!";
-    return false;
-  }
-  
-
   async onSubmit() {
     this.error = '';
     this.user = {};
 
-    if ( await this.areCredentialsValid() && await this.getAccountInfo() ) {
+    if ( await this.getUserInfo() ) {
       this.store.dispatch('loginSession', this.user);
     }
   }

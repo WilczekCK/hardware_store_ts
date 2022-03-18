@@ -1,46 +1,82 @@
 import { createStore } from "vuex";
+import { useCookies } from "vue3-cookies";
+import axios from 'axios';
+
+const { cookies } = useCookies();
+
+const refreshStoreByToken = async ( id:string ) :Promise<Record<string, string>> => {
+  const {data} = await axios("/auth/refresh",{
+    method: 'get',
+    headers: {
+      "Authorization": id
+    }
+  })
+
+  return data;
+}
+
+const logoutFromApiByToken = async ( id:string ) :Promise<Record<string, string>> => {
+  const {data} = await axios("/auth/logout",{
+    method: 'get',
+    headers: {
+      "Authorization": id
+    }
+  })
+
+  return data;
+}
 
 export default createStore({
   state: {
-    token: '',
-    userId: '',
     userType: 0,
-    username: ''
+    username: '',
+    userId: 0,
   },
   getters: {
     getLogin:    (state) => state.username,
-    getToken:    (state) => state.token,
-    getUserId:   (state) => state.userId,
-    getUserType: (state) => state.userType
+    getUserType: (state) => state.userType,
+    getUserId:    (state) => state.userId,
   },
   actions: {
     loginSession( {commit}, data){
-      sessionStorage.setItem('session_hardware', JSON.stringify(data));
-      commit('setSession', data);
+      const userInfo = {
+        username: data.username,
+        userId: data.id,
+      };
+      
+      cookies.set('session_hardware', JSON.stringify( {id: data.sessionID}));
+      commit('setSession', userInfo);
     },
-    getSession( {commit} ){
-      const session = sessionStorage.getItem('session_hardware');
-      if(session && typeof session === 'string' && session !== ''){
-        const data = JSON.parse(session);
-        commit('setSession', data);
-      }
+    async getSession( {commit} ){
+      if ( !this.getters.getLogin && cookies.get("session_hardware")){
+        const { id }:any = cookies.get("session_hardware");
+        const getUser = await refreshStoreByToken(id);
+
+        commit('setSession', {
+          userId: getUser.id,
+          username: getUser.username,
+        });
+      } 
     },
-    logout: ( {commit} ) => commit('logoutSession')
+    async logout( {commit} )  {
+      const { id }:any = cookies.get("session_hardware");
+      
+      await logoutFromApiByToken(id);
+      commit('logoutSession');
+    }
   },
   mutations: {
     setSession(state, data) {
-      state.token = 'no_token_now' //temp, no token now
-      state.userId = data.userid
-      state.userType = 0; //temp, no admin privileges available now!
-      state.username = data.firstName;
+      state.userType; //temp, no admin privileges available now!
+      state.username = data.username;
+      state.userId = data.userId;
     },
     logoutSession(state) {
-      sessionStorage.clear()
-      
-      state.token = ''
-      state.userId = ''
+      cookies.set('session_hardware', '');
+
       state.userType = 0
       state.username = '';
+      state.userId = 0;
     }
   },
 });
