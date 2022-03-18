@@ -1,8 +1,6 @@
 import express from "express";
-import { sendForgotPasswordEmail } from '../../controllers/auth.controller';
+import { sendForgotPasswordEmail, refreshUserInfo, removeSession } from '../../controllers/auth.controller';
 import { getUsers } from "../../controllers/user.controller";
-
-import { refreshUserInfo, removeSession } from '../../controllers/passportjs.controller';
 
 var router = express.Router();
 

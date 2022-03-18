@@ -2,6 +2,7 @@
     TODO:  
     - OAuth <- later
 */
+
 import { getUsers, modifyUser } from './user.controller';
 import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
@@ -98,3 +99,54 @@ export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults,
     return true;
 }
 
+export const isUserLogged = async (req:any, res:any) => {
+    const sessionOrder = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
+
+    if( sessionOrder > -1 ) {
+      return true;
+    } 
+
+    return false;
+}
+
+export const removeSession = async (req:any, res:any) => {
+    if ( ! await isUserLogged(req, res) )  {
+        return false;
+    }
+
+    delete req.sessionStore.sessions[req.headers.authorization];
+    return true;
+}
+
+export const refreshUserInfo = async (req: any, res: any) => {
+    const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
+    const sessions:string[] = Object.values(req.sessionStore.sessions);
+
+    if ( ! await isUserLogged(req, res) )  {
+        return false;
+    }
+
+    const sessionString:string = sessions[sessionOrder];
+    const sessionObject:Record<string, Record<string, string>> = JSON.parse( sessionString );
+
+    return sessionObject.passport.user;
+}
+
+export const requireLogin = async (req:any, res:any, next: any) => {
+    if( await isUserLogged(req, res) ) {
+        next();
+        return true;
+    } 
+    
+    return false;
+}
+
+export const findActualUserLogged = (sessions: Array<string>, token:any) => {
+    function findUserKey(val:any) {
+        if( val === token ){
+            return val;
+        }
+    }
+
+    return sessions.findIndex(findUserKey);
+}
