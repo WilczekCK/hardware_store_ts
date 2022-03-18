@@ -28,6 +28,4 @@ globalCookiesConfig({
     sameSite: "None",
 });
 
-console.log(axios.defaults);
-
 app.use(store).use(router).mount("#app");

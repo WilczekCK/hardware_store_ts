@@ -1,8 +1,20 @@
 import { VueElement } from "vue";
 import { createStore } from "vuex";
 import { useCookies } from "vue3-cookies";
+import axios from 'axios';
 
 const { cookies } = useCookies();
+
+const refreshStoreByToken = async ( id:string ) :Promise<boolean> => {
+  const {data} = await axios("/auth/refresh",{
+    method: 'get',
+    headers: {
+      "Authorization": id
+    }
+  })
+
+  return data;
+}
 
 export default createStore({
   state: {
@@ -27,14 +39,13 @@ export default createStore({
       cookies.set('session_hardware', JSON.stringify( {id: data.sessionID}));
       commit('setSession', userInfo);
     },
-    getSession( {commit} ){
-      //const session = sessionStorage.getItem('session_hardware');
-      const session = '';
+    async getSession( {commit} ){
+      if ( !this.getters.getLogin ){
+        const { id }:any = cookies.get("session_hardware");
+        const getUser = await refreshStoreByToken(id);
 
-      if(session && typeof session === 'string' && session !== ''){
-        const data = JSON.parse(session);
-        commit('setSession', data);
-      }
+        commit('setSession', getUser);
+      } 
     },
     logout: ( {commit} ) => commit('logoutSession')
   },

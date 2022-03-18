@@ -31,8 +31,6 @@ export default class NavBar extends Vue {
   }
 
   async created(){
-    const dupa = this.store.dispatch('getSession');
-    
     this.userInfo = computed(() => this.store.getters.getLogin)
   }
 }

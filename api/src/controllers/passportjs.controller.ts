@@ -65,6 +65,8 @@ const refreshUserInfo = async (req: any, res: any) => {
     const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
     const sessions:string[] = Object.values(req.sessionStore.sessions);
 
+    console.log('Refresh user');
+
     if ( ! await isUserLogged(req, res) )  {
         return false;
     }

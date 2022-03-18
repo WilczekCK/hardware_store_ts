@@ -2,6 +2,8 @@ import express from "express";
 import { areCredentialsValid, sendVerificationEmail, sendForgotPasswordEmail } from '../../controllers/auth.controller';
 import { getUsers } from "../../controllers/user.controller";
 
+import { passport, requireLogin, isUserLogged, refreshUserInfo } from '../../controllers/passportjs.controller';
+
 var router = express.Router();
 
 type queryResults = {
@@ -21,6 +23,10 @@ router.get('/forgotPassword', async (req, res) => {
       : {status: 402, message: `There is no user like that`}
     );
   })
+
+router.get('/refresh', async (req, res) => {
+  res.send( await refreshUserInfo(req, res) );
+})
   
 
 export {router}

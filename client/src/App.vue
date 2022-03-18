@@ -21,20 +21,8 @@ import NavBar from "./components/NavBar.vue"; // @ is an alias to /src
 export default class App extends Vue{
   store = useStore();
 
-  mounted(){
-    const { cookies } = useCookies();
-    if ( !this.store.getters.username ){
-       const { id }:any = cookies.get("session_hardware");
-
-      axios.get("/auctions",{
-        headers: {
-          "Authorization": id
-        },
-      }).then((response) => {
-        console.log('ok')
-      });
-    }
-
+  async created() {
+    this.store.dispatch('getSession');
   }
 }
 </script>
