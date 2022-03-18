@@ -18,14 +18,12 @@ const refreshStoreByToken = async ( id:string ) :Promise<Record<string, string>>
 
 export default createStore({
   state: {
-    token: '',
     userType: 0,
     username: '',
     userId: 0,
   },
   getters: {
     getLogin:    (state) => state.username,
-    getToken:    (state) => state.token,
     getUserType: (state) => state.userType,
     getUserId:    (state) => state.userId,
   },
@@ -60,8 +58,7 @@ export default createStore({
     },
     logoutSession(state) {
       sessionStorage.clear()
-      
-      state.token = ''
+
       state.userType = 0
       state.username = '';
     }
