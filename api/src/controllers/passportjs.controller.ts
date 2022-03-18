@@ -13,7 +13,9 @@ passport.use(new LocalStrategy( {
     passwordField: 'password',
 }, async (username:string, password:string, cb:any) => {
     if(!username || !password) { return cb(null, false, { message: 'Incorrect email or password' }) };
+    
     const [User]: any = await getUsers( {where: {email: username}} );
+    if (!User) return cb(null, false, { message: 'Incorrect email or password' });
 
     const areValidCredentials: boolean = await areCredentialsValid( {where: {email: username, password}} );
 
