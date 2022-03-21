@@ -72,7 +72,7 @@ export default createStore({
       state.userId = data.userId;
     },
     logoutSession(state) {
-      cookies.set('session_hardware', '');
+      cookies.remove('session_hardware');
 
       state.userType = 0
       state.username = '';
