@@ -2,14 +2,21 @@
     TODO:  
     - OAuth <- later
 */
+
 import { getUsers, modifyUser } from './user.controller';
 import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
+import { Request } from 'express';
 
 type queryResults = {
     [where: string]: Record<string, string>
 }
+
+interface RequestExtended extends Request {
+    sessionStore: Record<string, string>
+}
+
 
 export const areCredentialsValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
     const [ User ] : any = await getUsers({ where: {email: whereQuery.email} });
@@ -98,3 +105,59 @@ export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults,
     return true;
 }
 
+export const findActualUserLogged = (sessions: Array<string>, token:string): number => {
+    function findUserKey(val:string) {
+        if( val === token ){
+            return val;
+        }
+    }
+
+    return sessions.findIndex(findUserKey);
+}
+
+export const isUserLogged = (req:RequestExtended): boolean => {
+    if( !req.headers.authorization ) return false;
+    const sessionOrder = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
+
+    if( sessionOrder > -1 ) {
+      return true;
+    } 
+
+    return false;
+}
+
+export const removeSession = (req: RequestExtended): boolean => {
+    if ( !isUserLogged(req) || !req.headers.authorization)  {
+        return false;
+    }
+
+    //TS wtf? Its not a number, its clearly as string, 
+    //even on init, the req.headers.authorization is a string!
+    //@ts-ignore
+    delete req.sessionStore.sessions[req.headers.authorization];
+    return true;
+}
+
+export const refreshUserInfo = (req: RequestExtended): string | boolean => {
+    if(!req.headers.authorization) return false;
+
+    const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
+    const sessions:string[] = Object.values(req.sessionStore.sessions);
+
+    if ( ! isUserLogged(req) )  {
+        return false;
+    }
+
+    const sessionString:string = sessions[sessionOrder];
+    const sessionObject:Record<string, Record<string, string>> = JSON.parse( sessionString );
+
+    return sessionObject.passport.user;
+}
+
+export const requireLogin = (req:RequestExtended): boolean => {
+    if( isUserLogged(req) ) {
+        return true;
+    } 
+    
+    return false;
+}
