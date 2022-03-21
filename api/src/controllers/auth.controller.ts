@@ -132,7 +132,7 @@ export const removeSession = (req: RequestExtended): boolean => {
     }
 
     //TS wtf? Its not a number, its clearly as string, 
-    //from where, type number has letters, are you retarded?
+    //even on init, the req.headers.authorization is a string!
     //@ts-ignore
     delete req.sessionStore.sessions[req.headers.authorization];
     return true;

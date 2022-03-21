@@ -1,16 +1,14 @@
 import express from "express";
 import { sendForgotPasswordEmail, refreshUserInfo, removeSession } from '../../controllers/auth.controller';
 import { getUsers } from "../../controllers/user.controller";
-import { Request, Response } from 'express';
 var router = express.Router();
 
-type queryResults = {
-    [where: string]: Record<string, string>
-}
+import {Request, Response} from 'express';
 
 interface RequestExtended extends Request {
-  sessionStore: Record<string, string>
+    sessionStore: Record<string, string>
 }
+
 
 router.get('/mail', async (req, res) => {
 });
@@ -26,12 +24,12 @@ router.get('/forgotPassword', async (req, res) => {
     );
   })
 
-router.get('/refresh', (req, res) => {
-  res.send( refreshUserInfo(req, res) );
+router.get('/refresh', (req: Request, res: Response): any=> {
+  res.send( refreshUserInfo(req as RequestExtended) );
 })
   
-router.get('/logout', (req: RequestExtended, res) => {
-  removeSession(req, res);
+router.get('/logout', (req:Request, res:Response): any => {
+  removeSession( req as RequestExtended );
   res.send( {status: 200, message: `User logged out`} );
 })
 
