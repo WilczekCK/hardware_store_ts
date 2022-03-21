@@ -7,6 +7,7 @@ import { getUsers, modifyUser } from './user.controller';
 import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
+import { Request, Response } from 'express';
 
 type queryResults = {
     [where: string]: Record<string, string>
@@ -99,7 +100,17 @@ export const sendForgotPasswordEmail = async ({where: whereQuery}: queryResults,
     return true;
 }
 
-export const isUserLogged = async (req:any, res:any) => {
+export const findActualUserLogged = (sessions: Array<string>, token:string): number => {
+    function findUserKey(val:string) {
+        if( val === token ){
+            return val;
+        }
+    }
+
+    return sessions.findIndex(findUserKey);
+}
+
+export const isUserLogged = (req:any, res:any): boolean => {
     const sessionOrder = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
 
     if( sessionOrder > -1 ) {
@@ -109,8 +120,8 @@ export const isUserLogged = async (req:any, res:any) => {
     return false;
 }
 
-export const removeSession = async (req:any, res:any) => {
-    if ( ! await isUserLogged(req, res) )  {
+export const removeSession = (req:any, res:any): boolean => {
+    if ( !isUserLogged(req, res) )  {
         return false;
     }
 
@@ -118,11 +129,11 @@ export const removeSession = async (req:any, res:any) => {
     return true;
 }
 
-export const refreshUserInfo = async (req: any, res: any) => {
+export const refreshUserInfo = (req: any, res: any): string | boolean => {
     const sessionOrder:number = findActualUserLogged( Object.keys(req.sessionStore.sessions), req.headers.authorization );
     const sessions:string[] = Object.values(req.sessionStore.sessions);
 
-    if ( ! await isUserLogged(req, res) )  {
+    if ( ! isUserLogged(req, res) )  {
         return false;
     }
 
@@ -132,21 +143,11 @@ export const refreshUserInfo = async (req: any, res: any) => {
     return sessionObject.passport.user;
 }
 
-export const requireLogin = async (req:any, res:any, next: any) => {
-    if( await isUserLogged(req, res) ) {
+export const requireLogin = (req:any, res:any, next: any): boolean => {
+    if( isUserLogged(req, res) ) {
         next();
         return true;
     } 
     
     return false;
-}
-
-export const findActualUserLogged = (sessions: Array<string>, token:any) => {
-    function findUserKey(val:any) {
-        if( val === token ){
-            return val;
-        }
-    }
-
-    return sessions.findIndex(findUserKey);
 }
