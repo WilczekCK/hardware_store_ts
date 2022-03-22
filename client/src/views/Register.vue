@@ -2,17 +2,15 @@
 .register__container
     van-address-edit(
         :area-list="areaList"
-        show-postal
         show-delete
         show-set-default
         show-search-result
         :search-result="searchResult"
-        :area-columns-placeholder="['Choose', 'Choose', 'Choose']"
+        :area-columns-placeholder="['Choose']"
         @save="onSave"
         @delete="onDelete"
         @change-detail="onChangeDetail"
-    )
-
+        value="0")
 </template>
 
 <script lang="ts">
@@ -20,33 +18,29 @@ import { Vue } from "vue-class-component";
 import { Toast } from "vant";
 import { useStore } from 'vuex';
 import axios from "axios";
-import { ref } from 'vue';
 
 export default class Register extends Vue {
-    store = useStore();
     searchResult = [];
-    areaList = [];
+    areaList = {
+        province_list: {
+            0: 'Świętokrzyskie',
+            1: 'Mazowieckie',
+            2: 'Małopolskie'
+        },
+    };
 
     onSave = () => Toast('save');
     onDelete = () => Toast('delete');
-
     onChangeDetail = (val) => {
-      if (val) {
+
         this.searchResult = [
           {
             name: 'Name1',
             address: 'Address',
           },
         ];
-      } else {
-        this.searchResult = [];
-      }
+
     };
-
-    setup(){
-        this.areaList = ['a', 'b', 'c'];
-    }
-
 
 }
 </script>
@@ -56,6 +50,9 @@ export default class Register extends Vue {
     max-width: 350px;
     margin:0 auto;
 }
+
+.van-picker-column:nth-child(2){display:none}
+.van-picker-column:nth-child(3){display:none}
 </style>
 
 
