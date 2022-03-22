@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar, Loading, Form, Field, CellGroup, Toast, Picker, Checkbox } from "vant";
+import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar, Loading, Form, Field, CellGroup, Toast, Picker, Checkbox, Popup, AddressEdit } from "vant";
 import { globalCookiesConfig } from "vue3-cookies";
 
 import App from "./App.vue";
@@ -13,7 +13,7 @@ const app = createApp(App);
 app.config.performance = true; //enable vue troubleshooting
 
 /* VANT */
-app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar).use(Loading).use(Form).use(Field).use(CellGroup).use(Picker).use(Checkbox).use(Toast);
+app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar).use(Loading).use(Form).use(Field).use(CellGroup).use(Picker).use(AddressEdit).use(Checkbox).use(Popup).use(Toast);
 
 /* AXIOS */
 axios.defaults.baseURL = "http://localhost:8000/";

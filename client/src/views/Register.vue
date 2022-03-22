@@ -1,51 +1,53 @@
 <template lang="pug">
 .register__container
-    van-cell-group(inset class="register__container__cellgroup")
-        van-field(
-            class="register__container__cellgroup__field"
-            v-model="email"
-            name="email"
-            label="Email"
-            placeholder="Email"
-            :rules="[{ required: true, message: 'Email is required' }]")
-        van-field(
-            class="register__container__cellgroup__field"
-            v-model="password"
-            type="password"
-            name="password"
-            label="Password"
-            placeholder="Password"
-            :rules="[{ required: true, message: 'Password is required' }]")
-        van-field(
-            class="register__container__cellgroup__field"
-            v-model="firstName"
-            name="firstName"
-            label="First name"
-            placeholder="Adam"
-            :rules="[{ required: true, message: 'First name is required' }]")
-        van-field(
-            class="register__container__cellgroup__field"
-            v-model="lastName"
-            name="lastName"
-            label="Last name"
-            placeholder="Smith"
-            :rules="[{ required: true, message: 'Last name is required' }]")
+    van-address-edit(
+        :area-list="areaList"
+        show-postal
+        show-delete
+        show-set-default
+        show-search-result
+        :search-result="searchResult"
+        :area-columns-placeholder="['Choose', 'Choose', 'Choose']"
+        @save="onSave"
+        @delete="onDelete"
+        @change-detail="onChangeDetail"
+    )
+
 </template>
 
 <script lang="ts">
-import { Vue, } from "vue-class-component";
+import { Vue } from "vue-class-component";
+import { Toast } from "vant";
 import { useStore } from 'vuex';
 import axios from "axios";
+import { ref } from 'vue';
 
 export default class Register extends Vue {
-  store = useStore();
-  email = '';
-  password = '';
-  firstName = '';
-  lastName = '';
-  voivodeship = '';
-  city = '';
-  acceptedRules = false;
+    store = useStore();
+    searchResult = [];
+    areaList = [];
+
+    onSave = () => Toast('save');
+    onDelete = () => Toast('delete');
+
+    onChangeDetail = (val) => {
+      if (val) {
+        this.searchResult = [
+          {
+            name: 'Name1',
+            address: 'Address',
+          },
+        ];
+      } else {
+        this.searchResult = [];
+      }
+    };
+
+    setup(){
+        this.areaList = ['a', 'b', 'c'];
+    }
+
+
 }
 </script>
 
