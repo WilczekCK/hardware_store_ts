@@ -1,6 +1,6 @@
 <template lang="pug">
 van-form(class="register__container" @submit="onSubmit")
-  h3( class="register__container__error" v-if="error") {{ error }}
+  h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
   van-cell-group(inset)
     van-field(
       v-model="firstName"
@@ -49,7 +49,7 @@ export default class Register extends Vue {
     password = '';
     verifyPassword = '';
     
-    error = '';
+    errors = [];
 
     async sendUserInfo() :Promise<boolean> {
         const { data } = await axios.post('auth/user/register', {
@@ -64,19 +64,23 @@ export default class Register extends Vue {
             return true;
         }
 
-        this.error = "Wrong username or password";
         return false;
     }
 
   async onSubmit() {
-    this.error = '';
+    this.errors = [];
 
     if( this.password !== this.verifyPassword ) {
-        this.error = 'Passwords do not match';
-        return false;
+        this.errors.push('Passwords do not match');
     }
 
-    await this.sendUserInfo();
+    if ( !this.rulesAccepted || !this.isAdult ) {
+        this.errors.push('You have to accept rules and be adult');
+    }
+
+    if ( !this.errors.length ) {
+        await this.sendUserInfo();
+    }
   }
 }
 </script>
