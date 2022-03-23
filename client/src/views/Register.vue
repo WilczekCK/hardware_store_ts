@@ -1,16 +1,35 @@
 <template lang="pug">
 .register__container
-    van-address-edit(
-        :area-list="areaList"
-        show-delete
-        show-set-default
-        show-search-result
-        :search-result="searchResult"
-        :area-columns-placeholder="['Choose']"
-        @save="onSave"
-        @delete="onDelete"
-        @change-detail="onChangeDetail"
-        value="0")
+  h3( class="login__error" v-if="error") {{ error }}
+  van-cell-group(inset)
+    van-field(
+      v-model="firstName"
+      label="First Name"
+      placeholder="First Name")
+    van-field(
+      v-model="email"
+      name="email"
+      label="Email"
+      placeholder="Email"
+      :rules="[{ required: true, message: 'Email is required' }]")
+    van-field(
+      v-model="password"
+      type="password"
+      name="password"
+      label="Password"
+      placeholder="Password"
+      :rules="[{ required: true, message: 'Password is required' }]")
+    van-field(
+      v-model="verifyPassport"
+      type="password"
+      name="check_password"
+      label="Type password again"
+      placeholder="Password"
+      :rules="[{ required: true, message: 'Verify passport by writing it again' }]")
+    van-checkbox(v-model="rulesAccepted" @click="rulesAccepted = !!rulesAccepted")="I agree to the rules and conditions of the site"
+    van-checkbox(v-model="isAdult" @click="isAdult = !!isAdult")="I am at least 18 years old"
+  div(style="margin: 16px;" class="login__container__submit__container")
+    van-button(block type="success" native-type="submit")="Submit"
 </template>
 
 <script lang="ts">
@@ -20,28 +39,15 @@ import { useStore } from 'vuex';
 import axios from "axios";
 
 export default class Register extends Vue {
-    searchResult = [];
-    areaList = {
-        province_list: {
-            0: 'Świętokrzyskie',
-            1: 'Mazowieckie',
-            2: 'Małopolskie'
-        },
-    };
+    rulesAccepted = false;
+    isAdult = false;
 
-    onSave = () => Toast('save');
-    onDelete = () => Toast('delete');
-    onChangeDetail = (val) => {
-
-        this.searchResult = [
-          {
-            name: 'Name1',
-            address: 'Address',
-          },
-        ];
-
-    };
-
+    firstName = '';
+    email = '';
+    password = '';
+    verifyPassport = '';
+    
+    error = '';
 }
 </script>
 
@@ -50,9 +56,6 @@ export default class Register extends Vue {
     max-width: 350px;
     margin:0 auto;
 }
-
-.van-picker-column:nth-child(2){display:none}
-.van-picker-column:nth-child(3){display:none}
 </style>
 
 
