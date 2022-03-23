@@ -1,5 +1,5 @@
 <template lang="pug">
-van-form(class="register__container")
+van-form(class="register__container" @submit="onSubmit")
   h3( class="register__container__error" v-if="error") {{ error }}
   van-cell-group(inset)
     van-field(
@@ -28,8 +28,8 @@ van-form(class="register__container")
       label="Type password again"
       placeholder="Password"
       :rules="[{ required: true, message: 'Verify passport by writing it again' }]")
-    van-checkbox(class="register__container__checkbox" v-model="rulesAccepted" @click="rulesAccepted = !!rulesAccepted")="I agree to the rules and conditions of the site"
-    van-checkbox(class="register__container__checkbox" v-model="isAdult" @click="isAdult = !!isAdult")="I am at least 18 years old"
+    van-checkbox(class="register__container__checkbox" v-model="rulesAccepted" @click="rulesAccepted = !!rulesAccepted"  :rules="[{ required: true, message: 'You have to accept rules' }]")="I agree to the rules and conditions of the site"
+    van-checkbox(class="register__container__checkbox" v-model="isAdult" @click="isAdult = !!isAdult"  :rules="[{ required: true, message: 'You have to be adult' }]")="I am at least 18 years old"
   div(style="margin: 16px;" class="login__container__submit__container")
     van-button(block type="success" native-type="submit")="Submit"
 </template>
@@ -50,6 +50,27 @@ export default class Register extends Vue {
     verifyPassport = '';
     
     error = '';
+
+    async sendUserInfo() :Promise<boolean> {
+        const { data } = await axios.post('auth/user/register', {
+            email: this.email,
+            password: this.password,
+            firstName: this.firstName,
+            isAdult: this.isAdult,
+            rulesAccepted: this.rulesAccepted
+        })
+
+        if( data.username && data.id ) {
+            return true;
+        }
+
+        this.error = "Wrong username or password";
+        return false;
+    }
+
+  async onSubmit() {
+    await this.sendUserInfo();
+  }
 }
 </script>
 
