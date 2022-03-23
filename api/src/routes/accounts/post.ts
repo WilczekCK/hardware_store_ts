@@ -5,7 +5,9 @@ import { createUser, getUsers } from "../../controllers/user.controller";
 var router = express.Router();
 
 router.post('/', async (req, res) => {
-  res.send( await createUser(req.body) );
+
+  console.log(req);
+  //res.send( await createUser(req.body) );
 })
 
 

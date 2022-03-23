@@ -36,8 +36,6 @@ van-form(class="register__container" @submit="onSubmit")
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import { Toast } from "vant";
-import { useStore } from 'vuex';
 import axios from "axios";
 
 export default class Register extends Vue {
@@ -52,7 +50,7 @@ export default class Register extends Vue {
     errors = [];
 
     async sendUserInfo() :Promise<boolean> {
-        const { data } = await axios.post('auth/user/register', {
+        const { data } = await axios.post('accounts/', {
             email: this.email,
             password: this.password,
             firstName: this.firstName,
