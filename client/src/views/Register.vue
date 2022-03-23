@@ -22,7 +22,7 @@ van-form(class="register__container" @submit="onSubmit")
       placeholder="Password"
       :rules="[{ required: true, message: 'Password is required' }]")
     van-field(
-      v-model="verifyPassport"
+      v-model="verifyPassword"
       type="password"
       name="check_password"
       label="Type password again"
@@ -47,7 +47,7 @@ export default class Register extends Vue {
     firstName = '';
     email = '';
     password = '';
-    verifyPassport = '';
+    verifyPassword = '';
     
     error = '';
 
@@ -69,6 +69,13 @@ export default class Register extends Vue {
     }
 
   async onSubmit() {
+    this.error = '';
+
+    if( this.password !== this.verifyPassword ) {
+        this.error = 'Passwords do not match';
+        return false;
+    }
+
     await this.sendUserInfo();
   }
 }
