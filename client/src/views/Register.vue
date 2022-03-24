@@ -47,15 +47,13 @@ export default class Register extends Vue {
     password = '';
     verifyPassword = '';
     
-    errors = [];
+    errors:string[] = [];
 
     async sendUserInfo() :Promise<boolean> {
         const { data } = await axios.post('accounts/', {
             email: this.email,
             password: this.password,
             firstName: this.firstName,
-            isAdult: this.isAdult,
-            rulesAccepted: this.rulesAccepted
         })
 
         if( data.username && data.id ) {
