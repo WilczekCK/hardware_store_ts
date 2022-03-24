@@ -1,5 +1,5 @@
 import { createApp } from "vue";
-import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar, Loading, Form, Field, CellGroup, Toast, Picker, Checkbox, Popup, Area, Locale } from "vant";
+import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar, Loading, Form, Field, CellGroup, Toast, Picker, Checkbox, Popup, Area, Locale, DropdownMenu, DropdownItem, Icon } from "vant";
 import enUS from 'vant/es/locale/lang/en-US';
 import VueCookies from "vue3-cookies";
 
@@ -17,7 +17,7 @@ const app = createApp(App);
 app.config.performance = true; //enable vue troubleshooting
 
 /* VANT */
-app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar).use(Loading).use(Form).use(Field).use(CellGroup).use(Picker).use(Area).use(Checkbox).use(Popup).use(Toast);
+app.use(Button).use(Row).use(Col).use(Sticky).use(NavBar).use(Loading).use(Form).use(Field).use(CellGroup).use(Picker).use(Area).use(Checkbox).use(Popup).use(Icon).use(DropdownMenu).use(DropdownItem).use(Toast);
 Locale.use('en-US', enUS);
 
 /* AXIOS */
