@@ -6,7 +6,12 @@ van-nav-bar(fixed=true id="navbar")
   template(#right)
     span Hello, 
       b {{userInfo}}
-    van-icon(name="arrow-down")
+    van-icon(:name="menu.getMenuIcon()" @click="menu.toggle()")
+    .navbar__dropdown__container(v-if="menu.isToggled")
+      p="Menu item 1"
+      p="Menu item 2"
+      p="Menu item 3"
+
 </template>
 
 
@@ -32,6 +37,15 @@ import axios from "axios";
 export default class NavBar extends Vue {
   store = useStore();
   userInfo = {}; 
+
+  menu = { 
+    isToggled: false,
+    getMenuIcon: (): string => this.menu.isToggled ? 'arrow-up' : 'arrow-down',
+
+    toggle: (): void => {
+      this.menu.isToggled = !this.menu.isToggled;
+    },
+  }
 
   async logout() {
     this.store.dispatch('logout');
@@ -68,6 +82,22 @@ export default class NavBar extends Vue {
     &:first-of-type{
         padding-top:10px;
         padding-bottom:10px;
+    }
+
+    /* Dropdown */
+    .navbar__dropdown__container{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        border-radius: 2px;
+        padding: 5px 25px;
+        box-sizing: border-box;
+        text-align: left;
+        box-sizing:border-box;
     }
 }
 </style>
