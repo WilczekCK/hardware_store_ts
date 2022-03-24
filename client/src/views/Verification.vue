@@ -4,16 +4,30 @@
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useRoute } from "vue-router";
+
+interface AxiosRequestConfig2 {
+    AxiosRequestConfig: AxiosRequestConfig;
+    where: any
+}
 
 
 export default class Verification extends Vue {
-    verificationCode = '';
+    verificationCode:string|string[] = '';
+    isVerified = false;
 
-    created() {
+    async verifyCode():Promise<any> {
+        await axios.patch('auth/verify/', {
+            where: { verificationCode: this.verificationCode },
+        })
+    }
+
+    async created() {
         const route = useRoute();
-        console.log(route.params.token);
+        this.verificationCode = route.params.token;
+
+        await this.verifyCode();
     }
 }
 </script>

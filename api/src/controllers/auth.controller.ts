@@ -50,15 +50,15 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
 
 export const isVerificationCodeValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
     const [ User ] : any = await getUsers({ 
-        where: [
-            {verificationCode: whereQuery.verificationCode}, 
-            {isVerified: false}
-        ],
+        where: {
+            'verificationCode': whereQuery.verificationCode, 
+            'isVerified': false
+        },
         operator: 'AND' 
     });
     if ( !User || !whereQuery.verificationCode) return false;
 
-    return true;
+    return User;
 }  
 
 export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boolean> => {
