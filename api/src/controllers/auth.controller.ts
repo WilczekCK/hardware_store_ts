@@ -8,9 +8,10 @@ import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
 import { Request } from 'express';
+import { User } from '../models';
 
 type queryResults = {
-    [where: string]: Record<string, string>
+    [where: string]: Record<string, any>
 }
 
 interface RequestExtended extends Request {
@@ -48,7 +49,7 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
     return true;
 }
 
-export const isVerificationCodeValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
+export const getUserByVerificationCode = async ({where: whereQuery}: queryResults): Promise<number|boolean> => {
     const [ User ] : any = await getUsers({ 
         where: {
             'verificationCode': whereQuery.verificationCode, 
@@ -58,7 +59,7 @@ export const isVerificationCodeValid = async ({where: whereQuery}: queryResults)
     });
     if ( !User || !whereQuery.verificationCode) return false;
 
-    return User;
+    return User.id;
 }  
 
 export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boolean> => {

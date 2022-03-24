@@ -1,5 +1,5 @@
 import express from "express";
-import { isVerificationCodeValid, verifyUser } from "../../controllers/auth.controller";
+import { getUserByVerificationCode, verifyUser } from "../../controllers/auth.controller";
 
 var router = express.Router();
 
@@ -8,13 +8,16 @@ router.patch('/', async (req, res) => {
 })
 
 router.patch('/verify', async (req, res) => {
-  const isUserWithCode = await isVerificationCodeValid(req.body);
-  if ( !isUserWithCode ) return res.send( {status: 202, message: `No verification code like this!`} );
+  const getUserIdByCode = await getUserByVerificationCode(req.body);
+  if ( !getUserIdByCode ) return res.send( {status: 202, message: `No verification code like this or user is verified`} );
 
-  console.log(isUserWithCode);
-
-  //const isVerified = await verifyUser(req.body);
-  //if ( !isVerified ) return res.send( {status: 202, message: `No user like that, wrong verification code or user is already verified`} );
+  const isVerified = await verifyUser({ 
+      where: {
+        verificationCode: req.body.where.verificationCode,
+        id: getUserIdByCode
+      }
+    });
+  if ( !isVerified ) return res.send( {status: 202, message: `No user like that, wrong verification code`} );
 
   return res.send( {status: 200, message: `User verified`} );
 })
