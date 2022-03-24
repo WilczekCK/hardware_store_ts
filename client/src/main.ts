@@ -1,7 +1,7 @@
 import { createApp } from "vue";
 import { Button, Row, Col, RowAlign, RowJustify, Sticky, NavBar, Loading, Form, Field, CellGroup, Toast, Picker, Checkbox, Popup, Area, Locale } from "vant";
 import enUS from 'vant/es/locale/lang/en-US';
-import { globalCookiesConfig } from "vue3-cookies";
+import VueCookies from "vue3-cookies";
 
 import App from "./App.vue";
 import router from "./router";
@@ -25,7 +25,7 @@ axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.withCredentials = true;
 
 /* COOKIES */
-globalCookiesConfig({
+app.use(VueCookies, {
     expireTimes: "7d",
     path: "/",
     domain: "",
