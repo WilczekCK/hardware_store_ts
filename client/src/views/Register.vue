@@ -36,7 +36,12 @@ van-form(class="register__container" @submit="onSubmit")
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+
+interface createUserResponse {
+  status: number;
+  message: string;
+}
 
 export default class Register extends Vue {
     rulesAccepted = false;
@@ -49,18 +54,15 @@ export default class Register extends Vue {
     
     errors:string[] = [];
 
-    async sendUserInfo() :Promise<boolean> {
-        const { data } = await axios.post('accounts/', {
-            email: this.email,
-            password: this.password,
-            firstName: this.firstName,
-        })
+    async sendUserInfo() :Promise< createUserResponse > {
+      const { data, status }:AxiosResponse = await axios.post('accounts/', {
+          email: this.email,
+          password: this.password,
+          firstName: this.firstName,
+      })
+      const { message } = data;
 
-        if( data.username && data.id ) {
-            return true;
-        }
-
-        return false;
+      return {message, status};
     }
 
   async onSubmit() {
@@ -75,7 +77,11 @@ export default class Register extends Vue {
     }
 
     if ( !this.errors.length ) {
-        await this.sendUserInfo();
+      const { message, status } = await this.sendUserInfo();
+        
+      if( status !== 200 ) {
+        this.errors.push(message);
+      }
     }
   }
 }

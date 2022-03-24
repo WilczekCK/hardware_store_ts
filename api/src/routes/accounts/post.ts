@@ -7,8 +7,11 @@ var router = express.Router();
 router.post('/', async (req, res) => {
   const data = await createUser(req.body);
 
-  console.log(data);
-  res.send( data );
+  if ( !data ) {
+    return res.status(202).send({ message: "User already exists" });
+  }
+
+  res.status(200).send( {message: 'All ok!'} );
 })
 
 

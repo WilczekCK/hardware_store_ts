@@ -49,10 +49,14 @@ export const removeUsers = async (payload: userFilters): Promise<DeleteResult> =
         .execute();
 }
 
-export const createUser = async(payload: UserPayload): Promise<User> => {
+export const createUser = async(payload: UserPayload): Promise<User|Boolean> => {
     const userRepository = getRepository(User);
     const user = new User();
 
+    //Check, if the user exists, prevent duplicates
+    const userExists = await getUsers( {where: { email: payload.email }} );
+    if( userExists.length > 0 ) return false;
+    
     // Secure the password!
     payload.password = await hashData(payload.password);
 

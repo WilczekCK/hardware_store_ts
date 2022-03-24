@@ -29,8 +29,8 @@ const config: mailCredentials = {
     host: "smtp.ethereal.email",
     port: 587,
     auth: {
-        user: 'leif.lebsack45@ethereal.email',
-        pass: '8P7pDjur3q2kk7Bh8Y',
+        user: 'caesar.jast61@ethereal.email',
+        pass: 'MDnmRs6v4JdMhX8wG3',
     },
 };
 
