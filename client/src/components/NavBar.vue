@@ -4,21 +4,30 @@ van-nav-bar(fixed=true id="navbar")
     router-link(to="/")
         ="Hardware Store"
   template(#right)
-    router-link(to="/")
-      ="Home"
-    router-link(to="/auctions")
-      ="Auctions"
-    router-link(to="/login" class="navbar__container--login" v-if="!userInfo")
-      van-button(icon="friends-o" type="success" )="Sign/Log in"
-    van-button(icon="friends-o" type="success" v-else @click="logout")="Log out, " 
-      span {{userInfo}}
+    span Hello, 
+      b {{userInfo}}
+    van-icon(name="arrow-down")
 </template>
+
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import { computed } from "vue";
 import { useStore } from 'vuex';
 import axios from "axios";
+
+/**
+ * 
+      router-link(to="/login" class="navbar__container--login" v-if="!userInfo")
+      van-button(icon="friends-o" type="success" )="Sign/Log in"
+    van-button(icon="friends-o" type="success" v-else @click="logout")="Log out, " 
+      span {{userInfo}}
+          router-link(to="/")
+      ="Home"
+    router-link(to="/auctions")
+      ="Auctions"
+ * 
+ */
   
 export default class NavBar extends Vue {
   store = useStore();
@@ -45,8 +54,8 @@ export default class NavBar extends Vue {
         margin-left: 12.5%;
     }
 
-    a{
-        margin-left: 25px;
+    a, i {
+        margin-left: 5px;
         font-weight: 400;
         color: $text_color;
 
@@ -60,8 +69,6 @@ export default class NavBar extends Vue {
         padding-top:10px;
         padding-bottom:10px;
     }
-
-
 }
 </style>
 
