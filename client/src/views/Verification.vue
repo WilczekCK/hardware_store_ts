@@ -1,6 +1,7 @@
 <template lang="pug">
 .verification__container
-    h3 {{ message }}
+    h3(v-if="message") {{ message }}
+    van-loading(type="spinner" v-else)
     router-link(to="/")
       van-button(block type="success" native-type="submit" href="/")="Back to homepage"
 </template>
