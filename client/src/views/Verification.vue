@@ -1,5 +1,8 @@
 <template lang="pug">
 .verification__container
+    h3 {{ message }}
+    router-link(to="/")
+      van-button(block type="success" native-type="submit" href="/")="Back to homepage"
 </template>
 
 <script lang="ts">
@@ -7,33 +10,39 @@ import { Vue } from "vue-class-component";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { useRoute } from "vue-router";
 
-interface AxiosRequestConfig2 {
-    AxiosRequestConfig: AxiosRequestConfig;
-    where: any
+interface verifyUserResponse {
+  status: number;
+  message: string;
 }
-
 
 export default class Verification extends Vue {
     verificationCode:string|string[] = '';
-    isVerified = false;
+    message = '';
 
-    async verifyCode():Promise<any> {
-        await axios.patch('auth/verify/', {
+    async verifyCode():Promise<verifyUserResponse> {
+        const { data, status } = await axios.patch('auth/verify/', {
             where: { verificationCode: this.verificationCode },
         })
+
+        return {message: data.message, status};
     }
 
     async created() {
         const route = useRoute();
         this.verificationCode = route.params.token;
 
-        await this.verifyCode();
+        const { message, status } = await this.verifyCode();
+        this.message = message;
     }
 }
 </script>
 
 <style lang="scss">
 @import "../scss/main.scss";
+.verification__container{
+    max-width:350px;
+    margin:0 auto
+}
 </style>
 
 
