@@ -6,14 +6,20 @@ van-nav-bar(fixed=true id="navbar")
   template(#right)
     span Hello, 
       b {{userInfo}}
-    van-icon(:name="menu.getMenuIcon()" @click="menu.toggle()")
+    van-icon(:name="menu.getMenuIcon()" @click="menu.toggle()" class="navbar__dropdown__icon")
     .navbar__dropdown__container(v-if="menu.isToggled")
       router-link(to="/")
+        van-icon(name="wap-home")
         ="Home"
       router-link(to="/auctions")
+        van-icon(name="bag")
         ="Auctions"
       router-link(to="/profile")
+        van-icon(name="manager")
         ="Your Account"
+      router-link(to="/mails")
+        van-icon(name="comment")
+        ="Mails"  
       router-link(to="/login" class="navbar__container--login" v-if="!userInfo")
         van-button(icon="friends-o" type="success" )="Sign/Log in"
       van-button(icon="friends-o" type="success" v-else @click="logout")="Log out" 
@@ -75,7 +81,6 @@ export default class NavBar extends Vue {
     }
 
     a, i {
-        margin-left: 5px;
         font-weight: 400;
         color: $text_color;
 
@@ -91,10 +96,12 @@ export default class NavBar extends Vue {
     }
 
     /* Dropdown */
+
+    .navbar__dropdown__icon{ padding: 0px 10px; }
     .navbar__dropdown__container{
         position: absolute;
         top: calc(100% + 10px);
-        left: 0;
+        right: 0;
         z-index: 1;
         width: 300px;
         background-color: #fff;
@@ -108,6 +115,19 @@ export default class NavBar extends Vue {
         flex-direction:column;
 
         a,button{ margin-top: 10px; margin-bottom:5px; }
+        a {
+          display:flex;
+          align-items: center;
+          font-size: 14px;
+
+          .van-icon {
+            font-size: 18px;
+            margin-right: 10px;
+            margin-left: 5px;
+          }
+
+          &:hover .van-icon{ color: $hover_color; }
+        }
     }
 }
 </style>
