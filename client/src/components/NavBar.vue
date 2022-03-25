@@ -16,7 +16,7 @@ van-nav-bar(fixed=true id="navbar")
         ="Auctions"
       router-link(to="/profile")
         van-icon(name="manager")
-        ="Your Account"
+        ="Account"
       router-link(to="/mails")
         van-icon(name="comment")
         ="Mails"  

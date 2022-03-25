@@ -61,6 +61,23 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Verification.vue"),
   },
+  {
+    path: "/profile",
+    name: "Cutomize profile",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/ConfigProfile.vue"),
+  },  {
+    path: "/profile/:id",
+    name: "Visiting profile",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/VisitProfile.vue"),
+  },
 ];
 
 const router = createRouter({
