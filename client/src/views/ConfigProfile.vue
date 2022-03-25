@@ -30,11 +30,13 @@
 import { Vue } from "vue-class-component";
 import axios, { AxiosResponse } from "axios";
 import { useStore } from 'vuex';
+import { Toast } from 'vant';
 
 
 export default class CutomizeProfile extends Vue {
     store = useStore();
 
+    timer = 0;
     userId = 0; 
     firstName:any = '';
     lastName:any = '';
@@ -42,14 +44,13 @@ export default class CutomizeProfile extends Vue {
 
     async beforeMount(){
         this.userId = await this.store.getters.getUserId;
-    
+
         await this.fetchInformationsAboutProfile();
     }
 
     async fetchInformationsAboutProfile(){
         const { data, status } = await axios.get('/accounts/'+this.userId )
             .then((response: AxiosResponse) => {
-                //console.log(response);
                 return response;
             })
             .catch((error) => {
@@ -65,13 +66,45 @@ export default class CutomizeProfile extends Vue {
         }
     }
 
+    async changeInformationsAboutProfile(){
+        await axios.put('/accounts/'+this.userId, {
+            set: {
+                firstName: this.firstName,
+                lastName: this.lastName,
+            }
+            
+        })
+        .then((response: AxiosResponse) => {
+            return response;
+        })
+        .catch((error) => {
+            return { status: 201, data: 'No user like that' };
+        });
+    }
+
     afterRead = (file: string) => {
       console.log(file);
     };
 
-    onSubmit() {
-        return true;
+    attachDelay = (): void => {
+        this.timer = 15; //a length of delay in seconds
+
+        const interval = setInterval(():void => {
+            this.timer--;
+            if ( !this.timer ) { clearInterval(interval); }
+        }, 1000);
     }
+
+    async onSubmit() {
+        if ( this.timer ) return Toast.fail('Please wait few seconds before submitting again');
+        else {
+            await this.changeInformationsAboutProfile();
+            this.attachDelay();
+
+            Toast.success('Profile updated successfully');
+        }
+    }
+
 }
   
 </script>
