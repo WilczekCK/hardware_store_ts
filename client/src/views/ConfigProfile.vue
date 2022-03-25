@@ -29,7 +29,6 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import axios, { AxiosResponse } from "axios";
-import { computed } from "vue";
 import { useStore } from 'vuex';
 
 
@@ -40,17 +39,16 @@ export default class CutomizeProfile extends Vue {
     firstName:any = '';
     lastName:any = '';
     city = '';
-    
-
 
     async beforeMount(){
         this.userId = await this.store.getters.getUserId;
-        console.log(this.userId);
+    
+        await this.fetchInformationsAboutProfile();
     }
 
     async fetchInformationsAboutProfile(){
-        const { data, status } = await axios.get('/accounts/45' )
-            .then((response: any) => {
+        const { data, status } = await axios.get('/accounts/'+this.userId )
+            .then((response: AxiosResponse) => {
                 //console.log(response);
                 return response;
             })
