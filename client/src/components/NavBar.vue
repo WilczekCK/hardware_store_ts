@@ -8,9 +8,15 @@ van-nav-bar(fixed=true id="navbar")
       b {{userInfo}}
     van-icon(:name="menu.getMenuIcon()" @click="menu.toggle()")
     .navbar__dropdown__container(v-if="menu.isToggled")
-      p="Menu item 1"
-      p="Menu item 2"
-      p="Menu item 3"
+      router-link(to="/")
+        ="Home"
+      router-link(to="/auctions")
+        ="Auctions"
+      router-link(to="/profile")
+        ="Your Account"
+      router-link(to="/login" class="navbar__container--login" v-if="!userInfo")
+        van-button(icon="friends-o" type="success" )="Sign/Log in"
+      van-button(icon="friends-o" type="success" v-else @click="logout")="Log out" 
 
 </template>
 
@@ -87,17 +93,21 @@ export default class NavBar extends Vue {
     /* Dropdown */
     .navbar__dropdown__container{
         position: absolute;
-        top: 100%;
+        top: calc(100% + 10px);
         left: 0;
         z-index: 1;
-        width: 100%;
+        width: 300px;
         background-color: #fff;
         box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         border-radius: 2px;
-        padding: 5px 25px;
+        padding: 10px;
         box-sizing: border-box;
         text-align: left;
         box-sizing:border-box;
+        display: flex;
+        flex-direction:column;
+
+        a,button{ margin-top: 10px; margin-bottom:5px; }
     }
 }
 </style>
