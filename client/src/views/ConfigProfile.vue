@@ -1,51 +1,70 @@
 <template lang="pug">
 .profile__container
- van-form(@submit="onSubmit")
-    h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
-    
     van-uploader(:after-read="afterRead")
- 
-    van-cell-group(inset)
-        van-field(
-            v-model="firstName"
-            name="firstName"
-            label="First Name"
-            placeholder="First Name"
-            :rules="[{ required: true, message: 'First name is required' }]")
-        van-field(
-            v-model="lastName"
-            name="lastName"
-            label="Last Name"
-            placeholder="Last Name"
-            :rules="[{ required: true, message: 'Last name is required' }]")
-        van-field(
-            v-model="city"
-            name="city"
-            label="City"
-            placeholder="City")
-    div(style="margin: 16px;")
-      van-button(block type="success" native-type="submit")="Save changes"
-      router-link( :to="`/profile/${userId}`" target="_blank")
-        van-button(block class="profile__container__preview__button" type="default" )="Preview profile"
+    h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
+    van-form(@submit="onSubmit")
+        van-cell-group(inset)
+            van-field(
+                v-model="firstName"
+                name="firstName"
+                label="First Name"
+                placeholder="First Name"
+                :rules="[{ required: true, message: 'First name is required' }]")
+            van-field(
+                v-model="lastName"
+                name="lastName"
+                label="Last Name"
+                placeholder="Last Name")
+            van-field(
+                v-model="city"
+                name="city"
+                label="City"
+                placeholder="City")
+        div(style="margin: 16px;")
+        van-button(block type="success" native-type="submit")="Save changes"
+        router-link( :to="`/profile/${userId}`" target="_blank")
+            van-button(block class="profile__container__preview__button" type="default" )="Preview profile"
 </template>
 
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import axios, { AxiosResponse } from "axios";
+import { computed } from "vue";
 import { useStore } from 'vuex';
 
 
 export default class CutomizeProfile extends Vue {
     store = useStore();
 
-    userId = 1; 
-    firstName = '';
-    lastName = '';
+    userId = 0; 
+    firstName:any = '';
+    lastName:any = '';
     city = '';
+    
 
 
-    async created(){
-        this.userId = this.store.getters.getUserId;
+    async beforeMount(){
+        this.userId = await this.store.getters.getUserId;
+        console.log(this.userId);
+    }
+
+    async fetchInformationsAboutProfile(){
+        const { data, status } = await axios.get('/accounts/45' )
+            .then((response: any) => {
+                //console.log(response);
+                return response;
+            })
+            .catch((error) => {
+                return { status: 201, data: 'No user like that' };
+            });
+
+        if(status === 200){
+            const { firstName, lastName, city } = data[0];
+
+            this.firstName = firstName;
+            this.lastName = lastName;
+            //this.city = data.city;
+        }
     }
 
     afterRead = (file: string) => {
