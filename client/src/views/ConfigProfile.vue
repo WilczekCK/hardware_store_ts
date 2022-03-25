@@ -2,6 +2,9 @@
 .profile__container
  van-form(@submit="onSubmit")
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
+    
+    van-uploader(:after-read="afterRead")
+
     van-cell-group(inset)
         van-field(
             v-model="firstName"
@@ -33,6 +36,10 @@ export default class CutomizeProfile extends Vue {
     firstName = '';
     lastName = '';
     city = '';
+
+    afterRead = (file: string) => {
+      console.log(file);
+    };
 
     onSubmit() {
         return true;
