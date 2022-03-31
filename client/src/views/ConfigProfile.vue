@@ -21,9 +21,10 @@
                 label="City"
                 placeholder="City")
         div(style="margin: 16px;")
-        van-button(block type="success" native-type="submit")="Save changes"
         router-link( :to="`/profile/${userId}`" target="_blank")
             van-button(block class="profile__container__preview__button" type="default" )="Preview profile"
+        van-button(block type="success" native-type="submit")="Save changes"
+        small="You will be logged out when saving the changes!"
 </template>
 
 <script lang="ts">
@@ -36,7 +37,6 @@ import { Toast } from 'vant';
 export default class CutomizeProfile extends Vue {
     store = useStore();
 
-    timer = 0;
     userId = 0; 
     firstName:any = '';
     lastName:any = '';
@@ -75,6 +75,7 @@ export default class CutomizeProfile extends Vue {
             
         })
         .then((response: AxiosResponse) => {
+            this.store.dispatch('logout');
             return response;
         })
         .catch((error) => {
@@ -86,23 +87,9 @@ export default class CutomizeProfile extends Vue {
       console.log(file);
     };
 
-    attachDelay = (): void => {
-        this.timer = 15; //a length of delay in seconds
-
-        const interval = setInterval(():void => {
-            this.timer--;
-            if ( !this.timer ) { clearInterval(interval); }
-        }, 1000);
-    }
-
     async onSubmit() {
-        if ( this.timer ) return Toast.fail('Please wait few seconds before submitting again');
-        else {
-            await this.changeInformationsAboutProfile();
-            this.attachDelay();
-
-            Toast.success('Profile updated successfully');
-        }
+        await this.changeInformationsAboutProfile();
+        this.$router.push('/')
     }
 
 }
@@ -115,8 +102,10 @@ export default class CutomizeProfile extends Vue {
     max-width: 350px;
     margin:0 auto;
 
+    small { opacity:0.8; font-size: 11px; padding-top:5px; }
+
     .profile__container__preview__button{
-        margin-top: 16px;
+        margin: 10px 0px;
     }
 }
 </style>
