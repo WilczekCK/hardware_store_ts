@@ -1,6 +1,10 @@
 <template lang="pug">
 .profile__container
-    h1 {{ firstName }}
+    van-loading(type="spinner" v-if="!isLoaded")
+    .profile__container__wrapper(v-else-if="!error.status")
+        h2 {{ userInfo.firstName }}
+    .profile__container__error(v-else)
+        h2 {{ error.data }}
 </template>
 
 <script lang="ts">
@@ -9,9 +13,9 @@ import axios, { AxiosResponse } from "axios";
 
 export default class VisitProfile extends Vue {
     userId = 0; 
-    firstName:any = '';
-    lastName:any = '';
-    city = '';
+    userInfo = {};
+    error = {};
+    isLoaded = false;
 
     async beforeMount(){
         this.userId =+ this.$route.params.id //force convert to int
@@ -20,21 +24,15 @@ export default class VisitProfile extends Vue {
     }
 
     async fetchInformationsAboutProfile(){
-        const { data, status } = await axios.get('/accounts/'+this.userId )
+        await axios.get('/accounts/'+this.userId )
             .then((response: AxiosResponse) => {
-                return response;
+                this.userInfo = response.data[0];
             })
             .catch((error) => {
-                return { status: 201, data: 'No user like that' };
+                this.error = { status: 404, data: 'No user like that' };
             });
 
-        if(status === 200){
-            const { firstName, lastName, city } = data[0];
-
-            this.firstName = firstName;
-            this.lastName = lastName;
-            //this.city = data.city;
-        }
+        this.isLoaded = true;
     }
 
 }
