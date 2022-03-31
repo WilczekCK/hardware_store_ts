@@ -5,7 +5,7 @@ van-nav-bar(fixed=true id="navbar")
         ="Hardware Store"
   template(#right)
     span Hello, 
-      b {{userInfo}}
+      b {{userInfo ? userInfo : 'Guest'}}
     van-icon(:name="menu.getMenuIcon()" @click="menu.toggle()" class="navbar__dropdown__icon")
     .navbar__dropdown__container(v-if="menu.isToggled")
       router-link(to="/")

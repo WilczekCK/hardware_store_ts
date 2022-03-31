@@ -11,7 +11,7 @@ const refreshStoreByToken = async ( id:string ) :Promise<Record<string, string>>
       "Authorization": id
     }
   })
-
+  console.log(data);
   return data;
 }
 

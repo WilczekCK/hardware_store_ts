@@ -149,6 +149,8 @@ export const refreshUserInfo = (req: RequestExtended): string | boolean => {
         return false;
     }
 
+    console.log(req.headers.authorization);
+
     const sessionString:string = sessions[sessionOrder];
     const sessionObject:Record<string, Record<string, string>> = JSON.parse( sessionString );
 
