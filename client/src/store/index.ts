@@ -36,6 +36,7 @@ export default createStore({
     getLogin:    (state) => state.username,
     getUserType: (state) => state.userType,
     getUserId:    (state) => state.userId,
+    test: (state) => 'chuj',
   },
   actions: {
     loginSession( {commit}, data){
@@ -63,7 +64,7 @@ export default createStore({
       
       await logoutFromApiByToken(id);
       commit('logoutSession');
-    }
+    },
   },
   mutations: {
     setSession(state, data) {

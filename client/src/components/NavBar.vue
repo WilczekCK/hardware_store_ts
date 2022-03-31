@@ -14,10 +14,10 @@ van-nav-bar(fixed=true id="navbar")
       router-link(to="/auctions")
         van-icon(name="bag")
         ="Auctions"
-      router-link(to="/profile")
+      router-link(to="/profile" v-if="userInfo")
         van-icon(name="manager")
         ="Account"
-      router-link(to="/mails")
+      router-link(to="/mails" v-if="userInfo")
         van-icon(name="comment")
         ="Mails"  
       router-link(to="/login" class="navbar__container--login" v-if="!userInfo")

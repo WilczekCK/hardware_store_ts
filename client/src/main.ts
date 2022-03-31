@@ -4,13 +4,9 @@ import enUS from 'vant/es/locale/lang/en-US';
 import VueCookies from "vue3-cookies";
 
 import App from "./App.vue";
-import router from "./router";
 import store from "./store";
+import router from "./router";
 import axios from "axios";
-
-
-
-
 
 
 const app = createApp(App);

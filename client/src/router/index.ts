@@ -1,5 +1,13 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { createRouter, createWebHistory, NavigationGuardNext, RouteRecord, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
+
+import { useCookies } from "vue3-cookies";
+const { cookies } = useCookies();
+
+function checkIfLogged(to: any){
+  if ( cookies.get("session_hardware") ) return true;
+  return '/'
+}
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -64,6 +72,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/profile",
     name: "Cutomize profile",
+    beforeEnter: [checkIfLogged],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
