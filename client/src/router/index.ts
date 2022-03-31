@@ -9,6 +9,11 @@ function checkIfLogged(to: any){
   return '/'
 }
 
+function checkIfNotLogged(to: any){
+  if ( cookies.get("session_hardware") ) return '/'
+  return true;
+}
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -45,6 +50,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/login",
     name: "Login",
+    beforeEnter: [checkIfNotLogged],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.

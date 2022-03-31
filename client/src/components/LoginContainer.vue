@@ -57,6 +57,7 @@ export default class LoginContainer extends Vue {
 
     if ( await this.getUserInfo() ) {
       this.store.dispatch('loginSession', this.user);
+      this.$router.push('/')
     }
   }
 }
