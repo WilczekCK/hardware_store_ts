@@ -94,6 +94,7 @@ export default class CutomizeProfile extends Vue {
             return response;
         })
         .catch((error) => {
+            Toast.fail('Old password is not valid!')
             return { status: 201, data: 'No user like that' };
         });
     }
@@ -103,6 +104,8 @@ export default class CutomizeProfile extends Vue {
     };
 
     async onSubmit() {
+        if(this.password !== this.repeatPassword) return Toast.fail('Passwords do not match');
+
         await this.changeInformationsAboutProfile();
         this.$router.push('/')
     }
