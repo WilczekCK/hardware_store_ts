@@ -26,12 +26,20 @@
                 v-model="password"
                 name="password"
                 label="New password"
-                placeholder="Empty to keep the same")
+                placeholder="Empty to keep the same"
+                @keydown="unlockOldPassword")
             van-field(
                 v-model="repeatPassword"
                 name="repeatPassword"
                 label="Repeat password"
-                placeholder="Empty to keep the same")
+                placeholder="Empty to keep the same"
+                @keydown="unlockOldPassword")
+            van-field(
+                v-model="oldPassword"
+                name="oldPassword"
+                label="Old password"
+                placeholder="Previously used password"
+                :rules="[{ required: isOldPasswordDisabled ? false : true, message: 'Required to change the password' }]")
         div(style="margin: 16px;")
         router-link( :to="`/profile/${userId}`" target="_blank")
             van-button(block class="profile__container__preview__button" type="default" )="Preview profile"
@@ -55,6 +63,8 @@ export default class CutomizeProfile extends Vue {
     city = '';
     password = '';
     repeatPassword = '';
+    oldPassword = '';
+    isOldPasswordDisabled = true;
 
     async beforeMount(){
         this.userId = await this.store.getters.getUserId;
@@ -81,13 +91,16 @@ export default class CutomizeProfile extends Vue {
     }
 
     async changeInformationsAboutProfile(){
+        let set:Record<string,string|number> = {};
+
+        this.firstName   ? set.firstName   = this.firstName   : '';
+        this.lastName    ? set.lastName    = this.lastName    : '';
+        //this.city ? set.city = this.city : '';
+        this.password    ? set.password    = this.password    : '';
+        this.oldPassword ? set.oldPassword = this.oldPassword : '';
+
         await axios.put('/accounts/'+this.userId, {
-            set: {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                password: this.password,
-            }
-            
+            set            
         })
         .then((response: AxiosResponse) => {
             this.store.dispatch('logout');
