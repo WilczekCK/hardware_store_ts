@@ -2,6 +2,7 @@
 .profile__container
     van-uploader(:after-read="afterRead")
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
+    van-divider="Public informations"
     van-form(@submit="onSubmit")
         van-cell-group(inset)
             van-field(
@@ -20,6 +21,17 @@
                 name="city"
                 label="City"
                 placeholder="City")
+            van-divider="Personal informations"
+            van-field(
+                v-model="password"
+                name="password"
+                label="New password"
+                placeholder="Empty to keep the same")
+            van-field(
+                v-model="repeatPassword"
+                name="repeatPassword"
+                label="Repeat password"
+                placeholder="Empty to keep the same")
         div(style="margin: 16px;")
         router-link( :to="`/profile/${userId}`" target="_blank")
             van-button(block class="profile__container__preview__button" type="default" )="Preview profile"
@@ -41,6 +53,8 @@ export default class CutomizeProfile extends Vue {
     firstName:any = '';
     lastName:any = '';
     city = '';
+    password = '';
+    repeatPassword = '';
 
     async beforeMount(){
         this.userId = await this.store.getters.getUserId;
