@@ -8,14 +8,11 @@
             van-field(
                 v-model="firstName"
                 name="firstName"
-                label="First Name"
-                placeholder="First Name"
-                :rules="[{ required: true, message: 'First name is required' }]")
+                label="First Name")
             van-field(
                 v-model="lastName"
                 name="lastName"
-                label="Last Name"
-                placeholder="Last Name")
+                label="Last Name")
             van-field(
                 v-model="city"
                 name="city"
@@ -27,13 +24,13 @@
                 name="password"
                 label="New password"
                 placeholder="Empty to keep the same"
-                @keydown="unlockOldPassword")
+                @keyup="unlockOldPassword")
             van-field(
                 v-model="repeatPassword"
                 name="repeatPassword"
                 label="Repeat password"
                 placeholder="Empty to keep the same"
-                @keydown="unlockOldPassword")
+                @keyup="unlockOldPassword")
             van-field(
                 v-model="oldPassword"
                 name="oldPassword"
@@ -72,6 +69,14 @@ export default class CutomizeProfile extends Vue {
         await this.fetchInformationsAboutProfile();
     }
 
+    unlockOldPassword() {
+        if( this.password.length && this.repeatPassword.length ) {
+            this.isOldPasswordDisabled = false;
+        } else {
+            this.isOldPasswordDisabled = true;
+        }
+    }
+
     async fetchInformationsAboutProfile(){
         const { data, status } = await axios.get('/accounts/'+this.userId )
             .then((response: AxiosResponse) => {
@@ -107,7 +112,6 @@ export default class CutomizeProfile extends Vue {
             return response;
         })
         .catch((error) => {
-            Toast.fail('Old password is not valid!')
             return { status: 201, data: 'No user like that' };
         });
     }
@@ -118,7 +122,10 @@ export default class CutomizeProfile extends Vue {
 
     async onSubmit() {
         if(this.password !== this.repeatPassword) return Toast.fail('Passwords do not match');
-
+        
+        //more secure changing password!
+        if( !this.oldPassword.length ) return Toast.fail('You did not provided old password');
+        
         await this.changeInformationsAboutProfile();
         this.$router.push('/')
     }
