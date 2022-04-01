@@ -2,6 +2,7 @@ import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeor
 import { User } from '../models';
 import { hashData } from "./hashing.controller";
 import { sendVerificationEmail, generateVerificationString } from "./auth.controller";
+import { stringify } from "querystring";
 
 
 export interface UserPayload {
@@ -72,13 +73,20 @@ export const createUser = async(payload: UserPayload): Promise<User|Boolean> => 
 }
 
 export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
-    const { where, set }:userFilters = {
+    let { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {...payload.set, updatedAt:new Date()}  : {},
     }
 
     //WHERE, for single user, must have only ONE value!
     const key:String = Object.keys(payload.where)[0];
+
+    //PASSWORD, hash new password if changed
+    const passwordIndex = Object.keys(set).findIndex(key => key === "password");
+    if( passwordIndex > 0 ) {
+        const newPassword = await hashData(Object.values(set)[passwordIndex].toString());
+        set.password = newPassword;
+    }
 
     return await getConnection()
         .createQueryBuilder()

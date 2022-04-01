@@ -2,9 +2,9 @@
 .profile__container
     van-uploader(:after-read="afterRead")
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
-    van-divider="Public informations"
     van-form(@submit="onSubmit")
         van-cell-group(inset)
+            van-divider="Public informations"
             van-field(
                 v-model="firstName"
                 name="firstName"
@@ -85,6 +85,7 @@ export default class CutomizeProfile extends Vue {
             set: {
                 firstName: this.firstName,
                 lastName: this.lastName,
+                password: this.password,
             }
             
         })
