@@ -1,6 +1,6 @@
-import { DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
+import { DeleteResult, getConnection, getRepository, UpdateResult, Raw } from "typeorm";
 import { User } from '../models';
-import { hashData } from "./hashing.controller";
+import { hashData, compareData} from "./hashing.controller";
 import { sendVerificationEmail, generateVerificationString } from "./auth.controller";
 import { stringify } from "querystring";
 
@@ -10,6 +10,7 @@ export interface UserPayload {
     lastName: string;
     email: string;
     password: string;
+    oldPassword: string;
     verificationCode: string;
     isVerified: boolean;
 }
@@ -72,7 +73,7 @@ export const createUser = async(payload: UserPayload): Promise<User|Boolean> => 
     });
 }
 
-export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => {
+export const modifyUser = async(payload: userFilters): Promise<Record<string, number|string> | UpdateResult> => {
     let { where, set }:userFilters = {
         where:    payload.where ? payload.where : {},
         set:      payload.set  ? {...payload.set, updatedAt:new Date()}  : {},
@@ -83,9 +84,17 @@ export const modifyUser = async(payload: userFilters): Promise<UpdateResult> => 
 
     //PASSWORD, hash new password if changed
     const passwordIndex = Object.keys(set).findIndex(key => key === "password");
-    if( passwordIndex > 0 ) {
+    const oldPasswordIndex = Object.keys(set).findIndex(key => key === "oldPassword");
+    if( passwordIndex > 0 && oldPasswordIndex > 0) {
         const newPassword = await hashData(Object.values(set)[passwordIndex].toString());
         set.password = newPassword;
+        
+        const [ User ] = await getUsers( {where: {id: where.id}} );
+        const isOldPasswordValid = await compareData(User.password, Object.values(set)[oldPasswordIndex].toString());
+
+        delete set.oldPassword;
+
+        if (!isOldPasswordValid) return { status: 201, affected: 0 };
     }
 
     return await getConnection()
