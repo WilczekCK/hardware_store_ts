@@ -1,14 +1,17 @@
 <template lang="pug">
 .profile__container
-    van-form(@submit="onSubmit" class="login__container")
-    van-cell-group(inset class="login__container__cellgroup")
-        van-field(
-            v-model="email"
-            name="email"
-            label="Email"
-            placeholder="Email"
-            :rules="[{ required: true, message: 'Email is required' }]")
-        van-button(block type="success" native-type="submit")="Submit"
+    .profile__container--form(v-if="!sentMail")
+        van-form(@submit="onSubmit" class="login__container")
+            van-cell-group(inset class="login__container__cellgroup")
+                van-field(
+                    v-model="email"
+                    name="email"
+                    label="Email"
+                    placeholder="Email"
+                    :rules="[{ required: true, message: 'Email is required' }]")
+            van-button(block type="success" native-type="submit")="Submit"
+    .profile__container--sent(v-else)
+        h2="Verification email sent to your inbox!"
 </template>
 
 <script lang="ts">
@@ -21,6 +24,11 @@ import { Toast } from 'vant';
 export default class forgetPassword extends Vue {
     store = useStore();
     email = '';
+    sentMail = false;
+
+    onSubmit() {
+        this.sentMail = true;
+    }
 }
   
 </script>
