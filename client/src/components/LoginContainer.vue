@@ -19,7 +19,7 @@ van-form(@submit="onSubmit" class="login__container")
       :rules="[{ required: true, message: 'Password is required' }]")
   div(style="margin: 16px;" class="login__container__submit__container")
     van-button(block type="success" native-type="submit")="Submit"
-    a(href="#" class="login__container__submit__container--forgot")="Forgot password"
+    router-link(to="forgetPassword" class="login__container__submit__container--forgot" )="Forget password?"
     router-link(to="register" class="login__container__submit__container--account" )="Create account"
 </template>
 

@@ -84,7 +84,8 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/ConfigProfile.vue"),
-  },  {
+  },
+  {
     path: "/profile/:id",
     name: "Visiting profile",
     // route level code-splitting
@@ -92,6 +93,15 @@ const routes: Array<RouteRecordRaw> = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/VisitProfile.vue"),
+  },
+  {
+    path: "/forgotPassword",
+    name: "Forget password",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/forgotPassword.vue"),
   },
 ];
 
