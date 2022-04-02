@@ -109,10 +109,11 @@ export default class CutomizeProfile extends Vue {
         })
         .then((response: AxiosResponse) => {
             this.store.dispatch('logout');
+            this.$router.push('/')
             return response;
         })
         .catch((error) => {
-            return { status: 201, data: 'No user like that' };
+            return Toast.fail('Passwords do not match');
         });
     }
 
@@ -123,11 +124,7 @@ export default class CutomizeProfile extends Vue {
     async onSubmit() {
         if(this.password !== this.repeatPassword) return Toast.fail('Passwords do not match');
         
-        //more secure changing password!
-        if( !this.oldPassword.length ) return Toast.fail('You did not provided old password');
-        
         await this.changeInformationsAboutProfile();
-        this.$router.push('/')
     }
 
 }

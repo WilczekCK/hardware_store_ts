@@ -94,7 +94,7 @@ export const modifyUser = async(payload: userFilters): Promise<Record<string, nu
 
         delete set.oldPassword;
 
-        if (!isOldPasswordValid) return { status: 201, affected: 0 };
+        if (!isOldPasswordValid) return { status: 400, affected: 0 };
     }
 
     return await getConnection()
