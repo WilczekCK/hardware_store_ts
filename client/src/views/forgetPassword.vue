@@ -11,12 +11,14 @@
                     name="newPassword"
                     label="New password"
                     placeholder="New password"
+                    type="password"
                     :rules="[{ required: true, message: 'Password is required' }]")
                 van-field(
                     v-model="newPasswordRepeat"
                     name="newPasswordRepeat"
                     label="Repeat new password"
                     placeholder="New Password"
+                    type="password"
                     :rules="[{ required: true, message: 'Password is required' }]")
             van-button(block type="success" native-type="submit")="Submit"
     .profile__container--form(v-else-if="!sentMail")

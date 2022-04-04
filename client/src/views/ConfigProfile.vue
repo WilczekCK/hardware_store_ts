@@ -23,18 +23,21 @@
                 v-model="password"
                 name="password"
                 label="New password"
+                type="password"
                 placeholder="Empty to keep the same"
                 @keyup="unlockOldPassword")
             van-field(
                 v-model="repeatPassword"
                 name="repeatPassword"
                 label="Repeat password"
+                type="password"
                 placeholder="Empty to keep the same"
                 @keyup="unlockOldPassword")
             van-field(
                 v-model="oldPassword"
                 name="oldPassword"
                 label="Old password"
+                type="password"
                 placeholder="Previously used password"
                 :rules="[{ required: isOldPasswordDisabled ? false : true, message: 'Required to change the password' }]")
         div(style="margin: 16px;")
