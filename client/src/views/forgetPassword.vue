@@ -1,5 +1,7 @@
 <template lang="pug">
 .profile__container
+    .profile__container--error
+        h2 {{ error }}
     .profile__container--newPassword(v-if="verifyCode")
         h2 {{ verifyCode }}
         van-form(@submit="changePasswordSubmit" class="login__container")
@@ -45,40 +47,53 @@ export default class forgetPassword extends Vue {
     verifyCode:any = '';
     newPassword = '';
     newPasswordRepeat = '';
+    error = '';
 
     async sendVerifyCode(){
-        const { data, status } = await axios.post('/auth/forgetPassword', {where: { email: this.email }})
+        const { message, status } = await axios.post('/auth/forgetPassword', {where: { email: this.email }})
             .then((response: AxiosResponse) => {
                 return response;
             })
             .catch((error) => {
-                return { status: 201, data: 'No user like that' };
+                return error;
             });
 
-        return data;
+        return { message, status };
     }   
 
     async confirmVerifyCode(){
-        const { data, status } = await axios.put('/auth/forgetPassword', {where: { verificationCode: this.verifyCode, password: this.newPassword }})
+        const { message, status } = await axios.put('/auth/forgetPassword', {where: { verificationCode: this.verifyCode, password: this.newPassword }})
             .then((response: AxiosResponse) => {
                 return response;
             })
             .catch((error) => {
-                return { status: 201, data: 'No user like that' };
+                return error;
             });
 
-        return data;
+        return { message, status };
     }
 
     async verifyCodeSubmit() {
         this.sentMail = true;
         
-        const {data} = await this.sendVerifyCode();
+        const { status } = await this.sendVerifyCode();
+
+        if(status === 200){
+            Toast.success('Verification email sent to your inbox!');
+        }else{
+            Toast.fail("Oops... No user with that email");
+        }
     }
 
     async changePasswordSubmit() {
-        console.log('xD');
-        const {data} = await this.confirmVerifyCode();
+        const { status } = await this.confirmVerifyCode();
+
+        if(status === 200){
+            Toast.success('Password changed successfully');
+            this.$router.push('/');
+        } else {
+            Toast.fail("Oops... No verification code like that");
+        }
     }
     
     mounted() {
