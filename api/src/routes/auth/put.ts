@@ -8,7 +8,7 @@ router.put('/', async (req, res) => {
   //
 })
 
-router.put('/forgotPassword', async (req, res) => {
+router.put('/forgetPassword', async (req, res) => {
   const isPasswordChanged: boolean = await changeForgottenPassword(req.body);
 
   res.send(

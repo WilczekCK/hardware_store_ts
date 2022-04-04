@@ -1,10 +1,24 @@
 <template lang="pug">
 .profile__container
     .profile__container--newPassword(v-if="verifyCode")
-        .profile__container__wrapper
-            h2 {{ verifyCode }}
+        h2 {{ verifyCode }}
+        van-form(@submit="changePasswordSubmit" class="login__container")
+            van-cell-group(inset class="login__container__cellgroup")
+                van-field(
+                    v-model="newPassword"
+                    name="newPassword"
+                    label="New password"
+                    placeholder="New password"
+                    :rules="[{ required: true, message: 'Password is required' }]")
+                van-field(
+                    v-model="newPasswordRepeat"
+                    name="newPasswordRepeat"
+                    label="Repeat new password"
+                    placeholder="New Password"
+                    :rules="[{ required: true, message: 'Password is required' }]")
+            van-button(block type="success" native-type="submit")="Submit"
     .profile__container--form(v-else-if="!sentMail")
-        van-form(@submit="onSubmit" class="login__container")
+        van-form(@submit="verifyCodeSubmit" class="login__container")
             van-cell-group(inset class="login__container__cellgroup")
                 van-field(
                     v-model="email"
@@ -29,6 +43,8 @@ export default class forgetPassword extends Vue {
     email = '';
     sentMail = false;
     verifyCode:any = '';
+    newPassword = '';
+    newPasswordRepeat = '';
 
     async sendVerifyCode(){
         const { data, status } = await axios.post('/auth/forgetPassword', {where: { email: this.email }})
@@ -40,12 +56,29 @@ export default class forgetPassword extends Vue {
             });
 
         return data;
+    }   
+
+    async confirmVerifyCode(){
+        const { data, status } = await axios.put('/auth/forgetPassword', {where: { verificationCode: this.verifyCode, password: this.newPassword }})
+            .then((response: AxiosResponse) => {
+                return response;
+            })
+            .catch((error) => {
+                return { status: 201, data: 'No user like that' };
+            });
+
+        return data;
     }
 
-    async onSubmit() {
+    async verifyCodeSubmit() {
         this.sentMail = true;
         
         const {data} = await this.sendVerifyCode();
+    }
+
+    async changePasswordSubmit() {
+        console.log('xD');
+        const {data} = await this.confirmVerifyCode();
     }
     
     mounted() {
