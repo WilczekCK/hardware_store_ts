@@ -112,17 +112,16 @@ export default class forgetPassword extends Vue {
     }
 
     async changePasswordSubmit() {
+        if( this.newPassword !== this.newPasswordRepeat ) return Toast.fail("Oops... passwords are not the same");
         if( this.delay.checkIfActive() ) return;
         
         const { status } = await this.confirmVerifyCode();
 
-        if(status === 200){
+        if(status === 200) {
             Toast.success('Password changed successfully');
             this.$router.push('/');
-        } else if(this.newPassword !== this.newPasswordRepeat){
-            Toast.fail("Oops... passwords are not the same");
         } else {
-            Toast.fail("Oops... No verification code like that");
+            return Toast.fail("Oops... No verification code like that");
         }
     }
     
