@@ -3,7 +3,7 @@
     .profile__container--error
         h2 {{ error }}
     .profile__container--newPassword(v-if="verifyCode")
-        h2 {{ verifyCode }}
+        h2="Enter new password"
         van-form(@submit="changePasswordSubmit" class="login__container")
             van-cell-group(inset class="login__container__cellgroup")
                 van-field(
@@ -57,8 +57,6 @@ export default class forgetPassword extends Vue {
             this.delay.delayTime = time;
             let delay = setInterval( ():void => {
                 this.delay.delayTime--;
-
-                console.log(this.delay.delayTime);
 
                 if (this.delay.delayTime === 0) {
                     clearInterval(delay);
@@ -121,6 +119,8 @@ export default class forgetPassword extends Vue {
         if(status === 200){
             Toast.success('Password changed successfully');
             this.$router.push('/');
+        } else if(this.newPassword !== this.newPasswordRepeat){
+            Toast.fail("Oops... passwords are not the same");
         } else {
             Toast.fail("Oops... No verification code like that");
         }
