@@ -49,6 +49,33 @@ export default class forgetPassword extends Vue {
     newPasswordRepeat = '';
     error = '';
 
+    delay = {
+        isActive: () => this.delay.delayTime ? true : false,
+        delayTime: 0,
+
+        attachDelay: (time: number) => { //measured in seconds
+            this.delay.delayTime = time;
+            let delay = setInterval( ():void => {
+                this.delay.delayTime--;
+
+                console.log(this.delay.delayTime);
+
+                if (this.delay.delayTime === 0) {
+                    clearInterval(delay);
+                }
+            }, time * 100);
+        },
+        checkIfActive: () => {
+            if (this.delay.isActive()) {
+                Toast.fail('Please wait ' + this.delay.delayTime + ' seconds more');
+                return true;
+            }
+            
+            this.delay.attachDelay(15);
+            return false;
+        }
+    }
+
     async sendVerifyCode(){
         const { message, status } = await axios.post('/auth/forgetPassword', {where: { email: this.email }})
             .then((response: AxiosResponse) => {
@@ -74,18 +101,21 @@ export default class forgetPassword extends Vue {
     }
 
     async verifyCodeSubmit() {
-        this.sentMail = true;
-        
+        if( this.delay.checkIfActive() ) return;
+
         const { status } = await this.sendVerifyCode();
 
         if(status === 200){
             Toast.success('Verification email sent to your inbox!');
+            this.sentMail = true;
         }else{
             Toast.fail("Oops... No user with that email");
         }
     }
 
     async changePasswordSubmit() {
+        if( this.delay.checkIfActive() ) return;
+        
         const { status } = await this.confirmVerifyCode();
 
         if(status === 200){

@@ -11,11 +11,11 @@ router.post('/forgetPassword', async (req, res) => {
   const isMailSent: Boolean = await sendForgotPasswordEmail(req.body, User.verificationCode);
 
   res
-    .status(isMailSent ? 200 : 402)
+    .status(isMailSent ? 200 : 403)
     .send(
       (isMailSent) 
       ? {status: 200, message: `Verification code sent to your email`}
-      : {status: 402, message: `There is no user with verification code like that`}
+      : {status: 403, message: `There is no user with verification code like that`}
     );
 })
 
