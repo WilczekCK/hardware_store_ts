@@ -26,6 +26,16 @@ export default class forgetPassword extends Vue {
     email = '';
     sentMail = false;
 
+    async sendVerifyCode(){
+        const { data, status } = await axios.put('/auth/forgetPassword', { email: this.email })
+            .then((response: AxiosResponse) => {
+                return response;
+            })
+            .catch((error) => {
+                return { status: 201, data: 'No user like that' };
+            });
+    }
+
     onSubmit() {
         this.sentMail = true;
     }

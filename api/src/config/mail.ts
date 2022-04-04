@@ -26,12 +26,12 @@ const mails:mailContent = {
 }
 
 const config: mailCredentials = {
-    host: "smtp.ethereal.email",
+    host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'caesar.jast61@ethereal.email',
-        pass: 'MDnmRs6v4JdMhX8wG3',
-    },
+        user: 'roman.parisian93@ethereal.email',
+        pass: 'f8sdTGuqzy5GPUBF6F'
+    }
 };
 
 export {config, mails};

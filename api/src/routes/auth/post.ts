@@ -1,8 +1,21 @@
 import express from "express";
 import passport from "passport";
-
+import { sendForgotPasswordEmail } from '../../controllers/auth.controller';
+import { getUsers } from "../../controllers/user.controller";
 
 var router = express.Router();
+
+
+router.post('/forgotPassword', async (req, res) => {
+  const [ User ] = await getUsers({ where: {email: req.body.where.email} });
+  const isMailSent: Boolean = await sendForgotPasswordEmail(req.body, User.verificationCode);
+
+  res.send(
+    (isMailSent) 
+    ? {status: 200, message: `Verification code sent to your email`}
+    : {status: 402, message: `There is no user like that`}
+  );
+})
 
 router.post("/user/login", (req, res, next) => {
   passport.authenticate('local', (err, passportUser, info) => {
