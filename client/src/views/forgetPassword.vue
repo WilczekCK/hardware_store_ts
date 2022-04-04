@@ -1,6 +1,9 @@
 <template lang="pug">
 .profile__container
-    .profile__container--form(v-if="!sentMail")
+    .profile__container--newPassword(v-if="verifyCode")
+        .profile__container__wrapper
+            h2 {{ verifyCode }}
+    .profile__container--form(v-else-if="!sentMail")
         van-form(@submit="onSubmit" class="login__container")
             van-cell-group(inset class="login__container__cellgroup")
                 van-field(
@@ -25,19 +28,28 @@ export default class forgetPassword extends Vue {
     store = useStore();
     email = '';
     sentMail = false;
+    verifyCode:any = '';
 
     async sendVerifyCode(){
-        const { data, status } = await axios.put('/auth/forgetPassword', { email: this.email })
+        const { data, status } = await axios.post('/auth/forgetPassword', {where: { email: this.email }})
             .then((response: AxiosResponse) => {
                 return response;
             })
             .catch((error) => {
                 return { status: 201, data: 'No user like that' };
             });
+
+        return data;
     }
 
-    onSubmit() {
+    async onSubmit() {
         this.sentMail = true;
+        
+        const {data} = await this.sendVerifyCode();
+    }
+    
+    mounted() {
+        this.verifyCode = this.$route.query.verifyCode;
     }
 }
   

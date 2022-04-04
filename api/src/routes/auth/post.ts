@@ -6,7 +6,7 @@ import { getUsers } from "../../controllers/user.controller";
 var router = express.Router();
 
 
-router.post('/forgotPassword', async (req, res) => {
+router.post('/forgetPassword', async (req, res) => {
   const [ User ] = await getUsers({ where: {email: req.body.where.email} });
   const isMailSent: Boolean = await sendForgotPasswordEmail(req.body, User.verificationCode);
 
