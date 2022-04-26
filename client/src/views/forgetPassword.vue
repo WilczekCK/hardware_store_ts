@@ -89,7 +89,7 @@ export default class forgetPassword extends Vue {
     }   
 
     async confirmVerifyCode(){
-        const { message, status } = await axios.put('/auth/forgetPassword', {where: { verificationCode: this.verifyCode, password: this.newPassword }})
+        const { message, status } = await axios.put('/auth/forgetPassword', {where: { verificationCode: this.verifyCode, password: this.newPassword, forgottenPassword: true }})
             .then((response: AxiosResponse) => {
                 return response;
             })
