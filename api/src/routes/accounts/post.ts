@@ -5,7 +5,13 @@ import { createUser, getUsers } from "../../controllers/user.controller";
 var router = express.Router();
 
 router.post('/', async (req, res) => {
-  res.send( await createUser(req.body) );
+  const data = await createUser(req.body);
+
+  if ( !data ) {
+    return res.status(202).send({ message: "User already exists" });
+  }
+
+  res.status(200).send( {message: 'All ok!'} );
 })
 
 

@@ -25,6 +25,7 @@ export class User {
   
   @Column({
     type: "text",
+    nullable: true,
   })
   lastName!: string;
   

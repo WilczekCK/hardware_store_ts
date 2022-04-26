@@ -27,7 +27,7 @@ export default class Auction extends Vue {
 
   created() {
     const route = useRoute();
-    this.id = parseInt(route.params.id[0]);
+    this.id =+ route.params.id;
 
     axios.get(`/auctions/${this.id}`).then(response => {
       this.auction = response.data[0];

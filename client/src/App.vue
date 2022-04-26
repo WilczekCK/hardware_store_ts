@@ -1,6 +1,6 @@
 <template lang="pug">
 NavBar
-router-view( v-slot="{ Component }" )
+router-view( v-slot="{ Component }" v-if="isLoaded" )
   transition( name="fade" mode="out-in" )
     Component( :is="Component" )
 </template>
@@ -17,9 +17,12 @@ import NavBar from "./components/NavBar.vue"; // @ is an alias to /src
 })
 export default class App extends Vue{
   store = useStore();
+  isLoaded = false;
 
-  async created() {
+  async beforeCreate() {
     await this.store.dispatch('getSession');
+
+    this.isLoaded = true;
   }
 }
 </script>

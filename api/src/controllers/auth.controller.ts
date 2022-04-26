@@ -8,9 +8,10 @@ import { compareData, hashData } from './hashing.controller';
 import { createTransport, Transporter } from 'nodemailer';
 import { config, mails } from '../config/mail';
 import { Request } from 'express';
+import { User } from '../models';
 
 type queryResults = {
-    [where: string]: Record<string, string>
+    [where: string]: Record<string, any>
 }
 
 interface RequestExtended extends Request {
@@ -48,17 +49,17 @@ export const sendVerificationEmail = async ( firstName:string, email: string, ve
     return true;
 }
 
-export const isVerificationCodeValid = async ({where: whereQuery}: queryResults): Promise<boolean> => {
+export const getUserByVerificationCode = async ({where: whereQuery}: queryResults): Promise<number|boolean> => {
     const [ User ] : any = await getUsers({ 
-        where: [
-            {verificationCode: whereQuery.verificationCode}, 
-            {isVerified: false}
-        ],
+        where: {
+            'verificationCode': whereQuery.verificationCode, 
+            'isVerified': false
+        },
         operator: 'AND' 
     });
     if ( !User || !whereQuery.verificationCode) return false;
 
-    return true;
+    return User.id;
 }  
 
 export const verifyUser = async ({where: whereQuery}: queryResults): Promise<boolean> => {
@@ -78,7 +79,7 @@ export const changeForgottenPassword = async({where: whereQuery}: queryResults):
     const newHashedPassword: string = await hashData(whereQuery.password);
     const { affected, raw } :any = await modifyUser({
         where: {verificationCode: whereQuery.verificationCode},
-        set: {password: newHashedPassword}
+        set: {password: newHashedPassword, verificationCode: generateVerificationString()}
     })
     if ( !affected ) return false;
 
@@ -147,6 +148,8 @@ export const refreshUserInfo = (req: RequestExtended): string | boolean => {
     if ( ! isUserLogged(req) )  {
         return false;
     }
+
+    console.log(req.headers.authorization);
 
     const sessionString:string = sessions[sessionOrder];
     const sessionObject:Record<string, Record<string, string>> = JSON.parse( sessionString );

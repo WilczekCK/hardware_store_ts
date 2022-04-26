@@ -8,14 +8,16 @@ router.put('/', async (req, res) => {
   //
 })
 
-router.put('/forgotPassword', async (req, res) => {
+router.put('/forgetPassword', async (req, res) => {
   const isPasswordChanged: boolean = await changeForgottenPassword(req.body);
 
-  res.send(
-    (isPasswordChanged) 
-    ? {status: 200, message: `Your password is changed`}
-    : {status: 402, message: `Wrong verification code`} //or user is not verified --- todo
-  );
+  res
+    .status(isPasswordChanged ? 200 : 403)
+    .send(
+      (isPasswordChanged) 
+      ? {status: 200, message: `Your password is changed`}
+      : {status: 403, message: `Wrong verification code`} //or user is not verified --- todo
+    );
 })
 
 
