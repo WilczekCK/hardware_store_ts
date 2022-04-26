@@ -128,7 +128,7 @@ export default class forgetPassword extends Vue {
     }
     
     mounted() {
-        this.verifyCode = this.$route.query.verifyCode;
+        this.verifyCode = this.$route.params.token;
     }
 }
   
