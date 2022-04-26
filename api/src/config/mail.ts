@@ -21,7 +21,7 @@ const mails:mailContent = {
         to: "[mail_to]", // list of receivers
         subject: "YourWebsite.com | Password Reset", // Subject line
         text: "TBD", // plain text body
-        html: "<b>Hello [name], your verification code to change password is [password_generated] </b>", // html body
+        html: "<b>Hello [name], your link to change forgotten password to change password is [link]/forgetPassword/[password_generated] </b>", // html body
     }
 }
 
@@ -29,8 +29,8 @@ const config: mailCredentials = {
     host: 'smtp.ethereal.email',
     port: 587,
     auth: {
-        user: 'roman.parisian93@ethereal.email',
-        pass: 'f8sdTGuqzy5GPUBF6F'
+        user: 'devon.predovic57@ethereal.email',
+        pass: 'jBtFnG9uUCddgcJNYC'
     }
 };
 
