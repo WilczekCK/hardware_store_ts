@@ -1,5 +1,6 @@
 <template lang="pug">
 .auctions__container
+  van-button(v-if="userInfo" icon="plus" type="success")="Add new auction" 
   h1="This is an auctions page"
   van-loading(type="spinner" v-if="!isLoaded" class="auctions__container--loading")
   h2(v-else-if="!auctionsArray.length && isLoaded")="No auctions :("
@@ -21,6 +22,7 @@ import { useRoute } from "vue-router";
 import { useStore } from 'vuex';
 import axios from "axios";
 import ListSingleAuction from '../components/ListSingleAuction.vue';
+import { computed } from "vue";
 
 interface serverResponse {
   [key: string]: number | string | boolean;
@@ -37,6 +39,7 @@ export default class Auctions extends Vue {
   isLoaded = false;
   areMoreAuctions = true;
   store = useStore();
+  userInfo = {};
 
   //infinite loading values
   limit = 2;
@@ -74,6 +77,7 @@ export default class Auctions extends Vue {
   created() :void {
     const route = useRoute();
     this.page = route.query.page ? route.query.page : 1;
+    this.userInfo = computed(() => this.store.getters.getLogin)
 
     this.loadAuctions('next');
   }
