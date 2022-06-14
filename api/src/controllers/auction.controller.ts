@@ -31,10 +31,22 @@ export const getAuctions = async(payload: auctionFilters): Promise<any> => {
         skip:  payload.skip  ? payload.skip  : 0,
         relations: payload.relations ? payload.relations : undefined,
     }
-
+    
     console.log(preparedQuery);
 
     return auctionRepository.find( preparedQuery );
+}
+
+export const isLimitOfAuctionsCrossed = async(userId: number): Promise<boolean> => {
+    const getUserAuctions = await getAuctions({
+        where:{
+            user: userId,
+        },
+        limit: 5,
+        relations: ["user"]
+    })
+
+    return getUserAuctions.length === 5;
 }
 
 export const removeAuctions = async (payload: auctionFilters): Promise<DeleteResult> => {

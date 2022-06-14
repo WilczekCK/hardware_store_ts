@@ -52,7 +52,6 @@ import { useStore } from 'vuex';
 
 export default class NewAuction extends Vue {
     userId = 0; 
-
     brand = '';
     series = '';
     description = '';
