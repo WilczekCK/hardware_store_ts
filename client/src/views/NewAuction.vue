@@ -2,7 +2,7 @@
 .auction__create__container
     van-uploader(:after-read="afterRead")
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
-    van-form()
+    van-form( @submit="onSubmit")
         van-cell-group(inset)
             van-divider="Product information"
             van-field(
@@ -48,12 +48,36 @@
 <script lang="ts">
 import { Vue } from "vue-class-component";
 import axios from "axios";
+import { useStore } from 'vuex';
 
 export default class NewAuction extends Vue {
+    userId = 0; 
+
     brand = '';
     series = '';
     description = '';
     price?:number;
+
+    store = useStore();
+
+    async beforeMount(){
+        this.userId = await this.store.getters.getUserId;
+    }
+
+    async onSubmit(): Promise<void> {
+        const { brand, series, description, price, userId } = this;
+
+        const response = await axios.post('/auctions', {
+            brand,
+            series,
+            description,
+            price,
+            userId,
+            isActive: true,
+        });
+
+        console.log(response);
+    }
 }
 </script>
 
