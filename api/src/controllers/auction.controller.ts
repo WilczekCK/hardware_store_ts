@@ -66,19 +66,24 @@ export const removeAuctions = async (payload: auctionFilters): Promise<DeleteRes
         .execute();
 }
 
-export const createAuction = async(payload: auctionPayload): Promise<Auction> => {
+export const createAuction = async(payload: auctionPayload): Promise<Auction | any> => {
     const auctionRepository = getRepository(Auction);
 
-    //Relation assigments
-    const user = new User();
-          user.id = payload.userId;
-    const auction = new Auction();
-          auction.user = user;
+    if ( ! await isLimitOfAuctionsCrossed(payload.userId) ) {
+        //Relation assigments
+        const user = new User();
+            user.id = payload.userId;
+        const auction = new Auction();
+            auction.user = user;
 
-    return auctionRepository.save({
-        ...auction,
-        ...payload
-    });
+        return auctionRepository.save({
+            ...auction,
+            ...payload
+        });
+    } else {
+        return {status: 429, message: 'Amount of items' };
+    }
+
 }
 
 export const modifyAuction = async(payload: auctionFilters): Promise<UpdateResult> => {
