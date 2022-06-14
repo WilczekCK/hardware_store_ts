@@ -1,6 +1,7 @@
 <template lang="pug">
 .auctions__container
-  van-button(v-if="userInfo" icon="plus" type="success")="Add new auction" 
+  router-link(to="/auctions/add")
+    van-button(v-if="userInfo" icon="plus" type="success")="Add new auction" 
   h1="This is an auctions page"
   van-loading(type="spinner" v-if="!isLoaded" class="auctions__container--loading")
   h2(v-else-if="!auctionsArray.length && isLoaded")="No auctions :("
