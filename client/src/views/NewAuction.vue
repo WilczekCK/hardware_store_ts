@@ -27,6 +27,12 @@ export default class NewAuction extends Vue {
 </script>
 
 <style lang="scss">
+.auction__create__container{
+    max-width: 350px;
+    margin: 0 auto;
+    
+    small { opacity:0.8; font-size: 11px; padding-top:5px; }
+}
 </style>
 
 
