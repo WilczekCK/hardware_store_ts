@@ -50,10 +50,11 @@ export const isLimitOfAuctionsCrossed = async(userId: number): Promise<boolean> 
 }
 
 export const removeAuctions = async (payload: auctionFilters): Promise<DeleteResult> => {
-    const auctionsId = payload.where;
+    const auctionsId = payload.where.id;
+
 
     // Object to ID's array
-    const ids:Array<number> = auctionsId.map(( {id}: Record<string,number> ) => {
+    const ids:Array<number> = auctionsId.map(( id: Record<string,number> ) => {
         return id;
     });
 
