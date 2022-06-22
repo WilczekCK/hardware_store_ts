@@ -1,6 +1,6 @@
 import {app, express} from './app';
 
-app.use(express.static("public"));
+app.use(express.static("uploads"));
 
 
 import morgan from "morgan";

@@ -1,5 +1,7 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { Auction, User } from '../models';
+import { writeFileSync } from "fs";
+import {relative} from 'path';
 
 export interface auctionPayload {
     brand: string;
@@ -8,6 +10,7 @@ export interface auctionPayload {
     isActive: boolean;
     price: number;
     userId: number;
+    fileList: Record<string,string>[]
 }
 
 export interface auctionFilters {
@@ -19,6 +22,10 @@ export interface auctionFilters {
     set?:   Record<string, string> | Record<string, Date>;
     operator?: string;
     relations?: string[] | undefined;
+}
+
+export const uploadImageForAuction = async(base64code: string): Promise<any> => {
+    return writeFileSync( `${process.cwd()}/src/uploads/dupa.jpg`, base64code);
 }
 
 export const getAuctions = async(payload: auctionFilters): Promise<any> => {
@@ -71,11 +78,14 @@ export const createAuction = async(payload: auctionPayload): Promise<Auction | a
     const auctionRepository = getRepository(Auction);
 
     if ( ! await isLimitOfAuctionsCrossed(payload.userId) ) {
-        //Relation assigments
+        // Relation assigments
         const user = new User();
             user.id = payload.userId;
         const auction = new Auction();
             auction.user = user;
+
+        // Image uploading
+        await uploadImageForAuction(payload.fileList[0].content);
 
         return auctionRepository.save({
             ...auction,

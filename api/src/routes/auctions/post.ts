@@ -6,9 +6,6 @@ import { Auction } from '../../models';
 var router = express.Router();
 
 router.post('/', async (req, res) => {
-  console.log(req.body);
-  return;
-
   const response = await createAuction(req.body);
 
   if ( response.user ) {
