@@ -1,6 +1,6 @@
 <template lang="pug">
 .auction__create__container
-    van-uploader( v-model="image.fileList" :after-read="image.afterRead")
+    van-uploader( v-model="image.fileList" :max-size="500 * 1024" @oversize="image.onOversize" multiple)
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
     van-form( @submit="onSubmit")
         van-cell-group(inset)
@@ -49,6 +49,7 @@
 import { Vue } from "vue-class-component";
 import axios from "axios";
 import { useStore } from 'vuex';
+import { Toast } from "vant";
 
 export default class NewAuction extends Vue {
     userId = 0; 
@@ -80,9 +81,8 @@ export default class NewAuction extends Vue {
 
     image = {
         fileList: [],
-        afterRead(file:Record<string,string>) {
-            file.status = 'uploading';
-            file.message = "Uploading...";
+        onOversize() {
+            Toast('File size cannot exceed 500kb');
         }
     }
 }
