@@ -74,9 +74,8 @@ export default class NewAuction extends Vue {
             price,
             userId,
             isActive: true,
+            fileList: this.image.fileList
         });
-
-        console.log(response);
     }
 
     image = {
