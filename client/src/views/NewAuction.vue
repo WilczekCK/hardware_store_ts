@@ -1,6 +1,6 @@
 <template lang="pug">
 .auction__create__container
-    van-uploader(:after-read="afterRead")
+    van-uploader( v-model="image.fileList" :after-read="image.afterRead")
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
     van-form( @submit="onSubmit")
         van-cell-group(inset)
@@ -76,6 +76,14 @@ export default class NewAuction extends Vue {
         });
 
         console.log(response);
+    }
+
+    image = {
+        fileList: [],
+        afterRead(file:Record<string,string>) {
+            file.status = 'uploading';
+            file.message = "Uploading...";
+        }
     }
 }
 </script>

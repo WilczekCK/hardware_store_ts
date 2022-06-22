@@ -46,7 +46,7 @@ export const isLimitOfAuctionsCrossed = async(userId: number): Promise<boolean> 
         relations: ["user"]
     })
 
-    return getUserAuctions.length >= 5;
+    return getUserAuctions.length >= 10;
 }
 
 export const removeAuctions = async (payload: auctionFilters): Promise<DeleteResult> => {
