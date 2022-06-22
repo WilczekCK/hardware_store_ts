@@ -6,12 +6,12 @@ import { Auction } from '../../models';
 var router = express.Router();
 
 router.post('/', async (req, res) => {
-  const test = await createAuction(req.body);
+  const response = await createAuction(req.body);
 
-  if (test.status !== 200) {
-    res.status(429).send( {message: 'Too many items!'} );
-  } else {
+  if ( response.user ) {
     res.status(200).send( {message: 'All ok!'} );
+  } else {
+    res.status(400).send( {message: 'Something went wrong'} );
   }
 })
 
