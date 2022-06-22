@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
   if ( response.user ) {
     res.status(200).send( {message: 'All ok!'} );
   } else {
-    res.status(400).send( {message: 'Something went wrong'} );
+    res.status(400).send( {message: response.message ? response.message : 'Something went wrong'} );
   }
 })
 

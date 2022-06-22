@@ -67,7 +67,7 @@ export const removeAuctions = async (payload: auctionFilters): Promise<DeleteRes
         .execute();
 }
 
-export const createAuction = async(payload: auctionPayload): Promise<Auction | any> => {
+export const createAuction = async(payload: auctionPayload): Promise<Auction | any > => {
     const auctionRepository = getRepository(Auction);
 
     if ( ! await isLimitOfAuctionsCrossed(payload.userId) ) {
@@ -82,7 +82,7 @@ export const createAuction = async(payload: auctionPayload): Promise<Auction | a
             ...payload
         });
     } else {
-        return {status: 429, message: 'Amount of items' };
+        return {status: 429, message: 'Amount of items crossed' };
     }
 
 }
