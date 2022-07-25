@@ -1,7 +1,6 @@
 import { Connection, DeleteResult, getConnection, getRepository, UpdateResult } from "typeorm";
 import { Auction, User } from '../models';
-import { writeFileSync } from "fs";
-import {relative} from 'path';
+import { writeFileSync, existsSync, mkdirSync } from "fs";
 
 export interface auctionPayload {
     brand: string;
@@ -24,8 +23,13 @@ export interface auctionFilters {
     relations?: string[] | undefined;
 }
 
-export const uploadImageForAuction = async(base64code: string): Promise<any> => {
-    return writeFileSync( `${process.cwd()}/src/uploads/dupa.jpg`, base64code);
+export const uploadImageForAuction = async(base64code: string, numberOfImage: number, auctionId: number): Promise<any> => {
+    const uploadDir = `${process.cwd()}/src/uploads`;
+    if (!existsSync(`${uploadDir}/${auctionId}`)) {
+        mkdirSync(`${uploadDir}/${auctionId}`, 0o744);
+    }
+    
+    return writeFileSync( `${uploadDir}/${auctionId}/${numberOfImage}.jpg`, base64code);
 }
 
 export const getAuctions = async(payload: auctionFilters): Promise<any> => {
@@ -84,8 +88,19 @@ export const createAuction = async(payload: auctionPayload): Promise<Auction | a
         const auction = new Auction();
             auction.user = user;
 
+        // Get the id number of new auction
+        const latestAuction = await getAuctions({limit: 1});
+        const newId = !latestAuction[0].id ? 0 : latestAuction[0].id + 1;
+
         // Image uploading
-        await uploadImageForAuction(payload.fileList[0].content);
+        let imagesCount = 0;
+        for await (const {content} of payload.fileList){
+            console.log(content);
+
+            await uploadImageForAuction(content, imagesCount, newId);
+            imagesCount++;
+        }
+        
 
         return auctionRepository.save({
             ...auction,
