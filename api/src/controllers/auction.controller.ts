@@ -28,8 +28,11 @@ export const uploadImageForAuction = async(base64code: string, numberOfImage: nu
     if (!existsSync(`${uploadDir}/${auctionId}`)) {
         mkdirSync(`${uploadDir}/${auctionId}`, 0o744);
     }
+
+    // If not replaced, it displays binary instead of image 
+    base64code  = base64code.replace(/^data:image\/(jpeg|jpg);base64,/, "");
     
-    return writeFileSync( `${uploadDir}/${auctionId}/${numberOfImage}.jpg`, base64code);
+    return writeFileSync( `${uploadDir}/${auctionId}/${numberOfImage}.jpg`, base64code, 'base64');
 }
 
 export const getAuctions = async(payload: auctionFilters): Promise<any> => {
@@ -94,9 +97,7 @@ export const createAuction = async(payload: auctionPayload): Promise<Auction | a
 
         // Image uploading
         let imagesCount = 0;
-        for await (const {content} of payload.fileList){
-            console.log(content);
-
+        for await (let {content} of payload.fileList){
             await uploadImageForAuction(content, imagesCount, newId);
             imagesCount++;
         }
