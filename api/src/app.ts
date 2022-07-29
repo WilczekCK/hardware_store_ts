@@ -10,7 +10,10 @@ app.use(function(req, res, next) {
   next();
 });
   
+// Bigger payloads, needed for base64 images upload!
+app.use(express.json({limit: '50mb'}));
 
+// All related to sessions
 app.use(session({
     secret: 'secret key for session',
     resave: true,
