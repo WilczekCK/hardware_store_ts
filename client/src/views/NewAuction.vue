@@ -1,6 +1,6 @@
 <template lang="pug">
 .auction__create__container
-    van-uploader( v-model="image.fileList" :max-size="500 * 1024" @oversize="image.onOversize" multiple)
+    van-uploader( v-model="image.fileList" :max-size="500 * 1024" :before-read="image.beforeRead" @oversize="image.onOversize" multiple)
     h3( class="register__container__error" v-if="errors" v-for="error in errors") {{ error }}
     van-form( @submit="onSubmit")
         van-cell-group(inset)
@@ -80,6 +80,14 @@ export default class NewAuction extends Vue {
 
     image = {
         fileList: [],
+        beforeRead: (file:Record<string,null>) => {
+            if(file.type !== 'image/jpeg') {
+                Toast('The only image format allowed is JPG');
+                return false;
+            }
+
+            return true;
+        },
         onOversize() {
             Toast('File size cannot exceed 500kb');
         }
